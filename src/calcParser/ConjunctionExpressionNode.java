@@ -34,7 +34,7 @@ public class ConjunctionExpressionNode implements ExpressionNode
 	 */
 	public boolean getValue()
 	{
-		return (left.getValue() & right.getValue());
+		return (left.getValue() && right.getValue());
 	}
 
 	/**

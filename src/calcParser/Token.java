@@ -13,19 +13,19 @@ public class Token
   /** Token id for the epsilon terminal */
   public static final int EPSILON = 0;
   /** Token id for and */
-  public static final int CONJUNCTION = 1;
-  /** Token id for or */
-  public static final int DISJUNCTION = 2;
-  /** Token id for not */
-  public static final int NEGATION = 3;
+  public static final int NEGATION = 1;
   /** Token id for implies */
+  public static final int CONJUNCTION = 2;
+  /** Token id for or */
+  public static final int DISJUNCTION = 3;
+  /** Token id for not */
   public static final int IMPLICATION = 4;
-  /** Token id for opening brackets */
-  public static final int OPEN_BRACKET = 5;
-  /** Token id for closing brackets */
-  public static final int CLOSE_BRACKET = 6;
   /** Token id for if and only if */
-  public static final int EQUIVALENCE = 7;
+  public static final int EQUIVALENCE = 5;
+  /** Token id for opening brackets */
+  public static final int OPEN_BRACKET = 6;
+  /** Token id for closing brackets */
+  public static final int CLOSE_BRACKET = 7;
   /** Token id for variable names */
   public static final int VARIABLE = 8;
 

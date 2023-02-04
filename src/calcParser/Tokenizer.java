@@ -83,11 +83,10 @@ public class Tokenizer
     tokenizer.add("\\~", Token.NEGATION);
     tokenizer.add("\\=>", Token.IMPLICATION);
     tokenizer.add("\\<=>", Token.EQUIVALENCE);
-
     tokenizer.add("\\(", Token.OPEN_BRACKET);
     tokenizer.add("\\)", Token.CLOSE_BRACKET);
     tokenizer.add("[a-zA-Z]\\w*", Token.VARIABLE);
-
+    
     return tokenizer;
   }
 

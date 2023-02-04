@@ -200,10 +200,7 @@ public class Parser
 		// term_op -> EPSILON
 		return expression;
 	}
-
-
-
-
+	
 	/** handles the non-terminal factor_op */
 	private ExpressionNode equivalence(ExpressionNode expr1)
 	{

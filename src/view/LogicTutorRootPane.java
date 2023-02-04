@@ -21,6 +21,7 @@ public class LogicTutorRootPane extends BorderPane {
 	private ResultPane rp;
 	private LogicTutorMenuBar ltmb;
 	private TabPane tp;
+	private SimplificationPane sp;
 	
 	/**
 	 * a constructor method to initiate the different tabs and their specific panes
@@ -35,22 +36,23 @@ public class LogicTutorRootPane extends BorderPane {
 		wp = new WelcomingPane();
 		ltp = new LogicTutorPane();
 		rp = new ResultPane();
+		sp = new SimplificationPane();
 		
 		//create tabs with panes added
 		Tab t1 = new Tab("Welcome", wp);
 		Tab t2 = new Tab("Calculator", ltp);
 		Tab t3 = new Tab("Result", rp);
+		Tab t4 = new Tab("Simplification", sp);
 		t1.setStyle("-fx-font-size: 16px;"
-				+ "-fx-font-weight: bold;"
 				);
 		t2.setStyle("-fx-font-size: 16px;"
-				+ "-fx-font-weight: bold;"
 				);
 		t3.setStyle("-fx-font-size: 16px;"
-				+ "-fx-font-weight: bold;"
+				);
+		t4.setStyle("-fx-font-size: 16px;"
 				);
 		//add tabs to tab pane
-		tp.getTabs().addAll(t1, t2, t3);
+		tp.getTabs().addAll(t1, t2, t3, t4);
 		
 		//create menu bar
 		ltmb = new LogicTutorMenuBar();
@@ -80,6 +82,9 @@ public class LogicTutorRootPane extends BorderPane {
 	}
 	public WelcomingPane getWelcomingPane() {
 		return wp;
+	}
+	public SimplificationPane getSimplificationPane() {
+		return sp;
 	}
 	
 	/**

@@ -22,7 +22,6 @@ public class WelcomingPane extends GridPane{
 		    + "-fx-padding: 15 30 15 30;"
 		    + "-fx-font-alignment: center;"
 		    + "-fx-font: 30px Georgia;"
-		    + "-fx-font-weight: bold;"
 		    + "-fx-text-fill: #333333;"
 		    + "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
 			;
@@ -34,7 +33,6 @@ public class WelcomingPane extends GridPane{
 		    + "-fx-background-radius: 9,8,5,4,3;"
 		    + "-fx-padding: 15 30 15 30;"
 		    + "-fx-font: 30px Georgia;"
-		    + "-fx-font-weight: bold;"
 		    + "-fx-text-fill: #333333;"
 		    + "-fx-font-alignment: center;"
 		    + "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
@@ -57,7 +55,6 @@ public class WelcomingPane extends GridPane{
 
 		lbl.setStyle("-fx-text-fill: white;"
 				+ "-fx-font: 30px Georgia;"
-				+ "-fx-font-weight: bold;"
 				+ "-fx-font-alignment: center;"	
 				);
 		

@@ -7,11 +7,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import view.LogicTutorRootPane;
 import view.ResultPane;
+import view.SimplificationPane;
 import view.WelcomingPane;
 import view.LogicTutorPane;
 import view.LogicTutorMenuBar;
 import model.LogicalFormula;
-import model.autoTruth;
+import simplifier.SimplifyLogicalStrings;
+import model.AutoTruth;
 
 /**
  * @author meize
@@ -26,6 +28,7 @@ public class LogicTutorController {
 	private LogicTutorMenuBar ltmb;
 	private LogicalFormula model;
 	private WelcomingPane wp;
+	private SimplificationPane sp;
 
 	/**
 	 * a constructor method to initiate the view and model
@@ -43,6 +46,7 @@ public class LogicTutorController {
 		ltmb = view.getLogicTutorMenuBar();
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
+		sp = view.getSimplificationPane();
 
 
 		//attach event handlers to view using private helper method
@@ -53,19 +57,25 @@ public class LogicTutorController {
 	 * helper method - used to attach event handlers
 	 */
 	private void attachEventHandlers() {
+		//
+		wp.studyHandler(new moveToStudyPaneHandler());
+		wp.calculatorHandler(new moveToCalcPaneHandler());
+		wp.testHandler(new moveToTestPaneHandler());
 
 		//attach an event handler to the create student profile pane
 		ltp.calculateLogicHandler(new LogicTutorPaneHandler());
+		ltp.simplifyLogicHandler(new simplificationBtnHandler());
 		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
 		ltp.disjunctionLogicHandler(new disjunctionBtnHandler());
 		ltp.negationLogicHandler(new negationBtnHandler());
 		ltp.implicationLogicHandler(new implicationBtnHandler());
 		ltp.equivalenceLogicHandler(new equivalenceBtnHandler());
-		
-		//
-		wp.studyHandler(new moveToStudyPaneHandler());
-		wp.calculatorHandler(new moveToCalcPaneHandler());
-		wp.testHandler(new moveToTestPaneHandler());
+
+		//result
+
+		//simplification
+		sp.btnSaveHandler(new saveSimplificationBtnHandler());
+		sp.btnCalcHandler(new calcSimplificationBtnHandler());
 
 		//attach an event handler to the menu bar that closes the application
 		ltmb.addExitHandler(e -> System.exit(0));
@@ -92,12 +102,12 @@ public class LogicTutorController {
 				try
 				{
 					int counter = 0;
-					counter += autoTruth.countVariables(model.getFormula()).length();
+					counter += AutoTruth.countVariables(model.getFormula()).length();
 					String str =  "" + counter;
-					String ch = autoTruth.countVariables(model.getFormula());
-					model.setResult(autoTruth.resultTable(autoTruth.valuesTable(ch), autoTruth.booleanTable(counter), model.getFormula()));
-					model.setTruthTable(autoTruth.truthTable(autoTruth.valuesTable(ch), Integer.parseInt(str)));
-					
+					String ch = AutoTruth.countVariables(model.getFormula());
+					model.setResult(AutoTruth.resultTable(AutoTruth.valuesTable(ch), AutoTruth.booleanTable(counter), model.getFormula()));
+					model.setTruthTable(AutoTruth.truthTable(AutoTruth.valuesTable(ch), Integer.parseInt(str)));
+
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
@@ -111,6 +121,29 @@ public class LogicTutorController {
 					ex.printStackTrace();
 				}
 				view.changeTab(2);
+			}
+		}
+	}
+
+	private class simplificationBtnHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			//retrieves data from the view
+			try {
+				ltp.removeSpaces(ltp.getFormula());
+				model.setFormula(ltp.getFormula());
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			//check input not empty
+			if (model.getFormula().equals("")) {
+				//output error
+				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+			}else {
+
+				sp.populateFunction(model.getFormula());
+				sp.populateResult(SimplifyLogicalStrings.simplify(model.getFormula()));
+				model.setFormula(SimplifyLogicalStrings.simplify(model.getFormula()));
+				view.changeTab(3);
 			}
 		}
 	}
@@ -146,7 +179,7 @@ public class LogicTutorController {
 			ltp.setFormula("<=>");
 		}
 	}
-	
+
 	private class moveToStudyPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -163,6 +196,55 @@ public class LogicTutorController {
 		@Override
 		public void handle(ActionEvent event) {
 			//view.changeTab(3);
+		}
+	}
+
+	private class saveSimplificationBtnHandler implements EventHandler<ActionEvent>{
+
+		@Override
+		public void handle(ActionEvent event) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	private class calcSimplificationBtnHandler implements EventHandler<ActionEvent>{
+
+		@Override
+		public void handle(ActionEvent event) {
+			try {
+				model.setFormula(SimplifyLogicalStrings.getSimplifiedStr());
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			//check input not empty
+			if (model.getFormula().equals("")) {
+				//output error
+				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+			}else {
+				try
+				{
+					int counter = 0;
+					counter += AutoTruth.countVariables(model.getFormula()).length();
+					String str =  "" + counter;
+					String ch = AutoTruth.countVariables(model.getFormula());
+					model.setResult(AutoTruth.resultTable(AutoTruth.valuesTable(ch), AutoTruth.booleanTable(counter), model.getFormula()));
+					model.setTruthTable(AutoTruth.truthTable(AutoTruth.valuesTable(ch), Integer.parseInt(str)));
+
+					rp.populateFunction(model.getFormula());
+					rp.populateResult(model.getResult());
+					rp.populateTruthTable(model.getTruthTable());
+				}
+				catch (ParserException Pex)
+				{
+					Pex.printStackTrace();
+				}
+				catch (EvaluationException ex)
+				{
+					ex.printStackTrace();
+				}
+				view.changeTab(2);
+			}
 		}
 	}
 

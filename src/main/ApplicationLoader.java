@@ -4,6 +4,7 @@ import controller.LogicTutorController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.LogicalFormula;
 import view.LogicTutorRootPane;
 import javafx.scene.layout.*;
@@ -25,18 +26,26 @@ public class ApplicationLoader extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		
+		// create an input stream
+		FileInputStream icon = new FileInputStream(".//res//logic.png");
+
+		// create an image
+		Image iconImage = new Image(icon);
 		//sets minimum width and height for the stage window
 		stage.setMinWidth(1100); 
 		stage.setMinHeight(750);
 		stage.setHeight(800);
 		stage.setWidth(1100);
-		stage.setTitle("Logic Calculator");
+		stage.setTitle("Logic Tutor");
 		stage.setScene(new Scene(view));
+		stage.getIcons().add(iconImage);
+		stage.initStyle(StageStyle.DECORATED);
 		stage.show();
 
 
 		// create an input stream
-		FileInputStream input = new FileInputStream("C:\\Users\\meize\\De Montfort University\\David Smallwood - Mohammad Eizeddin\\Student's Cartridge\\Development\\Code\\src\\Images\\1200152.png");
+		FileInputStream input = new FileInputStream(".//res//black.png");
 
 		// create an image
 		Image image = new Image(input);

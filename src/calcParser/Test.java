@@ -24,7 +24,7 @@
 
 package calcParser;
 
-import model.autoTruth;
+import model.AutoTruth;
 
 /**
  * Test the Parser
@@ -49,7 +49,7 @@ public class Test
       expr.accept(new SetVariable("B", true));
       expr.accept(new SetVariable("R", true));
       System.out.println("The value of the expression is " + expr.getValue());
-      System.out.println(autoTruth.countVariables(exprstr).charAt(0) + "");
+      System.out.println(AutoTruth.countVariables(exprstr).charAt(0) + "");
       
     }
     catch (ParserException e)

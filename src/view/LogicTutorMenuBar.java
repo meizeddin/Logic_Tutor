@@ -25,6 +25,7 @@ public class LogicTutorMenuBar extends MenuBar {
 
 	//initiates menu item fields
 	private MenuItem saveItem, loadItem, aboutItem, exitItem;
+	private Menu menu;
 
 	/**
 	 * a constructor method to initiate the menuBar view of the application
@@ -32,33 +33,33 @@ public class LogicTutorMenuBar extends MenuBar {
 	public LogicTutorMenuBar() { 
 
 		//temp-var for menus and menu items within this MenuBar
-		Menu menu;
 
-		menu = new Menu("_File");
-		menu.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-		loadItem = new MenuItem("_Load");
+		menu = new Menu("File");
+		menu.setStyle("-fx-font-size: 16px;");
+		loadItem = new MenuItem("Load");
 		loadItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+L"));
 		menu.getItems().add(loadItem);
 
-		saveItem = new MenuItem("_Save");
+		saveItem = new MenuItem("Save");
 		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
 		menu.getItems().add(saveItem);
 
 		menu.getItems().add( new SeparatorMenuItem());
 
-		exitItem = new MenuItem("E_xit");
+		exitItem = new MenuItem("Exit");
 		exitItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+X"));
 		menu.getItems().add(exitItem);
 
 		this.getMenus().add(menu);
 
-		menu = new Menu("_Help");
-		menu.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-		aboutItem = new MenuItem("_About");
+		menu = new Menu("Help");
+		menu.setStyle("-fx-font-size: 16px;");
+		aboutItem = new MenuItem("About");
 		aboutItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+A"));
 		menu.getItems().add(aboutItem);
 
-		this.getMenus().add(menu); 
+		this.getMenus().add(menu);
+		//this.setBackground(Background.fill(Color.BLACK));
 	}
 
 	/**

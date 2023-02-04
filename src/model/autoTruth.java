@@ -11,7 +11,7 @@ import calcParser.ParserException;
 import calcParser.SetVariable;
 
 
-public class autoTruth {
+public class AutoTruth {
 	public static void main(String[] args) {
 
 		//crashes at 15
@@ -20,7 +20,7 @@ public class autoTruth {
 		System.out.println(booleanTable(3));
 		System.out.println(valuesTable("abd"));
 		System.out.println(valuesTable("ABR").size());
-		System.out.println(resultTable(valuesTable("ABR"), booleanTable(3), "(~(A=>(B|R))<=>A)"));
+		System.out.println(resultTable(valuesTable("A"), booleanTable(3), "(A&~A)"));
 
 	}
 
@@ -86,8 +86,9 @@ public class autoTruth {
 	public static String resultTable(List<Character> arrC, List<Boolean> arrB, String expression) {
 		int variables = arrC.size();
 		String table = "";
-		table += expression.toUpperCase() + "\n";
-		table += "-------------------\n"; 
+		String result = "";
+		String type="";
+		List<Boolean> arrBB = new ArrayList<>();
 		Parser parser = new Parser();
 		ExpressionNode expr = parser.parse(expression);
 		for (int i = 0; i < (Math.pow(2, variables) * variables) ; i+=variables) {
@@ -106,8 +107,19 @@ public class autoTruth {
 				}	
 			}
 			table += expr.getValue() + "\n";
+			arrBB.add(expr.getValue());
 		}
-		return table;
+		if ((arrBB.get(0) == true) && (arrBB.stream().distinct().count() <=1)) {
+			type = "Type: Tautology";
+		}else if ((arrBB.get(0) == false) && (arrBB.stream().distinct().count() <=1)) {
+			type = "Type: Contradiction";
+		} else {
+			type = "Type: Contingency";
+		}
+		result += expression.toUpperCase()+"\t"+type+"\n";
+		result += "-------------------\n"; 
+		result += table;
+		return result;
 	}
 
 	public static String countVariables(String str)
