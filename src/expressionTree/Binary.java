@@ -2,7 +2,7 @@ package expressionTree;
 
 
  //Abstract Binary class
-public abstract class Binary implements Expression {
+public abstract class Binary extends Expression {
 	protected Expression leftOperand;
 	protected Expression rightOperand;
 
@@ -12,7 +12,7 @@ public abstract class Binary implements Expression {
 	}
 
 	@Override
-	public abstract boolean evaluate();
+	public abstract boolean evaluate(Store s);
 
 	@Override
 	public Expression simplify() {

@@ -19,54 +19,48 @@ public class AutoTruth {
 		//System.out.print(truthTable("abd",3));
 		System.out.println(booleanTable(3));
 		System.out.println(valuesTable("abd"));
+		System.out.println(countVariables("(A&~A)=>B"));
 		System.out.println(valuesTable("ABR").size());
-		System.out.println(resultTable(valuesTable("A"), booleanTable(3), "(A&~A)"));
+		System.out.println(truthTable(valuesTable("AB"), 2));
+		System.out.println(resultTable(valuesTable("AB"), booleanTable(2), "(A&~A)=>B"));
 
 	}
 
+	//produces a truth table
 	public static String truthTable(List<Character> arrC, int n) {
 
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		for (char s: arrC) {
-			str += "  " + s + "\t\t";
+			str.append("  ").append(s).append("\t\t");
 		}
-		str.toUpperCase();
-		str += "\n";
-		str +="---------------------------------------------\n";
+		str.append("\n");
+		str.append("---------------------------------------------\n");
 		int rows = (int) Math.pow(2, n);
-		int maxColumn = n;
 		for (int i = rows -1; i >= 0 ;i--) {
 			List<Boolean> arr = new ArrayList<>();
-			for (int j = 0; j < leftPadding(Integer.toBinaryString(i), maxColumn).length(); j++) {
-				Boolean bool;
-				if (leftPadding(Integer.toBinaryString(i), maxColumn).charAt(j) == '0') {
-					bool = false;
-					arr.add(j, bool);
-					str += arr.get(j) + "\t";
+			for (int j = 0; j < leftPadding(Integer.toBinaryString(i), n).length(); j++) {
+				if (leftPadding(Integer.toBinaryString(i), n).charAt(j) == '0') {
+					arr.add(j, false);
+					str.append(arr.get(j)).append("\t");
 				}else {
-					bool = true;
-					arr.add(j, bool);
-					str += arr.get(j) + "\t";
+					arr.add(j, true);
+					str.append(arr.get(j)).append("\t");
 				}
 			}
-			str += "\n";
+			str.append("\n");
 		}
-		return str;
+		return str.toString();
 	}
 
 	public static List<Boolean> booleanTable(int n) {
 		List<Boolean> arr = new ArrayList<>();
 		int rows = (int) Math.pow(2, n);
-		int maxColumn = n;
 		for (int i = 0; i < rows ; i++) {
-			for (int j = 0; j < leftPadding(Integer.toBinaryString(i), maxColumn).length(); j++) {
-				Boolean bool;
-				if (leftPadding(Integer.toBinaryString(i), maxColumn).charAt(j) == '0') {
-					bool = false;
-					arr.add(j, bool);
+			for (int j = 0; j < leftPadding(Integer.toBinaryString(i), n).length(); j++) {
+				if (leftPadding(Integer.toBinaryString(i), n).charAt(j) == '0') {
+					arr.add(j, false);
 				}else {
-					bool = true;
-					arr.add(j, bool);
+					arr.add(j, true);
 				}
 			}
 		}
@@ -77,7 +71,7 @@ public class AutoTruth {
 		List<Character> arr = new ArrayList<>();
 		int var = str.length();
 		for (int i = 0; i < var ; i++) {
-			arr.add(str.charAt(i));
+			arr.add(str.toUpperCase().charAt(i));
 		}
 		return arr;
 	}
@@ -85,9 +79,9 @@ public class AutoTruth {
 
 	public static String resultTable(List<Character> arrC, List<Boolean> arrB, String expression) {
 		int variables = arrC.size();
-		String table = "";
+		StringBuilder table = new StringBuilder();
 		String result = "";
-		String type="";
+		String type= "";
 		List<Boolean> arrBB = new ArrayList<>();
 		Parser parser = new Parser();
 		ExpressionNode expr = parser.parse(expression);
@@ -104,14 +98,14 @@ public class AutoTruth {
 				catch (EvaluationException e)
 				{
 					System.out.println(e.getMessage());
-				}	
+				}
 			}
-			table += expr.getValue() + "\n";
+			table.append(expr.getValue()).append("\n");
 			arrBB.add(expr.getValue());
 		}
-		if ((arrBB.get(0) == true) && (arrBB.stream().distinct().count() <=1)) {
+		if ((arrBB.get(0)) && (arrBB.stream().distinct().count() <=1)) {
 			type = "Type: Tautology";
-		}else if ((arrBB.get(0) == false) && (arrBB.stream().distinct().count() <=1)) {
+		}else if ((!arrBB.get(0)) && (arrBB.stream().distinct().count() <=1)) {
 			type = "Type: Contradiction";
 		} else {
 			type = "Type: Contingency";
@@ -127,28 +121,28 @@ public class AutoTruth {
 		// Converting the given string
 		// into a character array
 		char[] charArray = str.toLowerCase().toCharArray();
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		// Traverse the character array
-		for (int i = 0; i < charArray.length; i++) {
+		for (char c : charArray) {
 
 			// Check if the specified character is not digit
 			// then add this character into result variable
-			if (Character.isLowerCase(charArray[i])) {
-				result = result + charArray[i];
+			if (Character.isLowerCase(c)) {
+				result.append(c);
 			}
 		}
-		char result1[] = result.toCharArray();
+		char[] result1 = result.toString().toCharArray();
 		HashSet<Character> charArray1 = new LinkedHashSet<>(str.length()-1);
 		for (char x: result1) {
 			charArray1.add(x);
 		}
 		// Return result
-		String fin = "";
+		StringBuilder fin = new StringBuilder();
 		for (char s: charArray1) {
-			fin += s;
+			fin.append(s);
 		}
-		return fin.toUpperCase();
+		return fin.toString().toUpperCase();
 	}
 
 	public static String leftPadding(String inputStr, int length) {

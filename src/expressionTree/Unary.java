@@ -2,7 +2,7 @@ package expressionTree;
 
 
 //Abstract Unary class
-public abstract class Unary implements Expression {
+public abstract class Unary extends Expression {
 	protected Expression operand;
 
 	public Unary(Expression operand) {
@@ -10,7 +10,7 @@ public abstract class Unary implements Expression {
 	}
 
 	@Override
-	public abstract boolean evaluate();
+	public abstract boolean evaluate(Store s);
 	
 	@Override
 	public Expression simplify() {

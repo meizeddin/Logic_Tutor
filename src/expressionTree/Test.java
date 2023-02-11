@@ -19,8 +19,8 @@ public class Test {
 		
 
 		// Create the And expression
-		Expression and = new And(a, a);
-		Expression or = new Or(and.simplify(), b);
+		And and = new And(a, a);
+		Or or = new Or(and.simplify(), b);
 		
 
 		// Evaluate the expression and print the result

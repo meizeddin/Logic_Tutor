@@ -1,9 +1,11 @@
 package expressionTree;
 
 //Abstract Expression class
-public interface Expression {
+public abstract class Expression {
 	
 	// Abstract methods
-	boolean evaluate();
-	Expression simplify(); 
+	public abstract boolean evaluate(Store s);
+	abstract Expression simplify();
+
+	public abstract String toString();
 }

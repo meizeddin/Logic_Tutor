@@ -1,10 +1,12 @@
 package controller;
 import calcParser.EvaluationException;
 import calcParser.ParserException;
+import expressionTree.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import model.TruthTableHelperFun;
 import view.LogicTutorRootPane;
 import view.ResultPane;
 import view.SimplificationPane;
@@ -14,6 +16,10 @@ import view.LogicTutorMenuBar;
 import model.LogicalFormula;
 import simplifier.SimplifyLogicalStrings;
 import model.AutoTruth;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author meize
@@ -62,7 +68,7 @@ public class LogicTutorController {
 		wp.calculatorHandler(new moveToCalcPaneHandler());
 		wp.testHandler(new moveToTestPaneHandler());
 
-		//attach an event handler to the create student profile pane
+		//attach an event handler to create student profile pane
 		ltp.calculateLogicHandler(new LogicTutorPaneHandler());
 		ltp.simplifyLogicHandler(new simplificationBtnHandler());
 		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
@@ -101,12 +107,18 @@ public class LogicTutorController {
 			}else {
 				try
 				{
-					int counter = 0;
-					counter += AutoTruth.countVariables(model.getFormula()).length();
-					String str =  "" + counter;
-					String ch = AutoTruth.countVariables(model.getFormula());
-					model.setResult(AutoTruth.resultTable(AutoTruth.valuesTable(ch), AutoTruth.booleanTable(counter), model.getFormula()));
-					model.setTruthTable(AutoTruth.truthTable(AutoTruth.valuesTable(ch), Integer.parseInt(str)));
+					Parser.list.clear();
+					String expression = model.getFormula();
+					List<String> tokens = Tokenizer.tokenize(expression);
+					List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+					Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+					List<Value> boolTbl = TruthTableHelperFun.booleanTable(Parser.list);
+					String truthTbl = TruthTableHelperFun.truthTable(Parser.list);
+					String resultTbl = TruthTableHelperFun.resultTable(Parser.list, boolTbl, expr, expression);
+
+
+					model.setTruthTable(truthTbl);
+					model.setResult(resultTbl);
 
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
