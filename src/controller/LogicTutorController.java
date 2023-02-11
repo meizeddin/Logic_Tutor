@@ -16,8 +16,6 @@ import view.LogicTutorMenuBar;
 import model.LogicalFormula;
 import simplifier.SimplifyLogicalStrings;
 import model.AutoTruth;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,13 +26,13 @@ import java.util.Objects;
 public class LogicTutorController {
 
 	//fields to be used throughout class
-	private LogicTutorRootPane view;
-	private LogicTutorPane ltp;
-	private ResultPane rp;
-	private LogicTutorMenuBar ltmb;
-	private LogicalFormula model;
-	private WelcomingPane wp;
-	private SimplificationPane sp;
+	private final LogicTutorRootPane view;
+	private final LogicTutorPane ltp;
+	private final ResultPane rp;
+	private final LogicTutorMenuBar ltmb;
+	private final LogicalFormula model;
+	private final WelcomingPane wp;
+	private final SimplificationPane sp;
 
 	/**
 	 * a constructor method to initiate the view and model
@@ -87,7 +85,7 @@ public class LogicTutorController {
 		ltmb.addExitHandler(e -> System.exit(0));
 
 		//attach an event handler to the about menu bar of the application
-		ltmb.addAboutHandler(e -> {ltmb.aboutInfo();});
+		ltmb.addAboutHandler(e -> ltmb.aboutInfo());
 
 	}
 	//event handler private class, which can be used for creating a profile
@@ -103,7 +101,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 				try
 				{
@@ -149,7 +147,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 
 				sp.populateFunction(model.getFormula());
@@ -232,7 +230,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 				try
 				{
@@ -262,16 +260,12 @@ public class LogicTutorController {
 
 	/**
 	 * helper method - alerts for validation
-	 * @param type: accepts alert type e.g. confirmation, warning, etc.
-	 * @param title: accepts a string of alert title
-	 * @param header: accepts a string of header text
-	 * @param content: accepts a string of the text content e.g. save successful 
 	 */
-	private void alertDialogBuilder(AlertType type, String title, String header, String content) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(header);
-		alert.setContentText(content);
+	private void alertDialogBuilder() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("To calculate, you need to enter a formula");
 		alert.showAndWait();
 	}
 }

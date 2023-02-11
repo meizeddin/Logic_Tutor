@@ -3,8 +3,6 @@ package expressionTree;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.naming.Context;
-
 //Variable class
 public class Variable extends Expression {
 	private final String name;

@@ -24,14 +24,12 @@ public class ValidationClass extends TextField {
 	 */
 	public ValidationClass(Predicate<String> validation) {
 		this.validation = validation;
-		textProperty().addListener((o, oldValue, newText) -> {
-			isValidProperty.set(validation.test(newText));
-		});
+		textProperty().addListener((o, oldValue, newText) -> isValidProperty.set(validation.test(newText)));
 		isValidProperty.set(validation.test(""));	
 	}
 
 	/**
-	 * @returns the specified validation
+	 * @returns </> the specified validation
 	 */
 	public Predicate<String> getValidation() {
 		return validation;

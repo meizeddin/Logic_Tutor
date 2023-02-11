@@ -21,9 +21,7 @@ public class Store {
 
 	public ArrayList<String> getAll(){
 		ArrayList<String> arr = new ArrayList<>();
-		map.forEach((key, value)->{
-			arr.add(key.toString());
-		});
+		map.forEach((key, value)-> arr.add(key.toString()));
 		return arr;
 	}
 

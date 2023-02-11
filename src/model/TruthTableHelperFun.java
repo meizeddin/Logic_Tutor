@@ -29,13 +29,15 @@ public class TruthTableHelperFun {
     public static String truthTable(ArrayList<Variable> list) {
         int n = list.size();
         StringBuilder str = new StringBuilder();
+        str.append("#").append("\t");
         for (Variable x: list) {
-            str.append("  ").append(x.getName()).append("\t\t");
+            str.append("   ").append(x.getName()).append("\t\t");
         }
         str.append("\n");
         str.append("---------------------------------------------\n");
         int rows = (int) Math.pow(2, n);
         for (int i = rows -1; i >= 0 ;i--) {
+            str.append(rows - i).append("\t");
             List<Boolean> arr = new ArrayList<>();
             for (int j = 0; j < leftPadding(Integer.toBinaryString(i), n).length(); j++) {
                 if (leftPadding(Integer.toBinaryString(i), n).charAt(j) == '0') {
@@ -73,6 +75,7 @@ public class TruthTableHelperFun {
         StringBuilder table = new StringBuilder();
         String result = "";
         String type= "";
+        int counter= 1;
         Store store = new Store();
         List<Boolean> arrBB = new ArrayList<>();
         for (int i = 0; i < (Math.pow(2, variables) * variables) ; i+=variables) {
@@ -90,7 +93,7 @@ public class TruthTableHelperFun {
                     System.out.println(e.getMessage());
                 }
             }
-            table.append(expr.evaluate(store)).append("\n");
+            table.append(counter++).append("\t").append(expr.evaluate(store)).append("\n");
             arrBB.add(expr.evaluate(store));
             store.clear();
         }
@@ -101,7 +104,7 @@ public class TruthTableHelperFun {
         } else {
             type = "Type: Contingency";
         }
-        result += expression.toUpperCase()+"\t"+type+"\n";
+        result += "#"+"\t"+expression.toUpperCase()+"\t  "+type+"\n";
         result += "-------------------\n";
         result += table;
         return result;

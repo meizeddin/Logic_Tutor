@@ -7,7 +7,7 @@ infix expression to postfix*/
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
+
 
 class Test1 {
 
@@ -17,19 +17,12 @@ class Test1 {
    // higher precedence
    static int Prec(char ch)
    {
-       switch (ch) {
-       case '+':
-       case '-':
-           return 1;
-
-       case '*':
-       case '/':
-           return 2;
-
-       case '^':
-           return 3;
-       }
-       return -1;
+       return switch (ch) {
+           case '+', '-' -> 1;
+           case '*', '/' -> 2;
+           case '^' -> 3;
+           default -> -1;
+       };
    }
 
    // The main method that converts
@@ -38,11 +31,11 @@ class Test1 {
    static String infixToPostfix(String exp)
    {
        // initializing empty String for result
-       String result = new String("");
+       StringBuilder result = new StringBuilder();
 
        // initializing empty stack
        Deque<Character> stack
-           = new ArrayDeque<Character>();
+           = new ArrayDeque<>();
 
        for (int i = 0; i < exp.length(); ++i) {
            char c = exp.charAt(i);
@@ -50,7 +43,7 @@ class Test1 {
            // If the scanned character is an
            // operand, add it to output.
            if (Character.isLetterOrDigit(c))
-               result += c;
+               result.append(c);
 
            // If the scanned character is an '(',
            // push it to the stack.
@@ -63,7 +56,7 @@ class Test1 {
            else if (c == ')') {
                while (!stack.isEmpty()
                       && stack.peek() != '(') {
-                   result += stack.peek();
+                   result.append(stack.peek());
                    stack.pop();
                }
 
@@ -74,7 +67,7 @@ class Test1 {
                while (!stack.isEmpty()
                       && Prec(c) <= Prec(stack.peek())) {
 
-                   result += stack.peek();
+                   result.append(stack.peek());
                    stack.pop();
                }
                stack.push(c);
@@ -85,11 +78,11 @@ class Test1 {
        while (!stack.isEmpty()) {
            if (stack.peek() == '(')
                return "Invalid Expression";
-           result += stack.peek();
+           result.append(stack.peek());
            stack.pop();
        }
       
-       return result;
+       return result.toString();
    }
 
    // Driver's code

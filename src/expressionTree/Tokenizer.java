@@ -12,7 +12,7 @@ public class Tokenizer {
         // Operators (includes ! for negation, & for conjunction, | for disjunction, and => for implication)
         "|(!|~|&|\\||=>|<=>)" +
         // Parentheses
-        "|(\\(|\\))"
+        "|([()])"
     );
     
     /**
