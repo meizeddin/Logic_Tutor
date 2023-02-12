@@ -1,10 +1,12 @@
 package controller;
 import calcParser.EvaluationException;
 import calcParser.ParserException;
+import expressionTree.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import model.TruthTableHelperFun;
 import view.LogicTutorRootPane;
 import view.ResultPane;
 import view.SimplificationPane;
@@ -14,6 +16,8 @@ import view.LogicTutorMenuBar;
 import model.LogicalFormula;
 import simplifier.SimplifyLogicalStrings;
 import model.AutoTruth;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author meize
@@ -22,13 +26,13 @@ import model.AutoTruth;
 public class LogicTutorController {
 
 	//fields to be used throughout class
-	private LogicTutorRootPane view;
-	private LogicTutorPane ltp;
-	private ResultPane rp;
-	private LogicTutorMenuBar ltmb;
-	private LogicalFormula model;
-	private WelcomingPane wp;
-	private SimplificationPane sp;
+	private final LogicTutorRootPane view;
+	private final LogicTutorPane ltp;
+	private final ResultPane rp;
+	private final LogicTutorMenuBar ltmb;
+	private final LogicalFormula model;
+	private final WelcomingPane wp;
+	private final SimplificationPane sp;
 
 	/**
 	 * a constructor method to initiate the view and model
@@ -62,7 +66,7 @@ public class LogicTutorController {
 		wp.calculatorHandler(new moveToCalcPaneHandler());
 		wp.testHandler(new moveToTestPaneHandler());
 
-		//attach an event handler to the create student profile pane
+		//attach an event handler to create student profile pane
 		ltp.calculateLogicHandler(new LogicTutorPaneHandler());
 		ltp.simplifyLogicHandler(new simplificationBtnHandler());
 		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
@@ -81,7 +85,7 @@ public class LogicTutorController {
 		ltmb.addExitHandler(e -> System.exit(0));
 
 		//attach an event handler to the about menu bar of the application
-		ltmb.addAboutHandler(e -> {ltmb.aboutInfo();});
+		ltmb.addAboutHandler(e -> ltmb.aboutInfo());
 
 	}
 	//event handler private class, which can be used for creating a profile
@@ -97,16 +101,22 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 				try
 				{
-					int counter = 0;
-					counter += AutoTruth.countVariables(model.getFormula()).length();
-					String str =  "" + counter;
-					String ch = AutoTruth.countVariables(model.getFormula());
-					model.setResult(AutoTruth.resultTable(AutoTruth.valuesTable(ch), AutoTruth.booleanTable(counter), model.getFormula()));
-					model.setTruthTable(AutoTruth.truthTable(AutoTruth.valuesTable(ch), Integer.parseInt(str)));
+					Parser.list.clear();
+					String expression = model.getFormula();
+					List<String> tokens = Tokenizer.tokenize(expression);
+					List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+					Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+					List<Value> boolTbl = TruthTableHelperFun.booleanTable(Parser.list);
+					String truthTbl = TruthTableHelperFun.truthTable(Parser.list);
+					String resultTbl = TruthTableHelperFun.resultTable(Parser.list, boolTbl, expr, expression);
+
+
+					model.setTruthTable(truthTbl);
+					model.setResult(resultTbl);
 
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
@@ -137,7 +147,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 
 				sp.populateFunction(model.getFormula());
@@ -220,7 +230,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder(AlertType.ERROR, "Error Dialog", null, "To calculate, you need to enter a formula");
+				alertDialogBuilder();
 			}else {
 				try
 				{
@@ -250,16 +260,12 @@ public class LogicTutorController {
 
 	/**
 	 * helper method - alerts for validation
-	 * @param type: accepts alert type e.g. confirmation, warning, etc.
-	 * @param title: accepts a string of alert title
-	 * @param header: accepts a string of header text
-	 * @param content: accepts a string of the text content e.g. save successful 
 	 */
-	private void alertDialogBuilder(AlertType type, String title, String header, String content) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(header);
-		alert.setContentText(content);
+	private void alertDialogBuilder() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("To calculate, you need to enter a formula");
 		alert.showAndWait();
 	}
 }

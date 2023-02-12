@@ -14,6 +14,7 @@ public class ShuntingYardAlgorithm {
 
 	static {
 		PRECEDENCE.put("!", 5);
+		PRECEDENCE.put("~", 5);
 		PRECEDENCE.put("&", 4);
 		PRECEDENCE.put("|", 3);
 		PRECEDENCE.put("=>", 2);
@@ -43,47 +44,45 @@ public class ShuntingYardAlgorithm {
 	*/
 	public static List<String> infixToPostfix(List<String> tokenizedExpression) {
 		// Initialize the stack to hold operators
-		Deque<String> stack = new ArrayDeque<String>();
+		Deque<String> stack = new ArrayDeque<>();
 		// Initialize the output list to hold the post-fix expression
 		List<String> output = new ArrayList<>();
 		
 		// Iterate through each token in the expression
-		for (int i = 0; i < tokenizedExpression.size(); i++) {
-			String st = tokenizedExpression.get(i);
-			// If the current token is a letter, add it to the output
-			if (letter(st)) 
+		// If the current token is a letter, add it to the output
+		tokenizedExpression.forEach(st -> {
+			if (letter(st))
 				output.add(st);
-			
-			// If the current token is an open parenthesis, push it onto the stack
-			else if(st.equals("(")) 
+
+				// If the current token is an open parenthesis, push it onto the stack
+			else if (st.equals("("))
 				stack.push(st);
-			
-			// If the current token is a closing parenthesis, 
-			// pop operators from the stack and add them to the output
-	        // until an open parenthesis is found
-			else if(st.equals(")")) {
-				while(!stack.isEmpty() && !stack.peek().equals("(")) {
+
+				// If the current token is a closing parenthesis,
+				// pop operators from the stack and add them to the output
+				// until an open parenthesis is found
+			else if (st.equals(")")) {
+				while (!stack.isEmpty() && !stack.peek().equals("(")) {
 					output.add(stack.peek());
 					stack.pop();
 				}
 				stack.pop();
 			}
-			// If the current token is an operator, 
+			// If the current token is an operator,
 			// pop operators from the stack and add them to the output
-	        // until the stack is empty 
+			// until the stack is empty
 			// or the operator on the top of the stack has lower precedence than the current operator
-			else 
-			{
-				while(!stack.isEmpty()&& PRECEDENCE.get(st) <= PRECEDENCE.get(stack.peek())) {
+			else {
+				while (!stack.isEmpty() && PRECEDENCE.get(st) <= PRECEDENCE.get(stack.peek())) {
 					output.add(stack.peek());
 					stack.pop();
 				}
 				stack.push(st);
 			}
-		}
+		});
 		// Pop any remaining operators from the stack and add them to the output
 		while (!stack.isEmpty()) {
-			if(stack.peek()=="(")
+			if(stack.peek().equals("("))
 				return null;
 			output.add(stack.peek());
 			stack.pop();
@@ -94,7 +93,7 @@ public class ShuntingYardAlgorithm {
 
 	public static void main(String[] args)
 	{
-		List<String> tokens = Tokenizer.tokenize("A&B=>R|B");
+		List<String> tokens = Tokenizer.tokenize("A=>B=>R&C");
 		// Function call
 		System.out.println(infixToPostfix(tokens));
 		//System.out.println(letter("4"));

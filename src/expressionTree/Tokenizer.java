@@ -10,9 +10,9 @@ public class Tokenizer {
         // Variables (single letters)
         "([A-Za-z])" +
         // Operators (includes ! for negation, & for conjunction, | for disjunction, and => for implication)
-        "|(!|&|\\||=>|<=>)" +
+        "|(!|~|&|\\||=>|<=>)" +
         // Parentheses
-        "|(\\(|\\))"
+        "|([()])"
     );
     
     /**

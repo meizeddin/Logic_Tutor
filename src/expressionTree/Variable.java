@@ -1,8 +1,10 @@
 package expressionTree;
 
 
+import org.jetbrains.annotations.NotNull;
+
 //Variable class
-public class Variable implements Expression {
+public class Variable extends Expression {
 	private final String name;
 	//delete the value
 	public Variable(String name) {
@@ -13,9 +15,9 @@ public class Variable implements Expression {
 	public String getName() {
 
 		return name;
-    }
+	}
 
-	
+
 	@Override
 	public Expression simplify() {
 
@@ -23,8 +25,19 @@ public class Variable implements Expression {
 	}
 
 	@Override
-	public boolean evaluate() {
+	public String toString() {
+		return name;
+	}
 
-		return false;
+	@Override
+	public boolean evaluate(@NotNull Store s) {
+		Value value = s.getValue(this);
+		if (value == null) {
+			// Handle the case where the variable is not stored in the Store
+			// You can throw an exception, return a default value, or handle the error in another way
+			return false;
+		} else {
+			return value.evaluate(s);
+		}
 	}
 }

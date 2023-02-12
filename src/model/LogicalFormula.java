@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 /**
  * A model class that sets and stores logical formula/expression 
@@ -9,6 +10,7 @@ import java.io.Serializable;
 public class LogicalFormula implements Serializable{
 
 	//fields
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private String formula, result, truthTable;
 
@@ -35,7 +37,7 @@ public class LogicalFormula implements Serializable{
 		return truthTable;
 	}
 	/**
-	 * @param accepts a logical expression as a String
+	 * @param formula accepts a logical expression as a String
 	 */
 	public void setFormula(String formula) {
 		this.formula = formula;

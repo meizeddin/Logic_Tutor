@@ -1,21 +1,23 @@
 package expressionTree;
 
 //Abstract Value class
-public abstract class Value implements Expression {
+public abstract class Value extends Expression {
 	private static final Value TRUE = new True();
     private static final Value FALSE = new False();
 	
-    public abstract boolean evaluate();
-	
+    public abstract boolean evaluate(Store s);
+
 	public Expression simplify() {
 		return this;
 	}
 
 	public static Value getTrue() {
+
 		return TRUE;
 	}
 
 	public static Value getFalse() {
+
 		return FALSE;
 	}
 }
@@ -27,6 +29,7 @@ class True extends Value{
 	public boolean t;
 	
 	True() {
+
 		t = true;
 	}
 	
@@ -36,8 +39,14 @@ class True extends Value{
 		return instance;
 	}
 	@Override
-	public boolean evaluate() {
+	public boolean evaluate(Store s) {
+
 		return t;
+	}
+
+	@Override
+	public String toString() {
+		return "TRUE";
 	}
 }
 
@@ -48,6 +57,7 @@ private static False instance = null;
 	public boolean f;
 	
 	False() {
+
 		f = false;
 	}
 	
@@ -57,8 +67,14 @@ private static False instance = null;
 		return instance;
 	}
 	@Override
-	public boolean evaluate() {
+	public boolean evaluate(Store s) {
+
 		return f;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "FALSE";
+	}
+
 }
