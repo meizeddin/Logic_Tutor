@@ -10,7 +10,7 @@ public class NotTest {
 	@Test
 	public void testNotTrue() {
 		Store s = new Store();
-		Variable a = new Variable("A");
+		Variable a = Variable.of("A");
 		s.addVariable(a, Value.getTrue());
 		Not not =  new Not(a);
 		assertFalse("Testing not expression when"
@@ -21,7 +21,7 @@ public class NotTest {
 	@Test
 	public void testNotFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
+		Variable a = Variable.of("A");
 		s.addVariable(a, Value.getFalse());
 		Not not =  new Not(a);
 		assertTrue("Testing not expression when"
@@ -32,7 +32,7 @@ public class NotTest {
 	@Test
 	public void testDoubleNot() {
 		Store s = new Store();
-		Variable a = new Variable("A");
+		Variable a = Variable.of("A");
 		s.addVariable(a, Value.getTrue());
 		Not not =  new Not(a);
 		Not not1 =  new Not(not);

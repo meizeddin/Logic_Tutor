@@ -20,6 +20,9 @@ public abstract class Value extends Expression {
 
 		return FALSE;
 	}
+	public Expression accept(ExpressionVisitor visitor){
+		return visitor.visit(this);
+	}
 }
 
 class True extends Value{
@@ -48,6 +51,11 @@ class True extends Value{
 	public String toString() {
 		return "TRUE";
 	}
+
+	@Override
+	public Expression accept(ExpressionVisitor visitor) {
+		return visitor.visit(this);
+	}
 }
 
 class False extends Value{
@@ -75,6 +83,11 @@ private static False instance = null;
 	@Override
 	public String toString() {
 		return "FALSE";
+	}
+
+	@Override
+	public Expression accept(ExpressionVisitor visitor) {
+		return visitor.visit(this);
 	}
 
 }

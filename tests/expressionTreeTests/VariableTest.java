@@ -15,7 +15,7 @@ public class VariableTest {
     public void testVariableCreation() {
         Store s = new Store();
         // create a new Variable with name "x" and value true
-        Variable x = new Variable("x");
+        Variable x = Variable.of("x");
         s.addVariable(x, Value.getTrue());
         // Assert that the name of the variable is "x"
         assertEquals("x", x.getName());

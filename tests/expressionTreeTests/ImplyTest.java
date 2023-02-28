@@ -10,8 +10,8 @@ public class ImplyTest {
 	@Test
 	public void testingImplyFalseTrue() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getFalse());
 		s.addVariable(b, Value.getTrue());
 
@@ -24,8 +24,8 @@ public class ImplyTest {
 	@Test
 	public void testingImplyTrueTrue() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getTrue());
 
@@ -38,8 +38,8 @@ public class ImplyTest {
 	@Test
 	public void testingImplyFalseFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getFalse());
 		s.addVariable(b, Value.getFalse());
 
@@ -52,8 +52,8 @@ public class ImplyTest {
 	@Test
 	public void testingImplyTrueFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getFalse());
 

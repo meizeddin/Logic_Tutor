@@ -14,7 +14,7 @@ public class StoreTest {
 	@Test
 	public void testAddVariableAndGetValue() {
 		Store store = new Store();
-        Variable x = new Variable("V");
+        Variable x = Variable.of("V");
 		store.addVariable(x, Value.getTrue());
 		assertEquals("Store should add a variable and get its value TRUE",
 				Value.getTrue(), store.getValue(x));

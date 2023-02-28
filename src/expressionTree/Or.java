@@ -6,6 +6,12 @@ public class Or extends Binary {
 
 		super(leftOperand, rightOperand);
 	}
+	public Expression getLeft() {
+		return leftOperand;
+	}
+	public Expression getRight() {
+		return rightOperand;
+	}
 
 	public boolean evaluate(Store s) {
 
@@ -14,6 +20,11 @@ public class Or extends Binary {
 
 	@Override
 	public String toString() {
-		return leftOperand.toString() + "|" + rightOperand.toString();
+		return "(" + leftOperand.toString() + "|" + rightOperand.toString() + ")";
+	}
+
+	@Override
+	public Expression accept(ExpressionVisitor visitor) {
+		return visitor.visit(this);
 	}
 }

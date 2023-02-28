@@ -93,7 +93,7 @@ public class ShuntingYardAlgorithm {
 
 	public static void main(String[] args)
 	{
-		List<String> tokens = Tokenizer.tokenize("A=>B=>R&C");
+		List<String> tokens = Tokenizer.tokenize("(A)=>(A&B)");
 		// Function call
 		System.out.println(infixToPostfix(tokens));
 		//System.out.println(letter("4"));

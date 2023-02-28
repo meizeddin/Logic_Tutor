@@ -7,6 +7,14 @@ public class And extends Binary {
 		super(leftOperand, rightOperand);
 	}
 
+	public Expression getLeft() {
+		return leftOperand;
+	}
+
+	public Expression getRight() {
+		return rightOperand;
+	}
+
 	public boolean evaluate(Store s) {
 
 		return leftOperand.evaluate(s) && rightOperand.evaluate(s);
@@ -14,6 +22,11 @@ public class And extends Binary {
 
 	@Override
 	public String toString() {
-		return leftOperand.toString() + "&" + rightOperand.toString();
+		return "("+ leftOperand.toString() + "&" + rightOperand.toString() + ")";
+	}
+
+	@Override
+	public Expression accept(ExpressionVisitor visitor) {
+		return visitor.visit(this);
 	}
 }
