@@ -1,40 +1,44 @@
 package expressionTree.rules;
 
 import expressionTree.*;
+
 import java.util.List;
 import java.util.Objects;
 
 /**
- * A visitor class that implements Associative law on an expression tree.
- * This class implements the 'ExpressionVisitor' interface, allowing it to
+ * A visitor class that implements Identity laws on an expression tree.
+ * This class implements the `ExpressionVisitor` interface, allowing it to
  * traverse an expression tree and manipulate the expressions contained within.
  * <p>
- * Associative law states that:
- * A and (B and C) = (A and B) and C.
- * A or (B or C) = (A or B) or C.
+ * Identity laws state that:
+ * A Or F = A,
+ * A And T = A,
+ * T Imply A = A
  * <p>
- * When visiting an 'Or' or 'And' expression, this visitor applies Commutative law.
+ * When visiting an 'Or', 'And', or 'Imply' expression, this visitor applies Identity law if the
+ * expression left or right nodes are equal to True for 'And' and 'Or' and left node equal to T for 'Imply'.
  * For all other expression types, the expression is returned unchanged.
  * <p>
- * This visitor does not modify expressions of type 'Equivalence', 'Imply', 'Not', or 'Variable'.
+ * This visitor does not modify expressions of type 'Equivalence', 'Not', or 'Variable'.
  */
-public class AssociativeVisitor implements ExpressionVisitor {
+public class IdentityVisitor implements ExpressionVisitor {
+
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("A<=>(B<=>C)");
+        List<String> tokens = Tokenizer.tokenize("(T=>A)");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
-        AssociativeVisitor visitor = new AssociativeVisitor();
+        IdentityVisitor visitor = new IdentityVisitor();
         System.out.println(exp.accept(visitor));
     }
     @Override
     public Expression visit(And and) {
         Expression left = and.getLeft().accept(this);
         Expression right = and.getRight().accept(this);
-
-        if (left instanceof And leftAnd) {
-            return new And(leftAnd.getLeft(), new And(leftAnd.getRight(), right));
-        } else if (right instanceof And rightAnd){
-            return new And(new And(left, rightAnd.getLeft()), rightAnd.getRight());
+        // If either the left or right node = t then return the variable
+        if (left.toString().equals(Value.getTrue().toString())) {
+            return right;
+        }else if(right.toString().equals(Value.getTrue().toString())){
+            return left;
         }else {
             return new And(left, right);
         }
@@ -44,11 +48,11 @@ public class AssociativeVisitor implements ExpressionVisitor {
     public Expression visit(Or or) {
         Expression left = or.getLeft().accept(this);
         Expression right = or.getRight().accept(this);
-
-        if (left instanceof Or leftOr) {
-            return new Or(leftOr.getLeft(), new Or(leftOr.getRight(), right));
-        } else if (right instanceof Or rightOr){
-            return new Or(new Or(left, rightOr.getLeft()), rightOr.getRight());
+        // If either the left or right node = t then return the variable
+        if (left.toString().equals(Value.getFalse().toString())) {
+            return right;
+        }else if(right.toString().equals(Value.getFalse().toString())){
+            return left;
         }else {
             return new Or(left, right);
         }
@@ -58,20 +62,18 @@ public class AssociativeVisitor implements ExpressionVisitor {
     public Expression visit(Equivalence equivalence) {
         Expression left = equivalence.getLeft().accept(this);
         Expression right = equivalence.getRight().accept(this);
-        if (left instanceof Equivalence leftEquiv) {
-            return new Equivalence(leftEquiv.getLeft(), new Equivalence(leftEquiv.getRight(), right));
-        } else if (right instanceof Equivalence rightEquiv){
-            return new Equivalence(new Equivalence(left, rightEquiv.getLeft()), rightEquiv.getRight());
-        }else {
-            return new Equivalence(left, right);
-        }
+        return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
         Expression left = imply.getLeft().accept(this);
         Expression right = imply.getRight().accept(this);
-        return new Imply(left, right);
+        if (left.toString().equals(Value.getTrue().toString())) {
+            return right;
+        }else {
+            return new Imply(left, right);
+        }
     }
 
     @Override
@@ -96,29 +98,25 @@ public class AssociativeVisitor implements ExpressionVisitor {
             And and = (And) expr;
             Expression left = and.getLeft().accept(this);
             Expression right = and.getRight().accept(this);
-
-            if (left instanceof And) {
+            if (left.toString().equals(Value.getTrue().toString())) {
                 result = true;
-            } else if (right instanceof And){
+            }else if(right.toString().equals(Value.getTrue().toString())){
                 result = true;
             }
         }else if(expr instanceof Or){
             Or or = (Or) expr;
             Expression left = or.getLeft().accept(this);
             Expression right = or.getRight().accept(this);
-
-            if (left instanceof Or) {
+            if (left.toString().equals(Value.getFalse().toString())) {
                 result = true;
-            } else if (right instanceof Or){
+            }else if(right.toString().equals(Value.getFalse().toString())){
                 result = true;
             }
-        }else if(expr instanceof Equivalence){
-            Equivalence equivalence = (Equivalence) expr;
-            Expression left = equivalence.getLeft().accept(this);
-            Expression right = equivalence.getRight().accept(this);
-            if (left instanceof Equivalence) {
-                result = true;
-            } else if (right instanceof Equivalence){
+        }else if(expr instanceof Imply){
+            Imply imply = (Imply) expr;
+            Expression left = imply.getLeft().accept(this);
+            Expression right = imply.getRight().accept(this);
+            if (left.toString().equals(Value.getTrue().toString())) {
                 result = true;
             }
         }

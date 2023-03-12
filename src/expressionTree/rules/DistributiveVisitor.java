@@ -96,4 +96,30 @@ public class DistributiveVisitor implements ExpressionVisitor {
     public Expression visit(Value value) {
         return value;
     }
+
+    public boolean canApply(Expression expr) {
+        boolean result = false;
+        if(expr instanceof And){
+            And and = (And) expr;
+            Expression left = and.getLeft().accept(this);
+            Expression right = and.getRight().accept(this);
+
+            if (left instanceof Variable && right instanceof Or) {
+                result = true;
+            } else if (left instanceof Or && right instanceof Variable){
+                result = true;
+            }
+        }else if(expr instanceof Or){
+            Or or = (Or) expr;
+            Expression left = or.getLeft().accept(this);
+            Expression right = or.getRight().accept(this);
+
+            if (left instanceof Variable && right instanceof And) {
+                result = true;
+            } else if (left instanceof And && right instanceof Variable){
+                result = true;
+            }
+        }
+        return result;
+    }
 }

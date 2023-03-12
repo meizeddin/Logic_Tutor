@@ -144,7 +144,7 @@ public class LogicTutorPane extends GridPane {
 	}
 
 	/**
-	 * @returns student p number as a string
+	 * @returns
 	 */
 	public String getFormula(){
 		return txtFormula.getText();

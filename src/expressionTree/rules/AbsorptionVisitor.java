@@ -109,4 +109,53 @@ public class AbsorptionVisitor implements ExpressionVisitor {
     public Expression visit(Value value) {
         return value;
     }
+
+    public boolean canApply(Expression expr) {
+        boolean result = false;
+        if(expr instanceof And){
+            And and = (And) expr;
+            Expression left = and.getLeft().accept(this);
+            Expression right = and.getRight().accept(this);
+            // A and (A or B) = A
+            if (left instanceof Variable && right instanceof Or) {
+                Or or = (Or) right;
+                Expression orLeft = or.getLeft().accept(this);
+                Expression orRight = or.getRight().accept(this);
+                if (orLeft.equals(left)) {
+                    result = true;
+                }
+            }
+            if (right instanceof Variable && left instanceof Or){
+                Or or = (Or) left;
+                Expression orLeft = or.getLeft().accept(this);
+                Expression orRight = or.getRight().accept(this);
+                if (orLeft.equals(right)) {
+                    result = true;
+                }
+            }
+        }else if(expr instanceof Or){
+            Or or = (Or) expr;
+            Expression left = or.getLeft().accept(this);
+            Expression right = or.getRight().accept(this);
+            // A OR (A AND B) = A
+            if (left instanceof Variable && right instanceof And) {
+                And and = (And) right;
+                Expression andLeft = and.getLeft().accept(this);
+                Expression andRight = and.getRight().accept(this);
+                if (andLeft.equals(left)) {
+                    result = true;
+                }
+            }
+            // (A AND B) OR A = A
+            if (right instanceof Variable && left instanceof And) {
+                And and = (And) left;
+                Expression andLeft = and.getLeft().accept(this);
+                Expression andRight = and.getRight().accept(this);
+                if (andLeft.equals(right)) {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
 }

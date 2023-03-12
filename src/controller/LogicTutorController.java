@@ -2,6 +2,7 @@ package controller;
 import calcParser.EvaluationException;
 import calcParser.ParserException;
 import expressionTree.*;
+import expressionTree.rules.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -67,7 +68,7 @@ public class LogicTutorController {
 		wp.testHandler(new moveToTestPaneHandler());
 
 		//attach an event handler to create student profile pane
-		ltp.calculateLogicHandler(new LogicTutorPaneHandler());
+		ltp.calculateLogicHandler(new evalLogicTutorPaneHandler());
 		ltp.simplifyLogicHandler(new simplificationBtnHandler());
 		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
 		ltp.disjunctionLogicHandler(new disjunctionBtnHandler());
@@ -80,6 +81,14 @@ public class LogicTutorController {
 		//simplification
 		sp.btnSaveHandler(new saveSimplificationBtnHandler());
 		sp.btnCalcHandler(new calcSimplificationBtnHandler());
+		sp.addButtonLogicHandler(new addSimplificationPaneHandler());
+		sp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
+		sp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
+		sp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
+		sp.negationLogicHandler(new negationSimplificationBtnHandler());
+		sp.implicationLogicHandler(new implicationSimplificationBtnHandler());
+		sp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
+		sp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
 
 		//attach an event handler to the menu bar that closes the application
 		ltmb.addExitHandler(e -> System.exit(0));
@@ -89,7 +98,7 @@ public class LogicTutorController {
 
 	}
 	//event handler private class, which can be used for creating a profile
-	private class LogicTutorPaneHandler implements EventHandler<ActionEvent> {
+	private class evalLogicTutorPaneHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
@@ -101,7 +110,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder();
+				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 				try
 				{
@@ -147,7 +156,7 @@ public class LogicTutorController {
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder();
+				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 
 				sp.populateFunction(model.getFormula());
@@ -219,27 +228,32 @@ public class LogicTutorController {
 	}
 
 	private class calcSimplificationBtnHandler implements EventHandler<ActionEvent>{
-
 		@Override
 		public void handle(ActionEvent event) {
 			try {
-				model.setFormula(SimplifyLogicalStrings.getSimplifiedStr());
+				model.setFormula(sp.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
 			//check input not empty
 			if (model.getFormula().equals("")) {
 				//output error
-				alertDialogBuilder();
+				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 				try
 				{
-					int counter = 0;
-					counter += AutoTruth.countVariables(model.getFormula()).length();
-					String str =  "" + counter;
-					String ch = AutoTruth.countVariables(model.getFormula());
-					model.setResult(AutoTruth.resultTable(AutoTruth.valuesTable(ch), AutoTruth.booleanTable(counter), model.getFormula()));
-					model.setTruthTable(AutoTruth.truthTable(AutoTruth.valuesTable(ch), Integer.parseInt(str)));
+					Parser.list.clear();
+					String expression = model.getFormula();
+					List<String> tokens = Tokenizer.tokenize(expression);
+					List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+					Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+					List<Value> boolTbl = TruthTableHelperFun.booleanTable(Parser.list);
+					String truthTbl = TruthTableHelperFun.truthTable(Parser.list);
+					String resultTbl = TruthTableHelperFun.resultTable(Parser.list, boolTbl, expr, expression);
+
+
+					model.setTruthTable(truthTbl);
+					model.setResult(resultTbl);
 
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
@@ -257,15 +271,165 @@ public class LogicTutorController {
 			}
 		}
 	}
+	private class conjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			sp.setFormula("&");
+		}
+	}
+
+	private class disjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			sp.setFormula("|");
+		}
+	}
+	private class negationSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			sp.setFormula("~");
+		}
+	}
+	private class implicationSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			sp.setFormula("=>");
+		}
+	}
+	private class equivalenceSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			sp.setFormula("<=>");
+		}
+	}
+
+	private class addSimplificationPaneHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			sp.clearResult();
+			//retrieves data from the view
+			try {
+				sp.removeSpaces(sp.getFormula());
+				model.setFormula(sp.getFormula());
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			//check input not empty
+			if (model.getFormula().equals("")) {
+				//output error
+				alertDialogBuilder("You need to enter a formula");
+			}else {
+				sp.populateFunction(model.getFormula());
+				sp.populateResult(model.getFormula());
+				model.setFormula(model.getFormula());
+			}
+		}
+	}
+
+	private class updateComboSimplificationBtnHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			model.setSelectedFormula(sp.getSelectedFormula());
+			if (!model.getSelectedFormula().isEmpty()) {
+				List<String> itemList = model.getRulesList();
+				String expression = model.getSelectedFormula();
+				Parser.list.clear();
+				List<String> tokens = Tokenizer.tokenize(expression);
+				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				sp.updateComboBox(itemList, expr);
+			} else{
+				alertDialogBuilder("Highlight an expression");
+			}
+		}
+	}
+
+	private class manipulateSimplificationPaneHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			//retrieves data from the view
+			try {
+				model.setSelectedFormula(sp.getSelectedFormula());
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			//check input not empty
+			if (model.getSelectedFormula().equals("")) {
+				//output error
+				alertDialogBuilder("Add a formula or highlight an expression");
+			}else {
+				Parser.list.clear();
+				String expression = model.getSelectedFormula();
+				List<String> tokens = Tokenizer.tokenize(expression);
+				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				Expression result = null;
+				model.setResult("");
+				switch (sp.getSelectedRule()) {
+					case "Idempotence Rule" -> {
+						IdempotenceVisitor visitor = new IdempotenceVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Idempotence Law");
+					}
+					case "De Morgan's Rule" -> {
+						DeMorganVisitor visitor = new DeMorganVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using De Morgan's Law");
+					}
+					case "Absorption Rule" -> {
+						AbsorptionVisitor visitor = new AbsorptionVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Absorption Law");
+					}
+					case "Associative Rule" -> {
+						AssociativeVisitor visitor = new AssociativeVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Associative Law");
+					}
+					case "Commutative Rule" -> {
+						CommutativeVisitor visitor = new CommutativeVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Commutative Law");
+					}
+					case "Distributive Rule" -> {
+						DistributiveVisitor visitor = new DistributiveVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Distributive Law");
+					}
+					case "Double Negation Rule" -> {
+						DoubleNegationVisitor visitor = new DoubleNegationVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Double Negation Law");
+					}
+					case "Switcheroo Rule" -> {
+						SwitcherooVisitor visitor = new SwitcherooVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Switcheroo Law");
+					}
+					case "Identity Rule" -> {
+						IdentityVisitor visitor = new IdentityVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Identity Law");
+					}
+					case "Select an option.." -> {
+						alertDialogBuilder("Select a rule");
+					}
+				}
+				sp.setFunction(result.toString(), sp.getIndexRange().getStart(), sp.getIndexRange().getEnd());
+				model.updateResult(sp.getFunction());
+				sp.clearFormula();
+				sp.populateResult(model.getResult());
+				sp.setFormula(sp.getFunction());
+				model.setResult("");
+			}
+		}
+	}
 
 	/**
 	 * helper method - alerts for validation
 	 */
-	private void alertDialogBuilder() {
+	private void alertDialogBuilder(String str) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error Dialog");
 		alert.setHeaderText(null);
-		alert.setContentText("To calculate, you need to enter a formula");
+		alert.setContentText(str);
 		alert.showAndWait();
 	}
 }

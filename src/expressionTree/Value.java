@@ -26,16 +26,16 @@ public abstract class Value extends Expression {
 }
 
 class True extends Value{
-	
+
 	private static True instance = null;
-	
+
 	public boolean t;
-	
+
 	True() {
 
 		t = true;
 	}
-	
+
 	public static True getInstance() {
 		if(instance == null)
 			instance = new True();
@@ -49,7 +49,7 @@ class True extends Value{
 
 	@Override
 	public String toString() {
-		return "TRUE";
+		return "T";
 	}
 
 	@Override
@@ -82,7 +82,7 @@ private static False instance = null;
 
 	@Override
 	public String toString() {
-		return "FALSE";
+		return "F";
 	}
 
 	@Override

@@ -40,6 +40,12 @@ public class Parser {
 					right = stack.pop();
 					stack.push(new Not(right));
 				}
+				case "T", "t" -> {
+					stack.push(new True());
+				}
+				case "F", "f" -> {
+					stack.push(new False());
+				}
 				default -> {
 					v = Variable.of(token);
 					stack.push(v);

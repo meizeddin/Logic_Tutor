@@ -19,6 +19,7 @@ import java.util.Objects;
  * This visitor does not modify expressions of type 'Equivalence', 'Imply', 'Not', or 'Variable'.
  */
 public class IdempotenceVisitor implements ExpressionVisitor {
+
     public static void main(String[] args) {
         List<String> tokens = Tokenizer.tokenize("(A&A)&(A&A)");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
@@ -78,5 +79,25 @@ public class IdempotenceVisitor implements ExpressionVisitor {
     @Override
     public Expression visit(Value value) {
         return value;
+    }
+
+    public boolean canApply(Expression expr) {
+        boolean result = false;
+        if(expr instanceof And){
+            And and = (And) expr;
+            Expression left = and.getLeft().accept(this);
+            Expression right = and.getRight().accept(this);
+            if (left.equals(right)) {
+                result = true;
+            }
+        }else if(expr instanceof Or){
+            Or or = (Or) expr;
+            Expression left = or.getLeft().accept(this);
+            Expression right = or.getRight().accept(this);
+            if (left.equals(right)) {
+                result = true;
+            }
+        }
+        return result;
     }
 }

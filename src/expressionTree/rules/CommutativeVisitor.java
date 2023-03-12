@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class CommutativeVisitor implements ExpressionVisitor {
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("(A&B)&(A&B)");
+        List<String> tokens = Tokenizer.tokenize("P<=>Q");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
         CommutativeVisitor visitor = new CommutativeVisitor();
@@ -45,7 +45,7 @@ public class CommutativeVisitor implements ExpressionVisitor {
     public Expression visit(Equivalence equivalence) {
         Expression left = equivalence.getLeft().accept(this);
         Expression right = equivalence.getRight().accept(this);
-        return new Equivalence(left, right);
+        return new Equivalence(right, left);
     }
 
     @Override
@@ -69,5 +69,17 @@ public class CommutativeVisitor implements ExpressionVisitor {
     @Override
     public Expression visit(Value value) {
         return value;
+    }
+
+    public boolean canApply(Expression expr) {
+        boolean result = false;
+        if(expr instanceof And){
+            result = true;
+        }else if(expr instanceof Or){
+            result = true;
+        }else if(expr instanceof Equivalence){
+            result = true;
+        }
+        return result;
     }
 }

@@ -29,4 +29,5 @@ public abstract class Expression {
 	 * @return the result of the visitor operation
 	 */
 	public abstract Expression accept(ExpressionVisitor visitor);
+
 }
