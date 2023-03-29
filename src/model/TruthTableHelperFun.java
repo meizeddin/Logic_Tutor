@@ -12,7 +12,7 @@ import java.util.Objects;
 public class TruthTableHelperFun {
     public static void main(String[] args) {
         // create expression
-        String expression = "(A|B)=>R";
+        String expression = "(A|A)";
         List<String> tokens = Tokenizer.tokenize(expression);
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));

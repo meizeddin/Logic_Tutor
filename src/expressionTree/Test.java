@@ -7,9 +7,9 @@ public class Test {
 
 
 		// Create Variable objects for the variables in the expression
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
-		Variable r = new Variable("R");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
+		Variable r = Variable.of("R");
 		
 		// Add the variable "A" and its value to the store
 				store.addVariable(a, Value.getFalse());

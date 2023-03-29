@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
+import static expressionTree.Variable.of;
+
 public class Parser {
 	//array list to save the variables in order to assign them values after they have been created
 	public static ArrayList<Variable> list = new ArrayList<>();
@@ -38,10 +40,18 @@ public class Parser {
 					right = stack.pop();
 					stack.push(new Not(right));
 				}
+				case "T", "t" -> {
+					stack.push(new True());
+				}
+				case "F", "f" -> {
+					stack.push(new False());
+				}
 				default -> {
-					v = new Variable(token);
+					v = Variable.of(token);
 					stack.push(v);
-					list.add(v);
+					if(!list.contains(v)) {
+						list.add(v);
+					}
 				}
 			}
 		}

@@ -9,8 +9,8 @@ public class AndTest {
 	@Test
 	public void testAndTrueFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getFalse());
 
@@ -23,8 +23,8 @@ public class AndTest {
 	@Test
 	public void testAndFalseFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getFalse());
 		s.addVariable(b, Value.getFalse());
 
@@ -37,8 +37,8 @@ public class AndTest {
 	@Test
 	public void testAndTrueTrue() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getTrue());
 

@@ -10,8 +10,8 @@ public class OrTest {
 	@Test
 	public void testOrTrueFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getFalse());
 
@@ -25,8 +25,8 @@ public class OrTest {
 	@Test
 	public void testOrFalseFalse() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getFalse());
 		s.addVariable(b, Value.getFalse());
 
@@ -40,8 +40,8 @@ public class OrTest {
 	@Test
 	public void testOrTrueTrue() {
 		Store s = new Store();
-		Variable a = new Variable("A");
-		Variable b = new Variable("B");
+		Variable a = Variable.of("A");
+		Variable b = Variable.of("B");
 		s.addVariable(a, Value.getTrue());
 		s.addVariable(b, Value.getTrue());
 
