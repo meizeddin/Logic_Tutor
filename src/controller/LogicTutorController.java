@@ -8,15 +8,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.TruthTableHelperFun;
-import view.LogicTutorRootPane;
-import view.ResultPane;
-import view.SimplificationPane;
-import view.WelcomingPane;
-import view.LogicTutorPane;
-import view.LogicTutorMenuBar;
+import view.*;
 import model.LogicalFormula;
 import simplifier.SimplifyLogicalStrings;
-import model.AutoTruth;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +28,7 @@ public class LogicTutorController {
 	private final LogicalFormula model;
 	private final WelcomingPane wp;
 	private final SimplificationPane sp;
+	private final StudyPane stp;
 
 	/**
 	 * a constructor method to initiate the view and model
@@ -52,6 +47,7 @@ public class LogicTutorController {
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
 		sp = view.getSimplificationPane();
+		stp = view.getStudyPane();
 
 
 		//attach event handlers to view using private helper method
@@ -202,7 +198,7 @@ public class LogicTutorController {
 	private class moveToStudyPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			//view.changeTab(0);
+			view.changeTab(4);
 		}
 	}
 	private class moveToCalcPaneHandler implements EventHandler<ActionEvent> {
