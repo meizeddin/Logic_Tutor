@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 
 /**
- * A view class that is responsible of showing the menu bar on the application
+ * A view class that is responsible for showing the menu bar on the application
  * the class extends MenuBar class from JavaFx
  * @author meize
  *
@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class LogicTutorMenuBar extends MenuBar {
 
 	//initiates menu item fields
-	private MenuItem saveItem, loadItem, aboutItem, exitItem;
+	private final MenuItem saveItem, loadItem, aboutItem, exitItem;
 	private Menu menu;
 
 	/**
@@ -75,10 +75,7 @@ public class LogicTutorMenuBar extends MenuBar {
 
 		HBox hbox = new HBox();
 		hbox.setAlignment(Pos.CENTER);
-		Label lbl = new Label("This app is to be used by students\n"
-				+ "  to learn about propositional logic\n\n"
-				+ "	 App is created by:\n"
-				+ "P2612742@my365.dmu.ac.uk");
+		Label lbl = new Label("This app is to be used by students\n  to learn about propositional logic\n\n\t App is created by:\nP2612742@my365.dmu.ac.uk");
 		lbl.setFont(Font.font ("Helvetica", 15));
 		Scene scene = new Scene(hbox, 300, 150);
 		hbox.getChildren().add(lbl);
@@ -87,7 +84,7 @@ public class LogicTutorMenuBar extends MenuBar {
 		about.show();
 	}
 
-	//these methods allow handlers to be externally attached to this menubar and used by the controller
+	//these methods allow handlers to be externally attached to this menu-bar and used by the controller
 	/**
 	 * @param handler: allows an external handler to be attached to the save item on the menuBar
 	 */

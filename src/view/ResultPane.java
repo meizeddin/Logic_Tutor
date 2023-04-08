@@ -18,9 +18,9 @@ import javafx.scene.layout.VBox;
  */
 public class ResultPane extends GridPane {
 
-	private Button btnSave;
-	private TextArea txtFunction, txtResult, txtTruthTable;
-	private Label labelFunc, labelTruth, labelResult;
+	private final Button btnSave;
+	private final TextArea txtFunction, txtResult, txtTruthTable;
+	private final Label labelFunc, labelTruth, labelResult;
 
 
 	/**
@@ -41,9 +41,9 @@ public class ResultPane extends GridPane {
 		btnSave.setAlignment(Pos.CENTER);
 		btnSave.setMinSize(200, 75);
 		
-		btnSave.setStyle(WelcomingPane.idel);
+		btnSave.setStyle(WelcomingPane.idle);
 		btnSave.setOnMouseEntered(e -> btnSave.setStyle(WelcomingPane.hover));
-		btnSave.setOnMouseExited(e -> btnSave.setStyle(WelcomingPane.idel));
+		btnSave.setOnMouseExited(e -> btnSave.setStyle(WelcomingPane.idle));
 
 		//setup label
 		labelFunc = new Label();
@@ -93,7 +93,7 @@ public class ResultPane extends GridPane {
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 
-		//setup HBoxs
+		//setup HBoxes
 		HBox hboxButton = new HBox();
 		hboxButton.getChildren().add(btnSave);
 		hboxButton.setAlignment(Pos.CENTER);

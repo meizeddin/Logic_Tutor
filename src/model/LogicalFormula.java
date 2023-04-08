@@ -16,7 +16,7 @@ public class LogicalFormula implements Serializable{
 	@Serial
 	private static final long serialVersionUID = 1L;
 	private String formula, selectedFormula, result, truthTable;
-	private List<String> rulesList;
+	private final List<String> rulesList;
 
 	//Constructor method
 	/**
@@ -27,7 +27,7 @@ public class LogicalFormula implements Serializable{
 		selectedFormula = "";
 		result = "";
 		truthTable = "";
-		rulesList = new ArrayList<String>();
+		rulesList = new ArrayList<>();
 		rulesList.add("Absorption Rule");
 		rulesList.add("Associative Rule");
 		rulesList.add("Commutative Rule");

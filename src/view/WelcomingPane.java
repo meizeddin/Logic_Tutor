@@ -10,9 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class WelcomingPane extends GridPane{
-	private Label lbl;
-	private Button btnStudy, btnEvaluate, btnManipulate, btnTest;
-	static final String idel= "-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),"
+	private final Label lbl;
+	private final Button btnStudy, btnEvaluate, btnManipulate, btnTest;
+	static final String idle = "-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),"
 			+ "linear-gradient(#020b02, #3a3a3a), "
 			+ "linear-gradient(#1c2331 0%, #c2c2c2 20%, #afafaf 80%, #1c2331 100%),"
 			+ "linear-gradient(#1c2331 0%, #dbdbdb 50%, #cacaca 51%, #1c2331 100%);"
@@ -35,7 +35,7 @@ public class WelcomingPane extends GridPane{
 		    + "-fx-text-fill: #333333;"
 		    + "-fx-font-alignment: center;"
 		    + "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
-			;;
+			;
 
 
 	public WelcomingPane() {
@@ -61,28 +61,25 @@ public class WelcomingPane extends GridPane{
 				"-fx-alignment: center;");
 
 		// add a hover effect to the label to make it shine
-		lbl.setOnMouseEntered(e -> {
-			lbl.setStyle("-fx-font-family: Harrington;" +
-					"-fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);" +
-					"-fx-padding: 10px;" +
-					"-fx-background-color: black;" +
-					"-fx-border-color: white;" +
-					"-fx-border-width: 2px;" +
-					"-fx-text-fill: white;" +
-					"-fx-font-size: 44px;" +
-					"-fx-alignment: center;");
-		});
+		lbl.setOnMouseEntered(e -> lbl.setStyle("-fx-font-family: Harrington;" +
+				"-fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);" +
+				"-fx-padding: 10px;" +
+				"-fx-background-color: black;" +
+				"-fx-border-color: white;" +
+				"-fx-border-width: 2px;" +
+				"-fx-text-fill: white;" +
+				"-fx-font-size: 44px;" +
+				"-fx-alignment: center;"));
 
-		lbl.setOnMouseExited(e -> {
-			lbl.setStyle("-fx-font-family: Harrington;" +
+		lbl.setOnMouseExited(e -> lbl.setStyle("-fx-font-family: Harrington;" +
 					"-fx-padding: 10px;" +
 					"-fx-background-color: #1c2331;" +
 					"-fx-border-color: white;" +
 					"-fx-border-width: 2px;" +
 					"-fx-text-fill: white;" +
 					"-fx-font-size: 44px;" +
-					"-fx-alignment: center;");
-		});
+					"-fx-alignment: center;"));
+
 		
 		btnStudy = new Button("Study Logic");
 		btnEvaluate = new Button("Evaluator");
@@ -90,21 +87,21 @@ public class WelcomingPane extends GridPane{
 		btnTest = new Button("     Test    ");
 		
 		
-		btnStudy.setStyle(idel);
+		btnStudy.setStyle(idle);
 		btnStudy.setOnMouseEntered(e -> btnStudy.setStyle(hover));
-		btnStudy.setOnMouseExited(e -> btnStudy.setStyle(idel));
+		btnStudy.setOnMouseExited(e -> btnStudy.setStyle(idle));
 
-		btnEvaluate.setStyle(idel);
+		btnEvaluate.setStyle(idle);
 		btnEvaluate.setOnMouseEntered(e -> btnEvaluate.setStyle(hover));
-		btnEvaluate.setOnMouseExited(e -> btnEvaluate.setStyle(idel));
+		btnEvaluate.setOnMouseExited(e -> btnEvaluate.setStyle(idle));
 
-		btnManipulate.setStyle(idel);
+		btnManipulate.setStyle(idle);
 		btnManipulate.setOnMouseEntered(e -> btnManipulate.setStyle(hover));
-		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(idel));
+		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(idle));
 		
-		btnTest.setStyle(idel);
+		btnTest.setStyle(idle);
 		btnTest.setOnMouseEntered(e -> btnTest.setStyle(hover));
-		btnTest.setOnMouseExited(e -> btnTest.setStyle(idel));
+		btnTest.setOnMouseExited(e -> btnTest.setStyle(idle));
 		
 		
 		btnStudy.setMinSize(200, 75);

@@ -83,33 +83,33 @@ public class ManipulationPane extends ScrollPane {
 		btnIfOnlyIf = new Button("<=>");
 		btnNegation = new Button("~");
 
-		btnAdd.setStyle(WelcomingPane.idel);
+		btnAdd.setStyle(WelcomingPane.idle);
 		btnAdd.setOnMouseEntered(e -> btnAdd.setStyle(WelcomingPane.hover));
-		btnAdd.setOnMouseExited(e -> btnAdd.setStyle(WelcomingPane.idel));
+		btnAdd.setOnMouseExited(e -> btnAdd.setStyle(WelcomingPane.idle));
 
-		btnManipulate.setStyle(WelcomingPane.idel);
+		btnManipulate.setStyle(WelcomingPane.idle);
 		btnManipulate.setOnMouseEntered(e -> btnManipulate.setStyle(WelcomingPane.hover));
-		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(WelcomingPane.idel));
+		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(WelcomingPane.idle));
 
-		btnAnd.setStyle(WelcomingPane.idel);
+		btnAnd.setStyle(WelcomingPane.idle);
 		btnAnd.setOnMouseEntered(e -> btnAnd.setStyle(WelcomingPane.hover));
-		btnAnd.setOnMouseExited(e -> btnAnd.setStyle(WelcomingPane.idel));
+		btnAnd.setOnMouseExited(e -> btnAnd.setStyle(WelcomingPane.idle));
 
-		btnOr.setStyle(WelcomingPane.idel);
+		btnOr.setStyle(WelcomingPane.idle);
 		btnOr.setOnMouseEntered(e -> btnOr.setStyle(WelcomingPane.hover));
-		btnOr.setOnMouseExited(e -> btnOr.setStyle(WelcomingPane.idel));
+		btnOr.setOnMouseExited(e -> btnOr.setStyle(WelcomingPane.idle));
 
-		btnImplies.setStyle(WelcomingPane.idel);
+		btnImplies.setStyle(WelcomingPane.idle);
 		btnImplies.setOnMouseEntered(e -> btnImplies.setStyle(WelcomingPane.hover));
-		btnImplies.setOnMouseExited(e -> btnImplies.setStyle(WelcomingPane.idel));
+		btnImplies.setOnMouseExited(e -> btnImplies.setStyle(WelcomingPane.idle));
 
-		btnIfOnlyIf.setStyle(WelcomingPane.idel);
+		btnIfOnlyIf.setStyle(WelcomingPane.idle);
 		btnIfOnlyIf.setOnMouseEntered(e -> btnIfOnlyIf.setStyle(WelcomingPane.hover));
-		btnIfOnlyIf.setOnMouseExited(e -> btnIfOnlyIf.setStyle(WelcomingPane.idel));
+		btnIfOnlyIf.setOnMouseExited(e -> btnIfOnlyIf.setStyle(WelcomingPane.idle));
 
-		btnNegation.setStyle(WelcomingPane.idel);
+		btnNegation.setStyle(WelcomingPane.idle);
 		btnNegation.setOnMouseEntered(e -> btnNegation.setStyle(WelcomingPane.hover));
-		btnNegation.setOnMouseExited(e -> btnNegation.setStyle(WelcomingPane.idel));
+		btnNegation.setOnMouseExited(e -> btnNegation.setStyle(WelcomingPane.idle));
 
 		btnAdd.setPadding(new Insets(10, 10, 10, 10));
 		btnManipulate.setPadding(new Insets(10, 10, 10, 10));
@@ -154,9 +154,9 @@ public class ManipulationPane extends ScrollPane {
 		btnSave.setAlignment(Pos.CENTER);
 		btnSave.setMinSize(300, 75);
 
-		btnSave.setStyle(WelcomingPane.idel);
+		btnSave.setStyle(WelcomingPane.idle);
 		btnSave.setOnMouseEntered(e -> btnSave.setStyle(WelcomingPane.hover));
-		btnSave.setOnMouseExited(e -> btnSave.setStyle(WelcomingPane.idel));
+		btnSave.setOnMouseExited(e -> btnSave.setStyle(WelcomingPane.idle));
 
 		btnCalc = new Button("Calculate");
 		btnCalc.setPrefSize(300, 50);
@@ -164,9 +164,9 @@ public class ManipulationPane extends ScrollPane {
 		btnCalc.setAlignment(Pos.CENTER);
 		btnCalc.setMinSize(300, 75);
 
-		btnCalc.setStyle(WelcomingPane.idel);
+		btnCalc.setStyle(WelcomingPane.idle);
 		btnCalc.setOnMouseEntered(e -> btnCalc.setStyle(WelcomingPane.hover));
-		btnCalc.setOnMouseExited(e -> btnCalc.setStyle(WelcomingPane.idel));
+		btnCalc.setOnMouseExited(e -> btnCalc.setStyle(WelcomingPane.idle));
 
 		//setup label
 		Label labelFunc = new Label();
@@ -189,10 +189,10 @@ public class ManipulationPane extends ScrollPane {
 		btnUpdateCombo.setPadding(new Insets(10, 10, 10, 10));
 		btnUpdateCombo.setAlignment(Pos.CENTER);
 		btnUpdateCombo.setMinSize(50, 50);
-		btnUpdateCombo.setStyle(WelcomingPane.idel);
+		btnUpdateCombo.setStyle(WelcomingPane.idle);
 		btnUpdateCombo.setOnMouseEntered(e -> btnUpdateCombo.setStyle(WelcomingPane.hover));
-		btnUpdateCombo.setOnMouseExited(e -> btnUpdateCombo.setStyle(WelcomingPane.idel));
-		comboBox = new ComboBox<String>();
+		btnUpdateCombo.setOnMouseExited(e -> btnUpdateCombo.setStyle(WelcomingPane.idle));
+		comboBox = new ComboBox<>();
 		comboBox.getItems().addAll("Select an option..");
 		comboBox.setOnAction((event)-> updateModel());
 		comboLabel = new Label("Select a rule:");
@@ -218,7 +218,7 @@ public class ManipulationPane extends ScrollPane {
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 
-		//setup HBoxs
+		//setup HBoxes
 		HBox hboxButton = new HBox();
 		hboxButton.getChildren().addAll(btnSave, btnCalc);
 		hboxButton.setAlignment(Pos.CENTER);

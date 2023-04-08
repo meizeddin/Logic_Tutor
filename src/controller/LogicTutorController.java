@@ -21,18 +21,17 @@ public class LogicTutorController {
 
 	//fields to be used throughout class
 	private final LogicTutorRootPane view;
-	private final LogicTutorPane ltp;
+	private final EvaluatorPane ltp;
 	private final ResultPane rp;
 	private final LogicTutorMenuBar ltmb;
 	private final LogicalFormula model;
 	private final WelcomingPane wp;
 	private final ManipulationPane mp;
-	private final StudyPane stp;
 
 	/**
 	 * a constructor method to initiate the view and model
 	 * @param view: Accepts a view where the user interaction is happening
-	 * @param model: Accepts a model to either store the data inputed on the view or-
+	 * @param model: Accepts a model to either store the data inputted on the view or-
 	 * 				-displays the data exited in the model on the view
 	 */
 	public LogicTutorController(LogicTutorRootPane view, LogicalFormula model) {
@@ -46,7 +45,6 @@ public class LogicTutorController {
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
 		mp = view.getManipulationPane();
-		stp = view.getStudyPane();
 
 
 		//attach event handlers to view using private helper method
@@ -127,13 +125,9 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException Pex)
+				catch (ParserException | EvaluationException Pex)
 				{
 					Pex.printStackTrace();
-				}
-				catch (EvaluationException ex)
-				{
-					ex.printStackTrace();
 				}
 				view.changeTab(3);
 			}
@@ -262,13 +256,9 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException Pex)
+				catch (ParserException | EvaluationException Pex)
 				{
 					Pex.printStackTrace();
-				}
-				catch (EvaluationException ex)
-				{
-					ex.printStackTrace();
 				}
 				view.changeTab(3);
 			}
@@ -411,11 +401,9 @@ public class LogicTutorController {
 						result = expr.accept(visitor);
 						model.updateResult("Using Identity Law");
 					}
-					case "Select an option.." -> {
-						alertDialogBuilder("Select a rule");
-					}
+					case "Select an option.." -> alertDialogBuilder("Select a rule");
 				}
-				mp.setFunction(result.toString(), mp.getIndexRange().getStart(), mp.getIndexRange().getEnd());
+				mp.setFunction(Objects.requireNonNull(result).toString(), mp.getIndexRange().getStart(), mp.getIndexRange().getEnd());
 				model.updateResult(mp.getFunction());
 				mp.clearFormula();
 				mp.populateResult(model.getResult());

@@ -84,11 +84,7 @@ public class TruthTableHelperFun {
                 {
                     store.addVariable(list.get(j), arrB.get(i+j));
                 }
-                catch (ParserException e)
-                {
-                    System.out.println(e.getMessage());
-                }
-                catch (EvaluationException e)
+                catch (ParserException | EvaluationException e)
                 {
                     System.out.println(e.getMessage());
                 }

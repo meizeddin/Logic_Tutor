@@ -16,11 +16,10 @@ public class ApplicationLoader extends Application {
 	private LogicTutorRootPane view;
 
 	@Override
-	public void init() throws FileNotFoundException {
+	public void init() {
 		//create view and model and pass their references to the controller
 		view = new LogicTutorRootPane();
 		LogicalFormula model = new LogicalFormula();
-		//Logic tutor model = new LogicTutor();
 		new LogicTutorController(view, model);
 	}
 

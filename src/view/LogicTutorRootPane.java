@@ -11,21 +11,20 @@ import java.util.Objects;
 
 /**
  * A class that initiates the view with the main container of the application
- * which then allow sub-continers to be added to it
+ * which then allow sub-containers to be added to it
  * this class extends BorderPane class from JavaFx
  * @author meize
  *
  */
 public class LogicTutorRootPane extends BorderPane {
 
-	private WelcomingPane wp;
-	private LogicTutorPane ltp;
-	private ResultPane rp;
-	private LogicTutorMenuBar ltmb;
-	private TabPane tp;
-	private ManipulationPane mp;
-	private StudyPane stp;
-	
+	private final WelcomingPane wp;
+	private final EvaluatorPane ltp;
+	private final ResultPane rp;
+	private final LogicTutorMenuBar ltmb;
+	private final TabPane tp;
+	private final ManipulationPane mp;
+
 	/**
 	 * a constructor method to initiate the different tabs and their specific panes
 	 */
@@ -37,11 +36,10 @@ public class LogicTutorRootPane extends BorderPane {
 		
 		//create panes
 		wp = new WelcomingPane();
-		ltp = new LogicTutorPane();
+		ltp = new EvaluatorPane();
 		rp = new ResultPane();
 		mp = new ManipulationPane();
-		stp = new StudyPane();
-		
+
 		//create tabs with panes added
 		Tab t1 = new Tab("Welcome", wp);
 		Tab t2 = new Tab("Study");
@@ -82,7 +80,7 @@ public class LogicTutorRootPane extends BorderPane {
 	/**
 	 * @returns the Create-Student-Profile-Pane to be accessed by the controller
 	 */
-	public LogicTutorPane getLogicTutorPane() {
+	public EvaluatorPane getLogicTutorPane() {
 		return ltp;
 	}
 	/**
@@ -91,7 +89,6 @@ public class LogicTutorRootPane extends BorderPane {
 	public LogicTutorMenuBar getLogicTutorMenuBar() {
 		return ltmb;
 	}
-	
 	public ResultPane getResultPane() {
 		return rp;
 	}
@@ -101,10 +98,7 @@ public class LogicTutorRootPane extends BorderPane {
 	public ManipulationPane getManipulationPane() {
 		return mp;
 	}
-	public StudyPane getStudyPane() {
-		return stp;
-	}
-	
+
 	/**
 	 * method to allow the controller to change tabs
 	 * @param index: an int value that indicates the tab to be changed to. first tab index is 0
