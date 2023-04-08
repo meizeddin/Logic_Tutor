@@ -1,22 +1,20 @@
 package view;
 
 import expressionTree.Expression;
-import expressionTree.Parser;
-import expressionTree.ShuntingYardAlgorithm;
-import expressionTree.Tokenizer;
 import expressionTree.rules.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import model.ValidationClass;
-
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
-public class SimplificationPane extends ScrollPane {
+public class ManipulationPane extends ScrollPane {
 	private final Button btnSave, btnCalc, btnAdd, btnManipulate, btnUpdateCombo;
 	private final Button btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation;
 	private final ValidationClass txtFormula;
@@ -30,25 +28,30 @@ public class SimplificationPane extends ScrollPane {
 	/**
 	 * a constructor method to initiate the overview pane
 	 */
-	public SimplificationPane() {
+	public ManipulationPane() {
 
 		//styling
-		this.setPadding(new Insets(10, 10, 10, 10));
+		this.setPadding(new Insets(20, 10, 20, 10));
 		this.setPrefSize(700, 700);
 		this.setFitToWidth(true);
 
 		Label lblFormula = new Label("Add A Formula");
 
 		lblFormula.setStyle("-fx-text-fill: white;"
-				+ "-fx-font: 30px Georgia;"
+				+ "-fx-font: 30px Harrington;"
 		);
 
 		//error labels
-		Label lblFormulaError = new Label("  Variables can only be alphabetic \n"
-				+ "and for logical operators see below");
+		Label lblFormulaError = new Label("\tVariables can only be alphabetic,\n"
+				+ "and only the below operators are allowed");
 
-		lblFormulaError.setStyle("-fx-text-fill: red;"
-				+ "-fx-font: 25px Georgia;"
+		lblFormulaError.setStyle("-fx-font: 25px Harrington;"
+				+ "-fx-padding: 8px;"
+				+ "-fx-background-color: #ff9999;"
+				+ "-fx-text-fill: #800000;"
+				+ "-fx-border-color: #800000;"
+				+ "-fx-border-width: 2px;"
+				+ "-fx-alignment: center;"
 		);
 
 
@@ -69,6 +72,7 @@ public class SimplificationPane extends ScrollPane {
 				+ "-fx-text-fill: #333333;"
 				+ "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
 		);
+		txtFormula.setMaxSize(700, 100);
 
 		//initialize the create profile button and binds it to the validation in the validation helper class
 		btnAdd = new Button("Add");
@@ -141,6 +145,8 @@ public class SimplificationPane extends ScrollPane {
 
 		//v Box
 		VBox vb = new VBox(lblFormula, txtFormula, lblFormulaError, hb, hb1);
+		vb.setAlignment(Pos.CENTER);
+		vb.setSpacing(20);
 		//initialize buttons
 		btnSave = new Button("Save");
 		btnSave.setPrefSize(300, 50);
@@ -171,12 +177,11 @@ public class SimplificationPane extends ScrollPane {
 		//setup text area
 		txtFunction = new TextArea();
 		txtFunction.setEditable(false);
-		//txtFunction.autosize();
 		txtFunction.setPadding(new Insets(10, 10, 10, 10));
-		txtFunction.setMaxSize(500, 250);
-		txtFunction.setPrefSize(500, 250);
-		txtFunction.setStyle("-fx-control-inner-background: lightsteelblue;"
-				+ "-fx-background-color: linear-gradient(to right, darkblue, darkcyan);"
+		txtFunction.setMaxSize(700, 100);
+		txtFunction.setPrefSize(700, 100);
+		txtFunction.setStyle("-fx-control-inner-background: #8897b3;"
+				+ "-fx-background-color: linear-gradient(to right, #212838, #c2e3fc);"
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 		//txtFunction
@@ -191,6 +196,7 @@ public class SimplificationPane extends ScrollPane {
 		comboBox.getItems().addAll("Select an option..");
 		comboBox.setOnAction((event)-> updateModel());
 		comboLabel = new Label("Select a rule:");
+		comboLabel.setStyle("-fx-text-fill: white;");
 		comboVBox = new VBox(10, comboLabel, comboBox);
 		comboVBox.setPadding(new Insets(10));
 		comboBox.setValue(comboBox.getItems().get(0));
@@ -207,8 +213,8 @@ public class SimplificationPane extends ScrollPane {
 		txtResult.setPrefSize(1000, 500);
 		txtResult.setPadding(new Insets(10, 10, 10, 10));
 		//txtResult.setPrefSize(800, 200);
-		txtResult.setStyle("-fx-control-inner-background: lightsteelblue;"
-				+ "-fx-background-color: linear-gradient(to right, darkblue, darkcyan);"
+		txtResult.setStyle("-fx-control-inner-background: #8897b3;"
+				+ "-fx-background-color: linear-gradient(to right, #212838, #c2e3fc);"
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 
@@ -243,13 +249,34 @@ public class SimplificationPane extends ScrollPane {
 
 		//add controls and labels to container
 		this.setContent(vbox2);
+		// create a new background image
+		FileInputStream input;
+		try {
+			input = new FileInputStream(".//res//black.png");
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 
+		Image image = new Image(input);
 
-		// Set the background color of the viewport
-		this.setStyle("-fx-background-color: grey;");
-		this.getContent().setStyle("-fx-background-color: grey;");
-		//this.setAlignment(Pos.CENTER);
+		// create a new background image view
+		BackgroundImage backgroundImageView = new BackgroundImage(image,
+				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+				BackgroundSize.DEFAULT);
 
+		// create a new background
+		Background background = new Background(backgroundImageView);
+
+		// create a new StackPane to wrap the content
+		StackPane contentPane = new StackPane(this.getContent());
+
+		// set the background of the StackPane
+		contentPane.setBackground(background);
+
+		// set the content of the ScrollPane to the StackPane
+		this.setContent(contentPane);
+		// set the background to the root pane
+		this.setBackground(background);
 	}
 
 	//methods to retrieve overview data

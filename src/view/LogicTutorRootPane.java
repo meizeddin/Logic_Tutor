@@ -4,9 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
-
 import java.util.Objects;
 
 
@@ -24,7 +23,7 @@ public class LogicTutorRootPane extends BorderPane {
 	private ResultPane rp;
 	private LogicTutorMenuBar ltmb;
 	private TabPane tp;
-	private SimplificationPane sp;
+	private ManipulationPane mp;
 	private StudyPane stp;
 	
 	/**
@@ -40,15 +39,15 @@ public class LogicTutorRootPane extends BorderPane {
 		wp = new WelcomingPane();
 		ltp = new LogicTutorPane();
 		rp = new ResultPane();
-		sp = new SimplificationPane();
+		mp = new ManipulationPane();
 		stp = new StudyPane();
 		
 		//create tabs with panes added
 		Tab t1 = new Tab("Welcome", wp);
-		Tab t2 = new Tab("Calculator", ltp);
-		Tab t3 = new Tab("Result", rp);
-		Tab t4 = new Tab("Simplification", sp);
-		Tab t5 = new Tab("Study");
+		Tab t2 = new Tab("Study");
+		Tab t3 = new Tab("Evaluate", ltp);
+		Tab t4 = new Tab("Result", rp);
+		Tab t5 = new Tab("Manipulate", mp);
 		t1.setStyle("-fx-font-size: 16px;"
 				);
 		t2.setStyle("-fx-font-size: 16px;"
@@ -64,9 +63,8 @@ public class LogicTutorRootPane extends BorderPane {
 		Platform.runLater(() -> {
 			WebView webView = new WebView();
 			webView.getEngine().load(Objects.requireNonNull(getClass().getResource("html/StudyPage.html")).toExternalForm());
-			t5.setContent(webView);
+			t2.setContent(webView);
 		});
-
 
 		//add tabs to tab pane
 		tp.getTabs().addAll(t1, t2, t3, t4, t5);
@@ -100,8 +98,8 @@ public class LogicTutorRootPane extends BorderPane {
 	public WelcomingPane getWelcomingPane() {
 		return wp;
 	}
-	public SimplificationPane getSimplificationPane() {
-		return sp;
+	public ManipulationPane getManipulationPane() {
+		return mp;
 	}
 	public StudyPane getStudyPane() {
 		return stp;

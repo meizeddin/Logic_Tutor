@@ -54,12 +54,11 @@ public class ResultPane extends GridPane {
 		//setup text area
 		txtFunction = new TextArea();
 		txtFunction.setEditable(false);
-		//txtFunction.autosize();
 		txtFunction.setPadding(new Insets(10, 10, 10, 10));
 		txtFunction.setMaxSize(500, 250);
 		txtFunction.setPrefSize(500, 250);
-		txtFunction.setStyle("-fx-control-inner-background: lightsteelblue;"
-				+ "-fx-background-color: linear-gradient(to right, darkblue, darkcyan);"
+		txtFunction.setStyle("-fx-control-inner-background: #8897b3;"
+				+ "-fx-background-color: linear-gradient(to right, #212838, #c2e3fc);"
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 		//txtFunction
@@ -74,9 +73,8 @@ public class ResultPane extends GridPane {
 		txtResult.setEditable(false);
 		txtResult.autosize();
 		txtResult.setPadding(new Insets(10, 10, 10, 10));
-		//txtResult.setPrefSize(800, 200);
-		txtResult.setStyle("-fx-control-inner-background: lightsteelblue;"
-				+ "-fx-background-color: linear-gradient(to right, darkblue, darkcyan);"
+		txtResult.setStyle("-fx-control-inner-background: #8897b3;"
+				+ "-fx-background-color: linear-gradient(to right, #212838, #c2e3fc);"
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 
@@ -90,9 +88,8 @@ public class ResultPane extends GridPane {
 		txtTruthTable.setEditable(false);
 		txtTruthTable.autosize();
 		txtTruthTable.setPadding(new Insets(10, 10, 10, 10));
-		//txtTruthTable.setPrefSize(2000, 500);
-		txtTruthTable.setStyle("-fx-control-inner-background: lightsteelblue;"
-				+ "-fx-background-color: linear-gradient(to right, darkcyan, darkblue);"
+		txtTruthTable.setStyle("-fx-control-inner-background: #8897b3;"
+				+ "-fx-background-color: linear-gradient(to right, #c2e3fc, #212838);"
 				+ "-fx-text-fill: black; -fx-font-size: 30px;"
 				);
 
@@ -121,13 +118,8 @@ public class ResultPane extends GridPane {
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setSpacing(20);
 
-
-
 		//add controls and labels to container
 		this.add(vbox, 0, 0);
-		//this.add(txtFunction, 0, 1, 2, 1);
-		//this.add(hbox, 0, 0, 1, 1);
-		//this.add(hboxButton, 0, 2, 1, 1);
 
 	}
 

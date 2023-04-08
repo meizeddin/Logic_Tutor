@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
  *
  */
 public class LogicTutorPane extends GridPane {
-	private Button btncalculate, btnSimplify;
+	private Button btnEvaluate, btnManipulate;
 	private Button btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation;
 	private ValidationClass txtFormula;
 
@@ -36,22 +36,23 @@ public class LogicTutorPane extends GridPane {
 		Label lblFormula = new Label("Add A Formula");
 
 		lblFormula.setStyle("-fx-text-fill: white;"
-				+ "-fx-font: 30px Georgia;"
+				+ "-fx-font: 30px Harrington;"
 				);
 
 		//error labels
-		Label lblFormulaError = new Label("  Variables can only be alphapatic \n"
-				+ "and for logical operators see below");
+		Label lblFormulaError = new Label("\tVariables can only be alphabetic,\n"
+				+ "and only the below operators are allowed");
 
-		lblFormulaError.setStyle("-fx-text-fill: red;"
-				+ "-fx-font: 25px Georgia;"
-				);
-
+		lblFormulaError.setStyle("-fx-font: 25px Harrington;"
+				+ "-fx-padding: 8px;"
+				+ "-fx-background-color: #ff9999;"
+				+ "-fx-text-fill: #800000;"
+				+ "-fx-border-color: #800000;"
+				+ "-fx-border-width: 2px;"
+				+ "-fx-alignment: center;");
 
 		//setup text fields
 		txtFormula = new ValidationClass(input -> input.matches("[a-zA-Z !&()~|=<>]*"));
-
-		txtFormula.setPadding(new Insets(10, 10, 10, 10));
 
 		txtFormula.setStyle("-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),"
 				+ "linear-gradient(#020b02, #3a3a3a), "
@@ -63,26 +64,26 @@ public class LogicTutorPane extends GridPane {
 				+ "-fx-font-size: 30px;"
 				+ "-fx-font-weight: bold;"
 				+ "-fx-text-fill: #333333;"
-				+ "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
+				+ "-fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.2), 1, 0.0, 0, 1);"
 				);
 
 
 		//initialize the create profile button and binds it to the validation in the validation helper class
-		btncalculate = new Button("Evaluate");
-		btnSimplify = new Button("Simplify");
+		btnEvaluate = new Button("Evaluate");
+		btnManipulate = new Button("Manipulate");
 		btnAnd = new Button("&");
 		btnOr = new Button("|");
 		btnImplies = new Button("=>");
 		btnIfOnlyIf = new Button("<=>");
 		btnNegation = new Button("~");
-		
-		btncalculate.setStyle(WelcomingPane.idel);
-		btncalculate.setOnMouseEntered(e -> btncalculate.setStyle(WelcomingPane.hover));
-		btncalculate.setOnMouseExited(e -> btncalculate.setStyle(WelcomingPane.idel));
-		
-		btnSimplify.setStyle(WelcomingPane.idel);
-		btnSimplify.setOnMouseEntered(e -> btnSimplify.setStyle(WelcomingPane.hover));
-		btnSimplify.setOnMouseExited(e -> btnSimplify.setStyle(WelcomingPane.idel));
+
+		btnEvaluate.setStyle(WelcomingPane.idel);
+		btnEvaluate.setOnMouseEntered(e -> btnEvaluate.setStyle(WelcomingPane.hover));
+		btnEvaluate.setOnMouseExited(e -> btnEvaluate.setStyle(WelcomingPane.idel));
+
+		btnManipulate.setStyle(WelcomingPane.idel);
+		btnManipulate.setOnMouseEntered(e -> btnManipulate.setStyle(WelcomingPane.hover));
+		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(WelcomingPane.idel));
 		
 		btnAnd.setStyle(WelcomingPane.idel);
 		btnAnd.setOnMouseEntered(e -> btnAnd.setStyle(WelcomingPane.hover));
@@ -104,16 +105,16 @@ public class LogicTutorPane extends GridPane {
 		btnNegation.setOnMouseEntered(e -> btnNegation.setStyle(WelcomingPane.hover));
 		btnNegation.setOnMouseExited(e -> btnNegation.setStyle(WelcomingPane.idel));
 
-		btncalculate.setPadding(new Insets(10, 10, 10, 10));
-		btnSimplify.setPadding(new Insets(10, 10, 10, 10));
+		btnEvaluate.setPadding(new Insets(10, 10, 10, 10));
+		btnManipulate.setPadding(new Insets(10, 10, 10, 10));
 		btnAnd.setPadding(new Insets(10, 10, 10, 10));
 		btnOr.setPadding(new Insets(10, 10, 10, 10));
 		btnImplies.setPadding(new Insets(10, 10, 10, 10));
 		btnIfOnlyIf.setPadding(new Insets(10, 10, 10, 10));
 		btnNegation.setPadding(new Insets(10, 10, 10, 10));
 
-		btncalculate.setMinSize(50, 50);
-		btnSimplify.setMinSize(50, 50);
+		btnEvaluate.setMinSize(50, 50);
+		btnManipulate.setMinSize(50, 50);
 		btnAnd.setMinSize(35, 35);
 		btnOr.setMinSize(35, 35);
 		btnImplies.setMinSize(35, 35);
@@ -121,24 +122,22 @@ public class LogicTutorPane extends GridPane {
 		btnNegation.setMinSize(35, 35);
 
 
-		btncalculate.disableProperty().bind(txtFormula.isValidProperty.not());
-		btnSimplify.disableProperty().bind(txtFormula.isValidProperty.not());
+		btnEvaluate.disableProperty().bind(txtFormula.isValidProperty.not());
+		btnManipulate.disableProperty().bind(txtFormula.isValidProperty.not());
 		lblFormulaError.visibleProperty().bind(txtFormula.isValidProperty.not());
-
-
 
 		//h Boxes
 		HBox hb = new HBox(btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation);
-		HBox hb1 = new HBox(btncalculate, btnSimplify);
+		HBox hb1 = new HBox(btnEvaluate, btnManipulate);
 		hb.setAlignment(Pos.BASELINE_CENTER);
 		hb1.setAlignment(Pos.BASELINE_CENTER);
-		hb.setPadding(new Insets(5, 5, 5, 5));
-		hb1.setPadding(new Insets(5, 5, 5, 5));
 		hb.setSpacing(20);
 		hb1.setSpacing(20);
 
 		//v Box
 		VBox vb = new VBox(lblFormula, txtFormula, lblFormulaError, hb, hb1);
+		vb.setAlignment(Pos.CENTER);
+		vb.setSpacing(20);
 		this.add(vb, 1, 1);
 
 	}
@@ -163,8 +162,8 @@ public class LogicTutorPane extends GridPane {
 	 * method to attach the create student profile button event handler
 	 * @param handler
 	 */
-	public void calculateLogicHandler(EventHandler<ActionEvent> handler) {
-		btncalculate.setOnAction(handler);
+	public void evaluateLogicHandler(EventHandler<ActionEvent> handler) {
+		btnEvaluate.setOnAction(handler);
 	}
 	public void conjunctionLogicHandler(EventHandler<ActionEvent> handler) {
 		btnAnd.setOnAction(handler);
@@ -181,8 +180,8 @@ public class LogicTutorPane extends GridPane {
 	public void negationLogicHandler(EventHandler<ActionEvent> handler) {
 		btnNegation.setOnAction(handler);
 	}
-	public void simplifyLogicHandler(EventHandler<ActionEvent> handler) {
-		btnSimplify.setOnAction(handler);
+	public void manipulateLogicHandler(EventHandler<ActionEvent> handler) {
+		btnManipulate.setOnAction(handler);
 	}
 
 }

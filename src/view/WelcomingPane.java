@@ -1,5 +1,4 @@
 package view;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,11 +11,11 @@ import javafx.scene.layout.VBox;
 
 public class WelcomingPane extends GridPane{
 	private Label lbl;
-	private Button btnStudy, btnCalc, btnTest;
+	private Button btnStudy, btnEvaluate, btnManipulate, btnTest;
 	static final String idel= "-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),"
 			+ "linear-gradient(#020b02, #3a3a3a), "
-			+ "linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
-			+ "linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
+			+ "linear-gradient(#1c2331 0%, #c2c2c2 20%, #afafaf 80%, #1c2331 100%),"
+			+ "linear-gradient(#1c2331 0%, #dbdbdb 50%, #cacaca 51%, #1c2331 100%);"
 			+ "-fx-background-insets: 0,1,4,5,6;"
 		    + "-fx-background-radius: 9,8,5,4,3;"
 		    + "-fx-padding: 15 30 15 30;"
@@ -27,8 +26,8 @@ public class WelcomingPane extends GridPane{
 			;
     static final String hover= "-fx-background-color: linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),"
 			+ "linear-gradient(#020b02, #3a3a3a), "
-			+ "linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
-			+ "linear-gradient(#add8e6 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
+			+ "linear-gradient(#b3b3b3 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
+			+ "linear-gradient(#304461 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
 			+ "-fx-background-insets: 0,1,4,5,6;"
 		    + "-fx-background-radius: 9,8,5,4,3;"
 		    + "-fx-padding: 15 30 15 30;"
@@ -49,27 +48,59 @@ public class WelcomingPane extends GridPane{
 
 
 		//create labels
-		lbl = new Label(" Welcom To The Logic Tutor\n"
-				+ "\tPlease Select One Of\n"
-				+ "\t The Options Below");
+		lbl = new Label("\tWelcome To The Logic Tutor\nPlease Select One Of The Options Below");
 
-		lbl.setStyle("-fx-text-fill: white;"
-				+ "-fx-font: 30px Georgia;"
-				+ "-fx-font-alignment: center;"	
-				);
+		// apply CSS to the label to add a blur effect to the background
+		lbl.setStyle("-fx-font-family: Harrington;" +
+				"-fx-padding: 10px;" +
+				"-fx-background-color: #1c2331;" +
+				"-fx-border-color: white;" +
+				"-fx-border-width: 2px;" +
+				"-fx-text-fill: white;" +
+				"-fx-font-size: 44px;" +
+				"-fx-alignment: center;");
+
+		// add a hover effect to the label to make it shine
+		lbl.setOnMouseEntered(e -> {
+			lbl.setStyle("-fx-font-family: Harrington;" +
+					"-fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);" +
+					"-fx-padding: 10px;" +
+					"-fx-background-color: black;" +
+					"-fx-border-color: white;" +
+					"-fx-border-width: 2px;" +
+					"-fx-text-fill: white;" +
+					"-fx-font-size: 44px;" +
+					"-fx-alignment: center;");
+		});
+
+		lbl.setOnMouseExited(e -> {
+			lbl.setStyle("-fx-font-family: Harrington;" +
+					"-fx-padding: 10px;" +
+					"-fx-background-color: #1c2331;" +
+					"-fx-border-color: white;" +
+					"-fx-border-width: 2px;" +
+					"-fx-text-fill: white;" +
+					"-fx-font-size: 44px;" +
+					"-fx-alignment: center;");
+		});
 		
 		btnStudy = new Button("Study Logic");
-		btnCalc = new Button("Calculator");
+		btnEvaluate = new Button("Evaluator");
+		btnManipulate = new Button("Manipulator");
 		btnTest = new Button("     Test    ");
 		
 		
 		btnStudy.setStyle(idel);
 		btnStudy.setOnMouseEntered(e -> btnStudy.setStyle(hover));
 		btnStudy.setOnMouseExited(e -> btnStudy.setStyle(idel));
-		
-		btnCalc.setStyle(idel);
-		btnCalc.setOnMouseEntered(e -> btnCalc.setStyle(hover));
-		btnCalc.setOnMouseExited(e -> btnCalc.setStyle(idel));
+
+		btnEvaluate.setStyle(idel);
+		btnEvaluate.setOnMouseEntered(e -> btnEvaluate.setStyle(hover));
+		btnEvaluate.setOnMouseExited(e -> btnEvaluate.setStyle(idel));
+
+		btnManipulate.setStyle(idel);
+		btnManipulate.setOnMouseEntered(e -> btnManipulate.setStyle(hover));
+		btnManipulate.setOnMouseExited(e -> btnManipulate.setStyle(idel));
 		
 		btnTest.setStyle(idel);
 		btnTest.setOnMouseEntered(e -> btnTest.setStyle(hover));
@@ -77,10 +108,11 @@ public class WelcomingPane extends GridPane{
 		
 		
 		btnStudy.setMinSize(200, 75);
-		btnCalc.setMinSize(200, 75);
+		btnEvaluate.setMinSize(200, 75);
+		btnManipulate.setMinSize(200, 75);
 		btnTest.setMinSize(200, 75);
 		
-		HBox hb = new HBox(btnStudy, btnCalc, btnTest);
+		HBox hb = new HBox(btnStudy, btnEvaluate, btnManipulate, btnTest);
 		hb.setAlignment(Pos.BASELINE_CENTER);
 		hb.setPadding(new Insets(5, 5, 5, 5));
 		hb.setSpacing(20);
@@ -98,8 +130,11 @@ public class WelcomingPane extends GridPane{
 	public void studyHandler(EventHandler<ActionEvent> handler) {
 		btnStudy.setOnAction(handler);
 	}
-	public void calculatorHandler(EventHandler<ActionEvent> handler) {
-		btnCalc.setOnAction(handler);
+	public void evaluatorHandler(EventHandler<ActionEvent> handler) {
+		btnEvaluate.setOnAction(handler);
+	}
+	public void manipulatorHandler(EventHandler<ActionEvent> handler) {
+		btnManipulate.setOnAction(handler);
 	}
 	public void testHandler(EventHandler<ActionEvent> handler) {
 		btnTest.setOnAction(handler);

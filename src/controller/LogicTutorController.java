@@ -10,7 +10,6 @@ import javafx.scene.control.Alert.AlertType;
 import model.TruthTableHelperFun;
 import view.*;
 import model.LogicalFormula;
-import simplifier.SimplifyLogicalStrings;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +26,7 @@ public class LogicTutorController {
 	private final LogicTutorMenuBar ltmb;
 	private final LogicalFormula model;
 	private final WelcomingPane wp;
-	private final SimplificationPane sp;
+	private final ManipulationPane mp;
 	private final StudyPane stp;
 
 	/**
@@ -46,7 +45,7 @@ public class LogicTutorController {
 		ltmb = view.getLogicTutorMenuBar();
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
-		sp = view.getSimplificationPane();
+		mp = view.getManipulationPane();
 		stp = view.getStudyPane();
 
 
@@ -60,12 +59,13 @@ public class LogicTutorController {
 	private void attachEventHandlers() {
 		//
 		wp.studyHandler(new moveToStudyPaneHandler());
-		wp.calculatorHandler(new moveToCalcPaneHandler());
+		wp.evaluatorHandler(new moveToEvaluatePaneHandler());
+		wp.manipulatorHandler(new moveToManipulatePaneHandler());
 		wp.testHandler(new moveToTestPaneHandler());
 
 		//attach an event handler to create student profile pane
-		ltp.calculateLogicHandler(new evalLogicTutorPaneHandler());
-		ltp.simplifyLogicHandler(new simplificationBtnHandler());
+		ltp.evaluateLogicHandler(new evalLogicTutorPaneHandler());
+		ltp.manipulateLogicHandler(new simplificationBtnHandler());
 		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
 		ltp.disjunctionLogicHandler(new disjunctionBtnHandler());
 		ltp.negationLogicHandler(new negationBtnHandler());
@@ -75,16 +75,16 @@ public class LogicTutorController {
 		//result
 
 		//simplification
-		sp.btnSaveHandler(new saveSimplificationBtnHandler());
-		sp.btnCalcHandler(new calcSimplificationBtnHandler());
-		sp.addButtonLogicHandler(new addSimplificationPaneHandler());
-		sp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
-		sp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
-		sp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
-		sp.negationLogicHandler(new negationSimplificationBtnHandler());
-		sp.implicationLogicHandler(new implicationSimplificationBtnHandler());
-		sp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
-		sp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
+		mp.btnSaveHandler(new saveSimplificationBtnHandler());
+		mp.btnCalcHandler(new calcSimplificationBtnHandler());
+		mp.addButtonLogicHandler(new addSimplificationPaneHandler());
+		mp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
+		mp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
+		mp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
+		mp.negationLogicHandler(new negationSimplificationBtnHandler());
+		mp.implicationLogicHandler(new implicationSimplificationBtnHandler());
+		mp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
+		mp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
 
 		//attach an event handler to the menu bar that closes the application
 		ltmb.addExitHandler(e -> System.exit(0));
@@ -135,7 +135,7 @@ public class LogicTutorController {
 				{
 					ex.printStackTrace();
 				}
-				view.changeTab(2);
+				view.changeTab(3);
 			}
 		}
 	}
@@ -155,10 +155,9 @@ public class LogicTutorController {
 				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 
-				sp.populateFunction(model.getFormula());
-				sp.populateResult(SimplifyLogicalStrings.simplify(model.getFormula()));
-				model.setFormula(SimplifyLogicalStrings.simplify(model.getFormula()));
-				view.changeTab(3);
+				mp.populateFunction(model.getFormula());
+				mp.populateResult(model.getFormula());
+				view.changeTab(4);
 			}
 		}
 	}
@@ -198,15 +197,23 @@ public class LogicTutorController {
 	private class moveToStudyPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			view.changeTab(4);
-		}
-	}
-	private class moveToCalcPaneHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
 			view.changeTab(1);
 		}
 	}
+	private class moveToEvaluatePaneHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			view.changeTab(2);
+		}
+	}
+
+	private class moveToManipulatePaneHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			view.changeTab(4);
+		}
+	}
+
 	private class moveToTestPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -227,7 +234,7 @@ public class LogicTutorController {
 		@Override
 		public void handle(ActionEvent event) {
 			try {
-				model.setFormula(sp.getFormula());
+				model.setFormula(mp.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -263,49 +270,49 @@ public class LogicTutorController {
 				{
 					ex.printStackTrace();
 				}
-				view.changeTab(2);
+				view.changeTab(3);
 			}
 		}
 	}
 	private class conjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("&");
+			mp.setFormula("&");
 		}
 	}
 
 	private class disjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("|");
+			mp.setFormula("|");
 		}
 	}
 	private class negationSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("~");
+			mp.setFormula("~");
 		}
 	}
 	private class implicationSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("=>");
+			mp.setFormula("=>");
 		}
 	}
 	private class equivalenceSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("<=>");
+			mp.setFormula("<=>");
 		}
 	}
 
 	private class addSimplificationPaneHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			sp.clearResult();
+			mp.clearResult();
 			//retrieves data from the view
 			try {
-				sp.removeSpaces(sp.getFormula());
-				model.setFormula(sp.getFormula());
+				mp.removeSpaces(mp.getFormula());
+				model.setFormula(mp.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -314,8 +321,8 @@ public class LogicTutorController {
 				//output error
 				alertDialogBuilder("You need to enter a formula");
 			}else {
-				sp.populateFunction(model.getFormula());
-				sp.populateResult(model.getFormula());
+				mp.populateFunction(model.getFormula());
+				mp.populateResult(model.getFormula());
 				model.setFormula(model.getFormula());
 			}
 		}
@@ -323,7 +330,7 @@ public class LogicTutorController {
 
 	private class updateComboSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			model.setSelectedFormula(sp.getSelectedFormula());
+			model.setSelectedFormula(mp.getSelectedFormula());
 			if (!model.getSelectedFormula().isEmpty()) {
 				List<String> itemList = model.getRulesList();
 				String expression = model.getSelectedFormula();
@@ -331,7 +338,7 @@ public class LogicTutorController {
 				List<String> tokens = Tokenizer.tokenize(expression);
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
 				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
-				sp.updateComboBox(itemList, expr);
+				mp.updateComboBox(itemList, expr);
 			} else{
 				alertDialogBuilder("Highlight an expression");
 			}
@@ -342,7 +349,7 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				model.setSelectedFormula(sp.getSelectedFormula());
+				model.setSelectedFormula(mp.getSelectedFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -358,7 +365,7 @@ public class LogicTutorController {
 				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 				Expression result = null;
 				model.setResult("");
-				switch (sp.getSelectedRule()) {
+				switch (mp.getSelectedRule()) {
 					case "Idempotence Rule" -> {
 						IdempotenceVisitor visitor = new IdempotenceVisitor();
 						result = expr.accept(visitor);
@@ -408,11 +415,11 @@ public class LogicTutorController {
 						alertDialogBuilder("Select a rule");
 					}
 				}
-				sp.setFunction(result.toString(), sp.getIndexRange().getStart(), sp.getIndexRange().getEnd());
-				model.updateResult(sp.getFunction());
-				sp.clearFormula();
-				sp.populateResult(model.getResult());
-				sp.setFormula(sp.getFunction());
+				mp.setFunction(result.toString(), mp.getIndexRange().getStart(), mp.getIndexRange().getEnd());
+				model.updateResult(mp.getFunction());
+				mp.clearFormula();
+				mp.populateResult(model.getResult());
+				mp.setFormula(mp.getFunction());
 				model.setResult("");
 			}
 		}
