@@ -42,8 +42,8 @@ public class ManipulationPane extends ScrollPane {
 		);
 
 		//error labels
-		Label lblFormulaError = new Label("\tVariables can only be alphabetic,\n"
-				+ "and only the below operators are allowed");
+		Label lblFormulaError = new Label("Variables can only be alphabetic, all brackets must be closed,\n"
+				+ "\t\tand only the below operators are allowed");
 
 		lblFormulaError.setStyle("-fx-font: 25px Harrington;"
 				+ "-fx-padding: 8px;"
@@ -56,7 +56,25 @@ public class ManipulationPane extends ScrollPane {
 
 
 		//setup text fields
-		txtFormula = new ValidationClass(input -> input.matches("[a-zA-Z !&()~|=<>]*"));
+		txtFormula = new ValidationClass(input -> {
+			// Match only alphabets, spaces, and a few special characters
+			if (!input.matches("[a-zA-Z !&()~|=<>]*")) {
+				return false;
+			}
+			// Check if brackets are balanced
+			int count = 0;
+			for (char c : input.toCharArray()) {
+				if (c == '(') {
+					count++;
+				} else if (c == ')') {
+					count--;
+				}
+				if (count < 0) {
+					return false;
+				}
+			}
+			return count == 0;
+		});
 
 		txtFormula.setPadding(new Insets(10, 10, 10, 10));
 
