@@ -10,9 +10,7 @@ import javafx.scene.control.Alert.AlertType;
 import model.TruthTableHelperFun;
 import view.*;
 import model.LogicalFormula;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -228,23 +226,29 @@ public class LogicTutorController {
 		public void handle(ActionEvent event) {
 			// Get the contents of the TextArea
 			String text = mp.getTxtResult().getText();
+			if(!mp.getTxtResult().getText().isEmpty()) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				String timeStamp = dateFormat.format(new Date());
+				String fileName = "file_" + timeStamp + ".txt";
+				// Set the file path
+				String filePath = String.format(".//savedManipulations//%s", fileName);
 
-			DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-			String timeStamp = dateFormat.format(new Date());
-			String fileName = "file_" + timeStamp + ".txt";
-			// Set the file path
-			String filePath = String.format(".//savedManipulations//%s", fileName);
+				// Create a File object
+				File file = new File(filePath);
 
-			// Create a File object
-			File file = new File(filePath);
+				// Write the contents of the TextArea to the file
 
-			// Write the contents of the TextArea to the file
-			try {
-				FileWriter fileWriter = new FileWriter(file);
-				fileWriter.write(text);
-				fileWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+				try {
+					FileWriter fileWriter = new FileWriter(file);
+					fileWriter.write(text);
+					fileWriter.close();
+					successDialogBuilder("Save Complete");
+				} catch (IOException e) {
+					e.printStackTrace();
+					alertDialogBuilder("Save InComplete");
+				}
+			}else {
+				alertDialogBuilder("There is nothing to save");
 			}
 		}
 	}
@@ -254,23 +258,26 @@ public class LogicTutorController {
 		public void handle(ActionEvent event) {
 			// Get the contents of the TextArea
 			String text = rp.getTxtFunction().getText() +"\n"+ rp.getTxtTruthTable().getText() +"\n"+ rp.getTxtResult().getText();
-
-			DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-			String timeStamp = dateFormat.format(new Date());
-			String fileName = "file_" + timeStamp + ".txt";
-			// Set the file path
-			String filePath = String.format(".//savedEvaluations//%s", fileName);
-
-			// Create a File object
-			File file = new File(filePath);
-
-			// Write the contents of the TextArea to the file
-			try {
-				FileWriter fileWriter = new FileWriter(file);
-				fileWriter.write(text);
-				fileWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(!rp.getTxtResult().getText().isEmpty()) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				String timeStamp = dateFormat.format(new Date());
+				String fileName = "file_" + timeStamp + ".txt";
+				// Set the file path
+				String filePath = String.format(".//savedEvaluations//%s", fileName);
+				// Create a File object
+				File file = new File(filePath);
+				// Write the contents of the TextArea to the file
+				try {
+					FileWriter fileWriter = new FileWriter(file);
+					fileWriter.write(text);
+					fileWriter.close();
+					successDialogBuilder("Save Complete");
+				} catch (IOException e) {
+					e.printStackTrace();
+					alertDialogBuilder("Save InComplete");
+				}
+			}else{
+				alertDialogBuilder("There is nothing to save");
 			}
 		}
 	}
@@ -470,6 +477,14 @@ public class LogicTutorController {
 	private void alertDialogBuilder(String str) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(str);
+		alert.showAndWait();
+	}
+
+	private void successDialogBuilder(String str) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Confirmation Dialog");
 		alert.setHeaderText(null);
 		alert.setContentText(str);
 		alert.showAndWait();
