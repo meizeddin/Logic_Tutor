@@ -1,0 +1,14 @@
+A&B
+#	   A		   B		
+---------------------------------------------
+1	TRUE	TRUE	
+2	TRUE	FALSE	
+3	FALSE	TRUE	
+4	FALSE	FALSE	
+
+#	A&B	  TYPE: CONTINGENCY
+-------------------
+1	TRUE
+2	FALSE
+3	FALSE
+4	FALSE

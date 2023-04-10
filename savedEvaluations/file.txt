@@ -1,0 +1,22 @@
+(A&B)=>R
+#	   A		   B		   R		
+---------------------------------------------
+1	TRUE	TRUE	TRUE	
+2	TRUE	TRUE	FALSE	
+3	TRUE	FALSE	TRUE	
+4	TRUE	FALSE	FALSE	
+5	FALSE	TRUE	TRUE	
+6	FALSE	TRUE	FALSE	
+7	FALSE	FALSE	TRUE	
+8	FALSE	FALSE	FALSE	
+
+#	(A&B)=>R	  TYPE: CONTINGENCY
+-------------------
+1	TRUE
+2	FALSE
+3	TRUE
+4	TRUE
+5	TRUE
+6	TRUE
+7	TRUE
+8	TRUE

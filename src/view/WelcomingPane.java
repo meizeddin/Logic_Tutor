@@ -17,7 +17,7 @@ public class WelcomingPane extends GridPane{
 			+ "linear-gradient(#1c2331 0%, #c2c2c2 20%, #afafaf 80%, #1c2331 100%),"
 			+ "linear-gradient(#1c2331 0%, #dbdbdb 50%, #cacaca 51%, #1c2331 100%);"
 			+ "-fx-background-insets: 0,1,4,5,6;"
-		    + "-fx-background-radius: 9,8,5,4,3;"
+		    + "-fx-background-radius: 30,29,25,24,23;"
 		    + "-fx-padding: 15 30 15 30;"
 		    + "-fx-font-alignment: center;"
 		    + "-fx-font: 30px Georgia;"
@@ -29,7 +29,7 @@ public class WelcomingPane extends GridPane{
 			+ "linear-gradient(#b3b3b3 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
 			+ "linear-gradient(#304461 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
 			+ "-fx-background-insets: 0,1,4,5,6;"
-		    + "-fx-background-radius: 9,8,5,4,3;"
+		    + "-fx-background-radius: 30,29,25,24,23;"
 		    + "-fx-padding: 15 30 15 30;"
 		    + "-fx-font: 30px Georgia;"
 		    + "-fx-text-fill: #333333;"
@@ -54,10 +54,12 @@ public class WelcomingPane extends GridPane{
 		lbl.setStyle("-fx-font-family: Harrington;" +
 				"-fx-padding: 10px;" +
 				"-fx-background-color: #1c2331;" +
-				"-fx-border-color: white;" +
+				"-fx-background-radius: 25;" +
+				"-fx-border-radius: 25; " +
+				"-fx-border-color: white; " +
 				"-fx-border-width: 2px;" +
 				"-fx-text-fill: white;" +
-				"-fx-font-size: 44px;" +
+				"-fx-font-size: 50px;" +
 				"-fx-alignment: center;");
 
 		// add a hover effect to the label to make it shine
@@ -65,20 +67,24 @@ public class WelcomingPane extends GridPane{
 				"-fx-effect: dropshadow(three-pass-box, white, 10, 0, 0, 0);" +
 				"-fx-padding: 10px;" +
 				"-fx-background-color: black;" +
-				"-fx-border-color: white;" +
+				"-fx-background-radius: 25;" +
+				"-fx-border-radius: 25; " +
+				"-fx-border-color: white; " +
 				"-fx-border-width: 2px;" +
 				"-fx-text-fill: white;" +
-				"-fx-font-size: 44px;" +
+				"-fx-font-size: 50px;" +
 				"-fx-alignment: center;"));
 
 		lbl.setOnMouseExited(e -> lbl.setStyle("-fx-font-family: Harrington;" +
-					"-fx-padding: 10px;" +
-					"-fx-background-color: #1c2331;" +
-					"-fx-border-color: white;" +
-					"-fx-border-width: 2px;" +
-					"-fx-text-fill: white;" +
-					"-fx-font-size: 44px;" +
-					"-fx-alignment: center;"));
+				"-fx-padding: 10px;" +
+				"-fx-background-color: #1c2331;" +
+				"-fx-background-radius: 25;" +
+				"-fx-border-radius: 25; " +
+				"-fx-border-color: white; " +
+				"-fx-border-width: 2px;" +
+				"-fx-text-fill: white;" +
+				"-fx-font-size: 50px;" +
+				"-fx-alignment: center;"));
 
 		
 		btnStudy = new Button("Study Logic");

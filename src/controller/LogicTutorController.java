@@ -10,6 +10,12 @@ import javafx.scene.control.Alert.AlertType;
 import model.TruthTableHelperFun;
 import view.*;
 import model.LogicalFormula;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +27,7 @@ public class LogicTutorController {
 
 	//fields to be used throughout class
 	private final LogicTutorRootPane view;
-	private final EvaluatorPane ltp;
+	private final EvaluatorPane ep;
 	private final ResultPane rp;
 	private final LogicTutorMenuBar ltmb;
 	private final LogicalFormula model;
@@ -40,7 +46,7 @@ public class LogicTutorController {
 		this.model = model;
 
 		//initialize view sub-container fields
-		ltp = view.getLogicTutorPane();
+		ep = view.getLogicTutorPane();
 		ltmb = view.getLogicTutorMenuBar();
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
@@ -55,24 +61,25 @@ public class LogicTutorController {
 	 * helper method - used to attach event handlers
 	 */
 	private void attachEventHandlers() {
-		//
+		//WelcomePane Handlers
 		wp.studyHandler(new moveToStudyPaneHandler());
 		wp.evaluatorHandler(new moveToEvaluatePaneHandler());
 		wp.manipulatorHandler(new moveToManipulatePaneHandler());
 		wp.testHandler(new moveToTestPaneHandler());
 
 		//attach an event handler to create student profile pane
-		ltp.evaluateLogicHandler(new evalLogicTutorPaneHandler());
-		ltp.manipulateLogicHandler(new simplificationBtnHandler());
-		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
-		ltp.disjunctionLogicHandler(new disjunctionBtnHandler());
-		ltp.negationLogicHandler(new negationBtnHandler());
-		ltp.implicationLogicHandler(new implicationBtnHandler());
-		ltp.equivalenceLogicHandler(new equivalenceBtnHandler());
+		ep.evaluateLogicHandler(new evalLogicTutorPaneHandler());
+		ep.manipulateLogicHandler(new simplificationBtnHandler());
+		ep.conjunctionLogicHandler(new conjunctionBtnHandler());
+		ep.disjunctionLogicHandler(new disjunctionBtnHandler());
+		ep.negationLogicHandler(new negationBtnHandler());
+		ep.implicationLogicHandler(new implicationBtnHandler());
+		ep.equivalenceLogicHandler(new equivalenceBtnHandler());
 
-		//result
+		//resultPane Handlers
+		rp.btnSaveHandler(new saveResultBtnHandler());
 
-		//simplification
+		//Manipulation pane handlers
 		mp.btnSaveHandler(new saveSimplificationBtnHandler());
 		mp.btnCalcHandler(new calcSimplificationBtnHandler());
 		mp.addButtonLogicHandler(new addSimplificationPaneHandler());
@@ -96,8 +103,8 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				ltp.removeSpaces(ltp.getFormula());
-				model.setFormula(ltp.getFormula());
+				ep.removeSpaces(ep.getFormula());
+				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -138,8 +145,8 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				ltp.removeSpaces(ltp.getFormula());
-				model.setFormula(ltp.getFormula());
+				ep.removeSpaces(ep.getFormula());
+				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -159,32 +166,32 @@ public class LogicTutorController {
 	private class conjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("&");
+			ep.setFormula("&");
 		}
 	}
 
 	private class disjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("|");
+			ep.setFormula("|");
 		}
 	}
 	private class negationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("~");
+			ep.setFormula("~");
 		}
 	}
 	private class implicationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("=>");
+			ep.setFormula("=>");
 		}
 	}
 	private class equivalenceBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("<=>");
+			ep.setFormula("<=>");
 		}
 	}
 
@@ -211,7 +218,7 @@ public class LogicTutorController {
 	private class moveToTestPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			//view.changeTab(3);
+			view.changeTab(5);
 		}
 	}
 
@@ -219,8 +226,52 @@ public class LogicTutorController {
 
 		@Override
 		public void handle(ActionEvent event) {
-			// TODO Auto-generated method stub
+			// Get the contents of the TextArea
+			String text = mp.getTxtResult().getText();
 
+			DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			String timeStamp = dateFormat.format(new Date());
+			String fileName = "file_" + timeStamp + ".txt";
+			// Set the file path
+			String filePath = String.format(".//savedManipulations//%s", fileName);
+
+			// Create a File object
+			File file = new File(filePath);
+
+			// Write the contents of the TextArea to the file
+			try {
+				FileWriter fileWriter = new FileWriter(file);
+				fileWriter.write(text);
+				fileWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class saveResultBtnHandler implements EventHandler<ActionEvent>{
+		@Override
+		public void handle(ActionEvent event) {
+			// Get the contents of the TextArea
+			String text = rp.getTxtFunction().getText() +"\n"+ rp.getTxtTruthTable().getText() +"\n"+ rp.getTxtResult().getText();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			String timeStamp = dateFormat.format(new Date());
+			String fileName = "file_" + timeStamp + ".txt";
+			// Set the file path
+			String filePath = String.format(".//savedEvaluations//%s", fileName);
+
+			// Create a File object
+			File file = new File(filePath);
+
+			// Write the contents of the TextArea to the file
+			try {
+				FileWriter fileWriter = new FileWriter(file);
+				fileWriter.write(text);
+				fileWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -4,11 +4,14 @@ import expressionTree.Expression;
 import expressionTree.rules.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import model.ValidationClass;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,9 +23,6 @@ public class ManipulationPane extends ScrollPane {
 	private final ValidationClass txtFormula;
 	private final TextArea txtFunction, txtResult;
 	private final ComboBox<String> comboBox;
-	private final Label comboLabel;
-	private final VBox comboVBox;
-
 
 
 	/**
@@ -35,7 +35,7 @@ public class ManipulationPane extends ScrollPane {
 		this.setPrefSize(700, 700);
 		this.setFitToWidth(true);
 
-		Label lblFormula = new Label("Add A Formula");
+		Label lblFormula = new Label("Add An Expression");
 
 		lblFormula.setStyle("-fx-text-fill: white;"
 				+ "-fx-font: 30px Harrington;"
@@ -83,7 +83,7 @@ public class ManipulationPane extends ScrollPane {
 				+ "linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
 				+ "linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
 				+ "-fx-background-insets: 0,1,4,5,6;"
-				+ "-fx-background-radius: 9,8,5,4,3;"
+				+ "-fx-background-radius: 70,69,65,64,63;"
 				+ "-fx-padding: 15 30 15 30;"
 				+ "-fx-font-size: 30px;"
 				+ "-fx-font-weight: bold;"
@@ -91,6 +91,33 @@ public class ManipulationPane extends ScrollPane {
 				+ "-fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);"
 		);
 		txtFormula.setMaxSize(700, 100);
+		txtFormula.setPromptText("Enter a logical expression");
+
+		// Create a round button with a tooltip
+		Button popupButton = new Button("Click me!");
+		popupButton.setStyle("-fx-background-color: #37435c; "
+				+ "-fx-text-fill: white; "
+				+ "-fx-background-radius: 30;");
+
+		popupButton.setOnMouseEntered(e -> popupButton.setEffect(new DropShadow(10, Color.WHITE)));
+		popupButton.setOnMouseExited(e -> popupButton.setEffect(null));
+
+		Tooltip tooltip = new Tooltip("Click me to display a message");
+		popupButton.setTooltip(tooltip);
+
+		// Create a popup message
+		Tooltip popupMessage = new Tooltip("""
+				Only alphabetic characters and the below operators are allowed
+							Make sure you close all the brackets
+				(T) and (F) are considered true and false rather than variables""");
+		popupMessage.setStyle("-fx-font-size: 18px;");
+		popupMessage.setAutoHide(true);
+
+		// Show the popup message when the button is clicked
+		popupButton.setOnAction(e -> {
+			Bounds bounds = popupButton.localToScreen(popupButton.getBoundsInLocal());
+			popupMessage.show(popupButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
+		});
 
 		//initialize the create profile button and binds it to the validation in the validation helper class
 		btnAdd = new Button("Add");
@@ -154,15 +181,19 @@ public class ManipulationPane extends ScrollPane {
 		//h Boxes
 		HBox hb = new HBox(btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation);
 		HBox hb1 = new HBox(btnAdd);
+		HBox hb2 = new HBox(lblFormula, popupButton);
 		hb.setAlignment(Pos.BASELINE_CENTER);
 		hb1.setAlignment(Pos.BASELINE_CENTER);
+		hb2.setAlignment(Pos.BASELINE_CENTER);
 		hb.setPadding(new Insets(5, 5, 5, 5));
 		hb1.setPadding(new Insets(5, 5, 5, 5));
+		hb2.setPadding(new Insets(5, 5, 5, 5));
 		hb.setSpacing(20);
 		hb1.setSpacing(20);
+		hb2.setSpacing(20);
 
 		//v Box
-		VBox vb = new VBox(lblFormula, txtFormula, lblFormulaError, hb, hb1);
+		VBox vb = new VBox(hb2, txtFormula, lblFormulaError, hb, hb1);
 		vb.setAlignment(Pos.CENTER);
 		vb.setSpacing(20);
 		//initialize buttons
@@ -213,9 +244,9 @@ public class ManipulationPane extends ScrollPane {
 		comboBox = new ComboBox<>();
 		comboBox.getItems().addAll("Select an option..");
 		comboBox.setOnAction((event)-> updateModel());
-		comboLabel = new Label("Select a rule:");
+		Label comboLabel = new Label("Select a rule:");
 		comboLabel.setStyle("-fx-text-fill: white;");
-		comboVBox = new VBox(10, comboLabel, comboBox);
+		VBox comboVBox = new VBox(10, comboLabel, comboBox);
 		comboVBox.setPadding(new Insets(10));
 		comboBox.setValue(comboBox.getItems().get(0));
 
@@ -414,9 +445,6 @@ public class ManipulationPane extends ScrollPane {
 	public void negationLogicHandler(EventHandler<ActionEvent> handler) {
 		btnNegation.setOnAction(handler);
 	}
-	public void calcLogicHandler(EventHandler<ActionEvent> handler) {
-		btnCalc.setOnAction(handler);
-	}
 	public void updateBtnLogicHandler(EventHandler<ActionEvent> handler) {
 		btnUpdateCombo.setOnAction(handler);
 	}
@@ -436,13 +464,6 @@ public class ManipulationPane extends ScrollPane {
 
 	public void clearResult(){
 		txtResult.clear();
-	}
-
-	/**
-	 * @returns the button (Save Overview) to be accessed by the controller
-	 */
-	public Button getBtnSaveOverview() {
-		return btnSave;
 	}
 	/**
 	 * @returns student personal details of type TextArea

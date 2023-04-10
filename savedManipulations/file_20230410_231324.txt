@@ -1,0 +1,6 @@
+A
+(A&A)
+Using Commutative Law
+(A&A)
+Using Idempotence Law
+A

@@ -1,5 +1,8 @@
 package view;
-
+import javafx.geometry.Bounds;
+import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import model.ValidationClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,7 +36,7 @@ public class EvaluatorPane extends GridPane {
 
 
 		//create labels
-		Label lblFormula = new Label("Add A Formula");
+		Label lblFormula = new Label("Add An Expression");
 
 		lblFormula.setStyle("-fx-text-fill: white;"
 				+ "-fx-font: 30px Harrington;"
@@ -77,14 +80,43 @@ public class EvaluatorPane extends GridPane {
 				+ "linear-gradient(#b9b9b9 0%, #c2c2c2 20%, #afafaf 80%, #c8c8c8 100%),"
 				+ "linear-gradient(#f5f5f5 0%, #dbdbdb 50%, #cacaca 51%, #d7d7d7 100%);"
 				+ "-fx-background-insets: 0,1,4,5,6;"
-				+ "-fx-background-radius: 9,8,5,4,3;"
+				+ "-fx-background-radius: 70,69,65,64,63;"
 				+ "-fx-padding: 15 30 15 30;"
 				+ "-fx-font-size: 30px;"
 				+ "-fx-font-weight: bold;"
 				+ "-fx-text-fill: #333333;"
 				+ "-fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.2), 1, 0.0, 0, 1);"
 				);
+		txtFormula.setPromptText("Enter a logical expression");
 
+		// Create a round button with a tooltip
+		Button popupButton = new Button("Click me!");
+		popupButton.setStyle("-fx-background-color: #37435c; "
+				+ "-fx-text-fill: white; "
+				+ "-fx-background-radius: 30;");
+		popupButton.setOnMouseEntered(e -> {
+			popupButton.setEffect(new DropShadow(10, Color.WHITE));
+		});
+
+		popupButton.setOnMouseExited(e -> {
+			popupButton.setEffect(null);
+		});
+		Tooltip tooltip = new Tooltip("Click me to display a message");
+		popupButton.setTooltip(tooltip);
+
+		// Create a popup message
+		Tooltip popupMessage = new Tooltip("""
+				Only alphabetic characters and the below operators are allowed
+							Make sure you close all the brackets
+				(T) and (F) are considered true and false rather than variables""");
+		popupMessage.setStyle("-fx-font-size: 18px;");
+		popupMessage.setAutoHide(true);
+
+		// Show the popup message when the button is clicked
+		popupButton.setOnAction(e -> {
+			Bounds bounds = popupButton.localToScreen(popupButton.getBoundsInLocal());
+			popupMessage.show(popupButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
+		});
 
 		//initialize the create profile button and binds it to the validation in the validation helper class
 		btnEvaluate = new Button("Evaluate");
@@ -147,13 +179,16 @@ public class EvaluatorPane extends GridPane {
 		//h Boxes
 		HBox hb = new HBox(btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation);
 		HBox hb1 = new HBox(btnEvaluate, btnManipulate);
+		HBox hb2 = new HBox(lblFormula, popupButton);
 		hb.setAlignment(Pos.BASELINE_CENTER);
 		hb1.setAlignment(Pos.BASELINE_CENTER);
+		hb2.setAlignment(Pos.BASELINE_CENTER);
 		hb.setSpacing(20);
 		hb1.setSpacing(20);
+		hb2.setSpacing(20);
 
 		//v Box
-		VBox vb = new VBox(lblFormula, txtFormula, lblFormulaError, hb, hb1);
+		VBox vb = new VBox(hb2, txtFormula, lblFormulaError, hb, hb1);
 		vb.setAlignment(Pos.CENTER);
 		vb.setSpacing(20);
 		this.add(vb, 1, 1);
