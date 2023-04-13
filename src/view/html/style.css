@@ -2,11 +2,32 @@ body {
   background-color: #333;
   color: #eee;
   font-size:1.2em;
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+}
+.light {
+  background-color: #fffaea;
+  color: #000;
+  font-size:1.2em;
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+}
+.light p{
+  color: black;
 }
 
 .lesson-card {
   background-color: #555;
   color: #fff;
+}
+.lesson-card p{
+  color: white;
 }
 
 .btn-primary {
@@ -47,6 +68,23 @@ body {
   animation-name: bounce;
   animation-iteration-count: 5;
 }
+.fluid-container{
+  padding: 20px 20px 20px 20px;
+}
+
+.card{
+    border-width: 5px;
+}
+.card p{
+  color: white;
+}
+.card-header{
+  color: white;
+}
+
+h2{
+    padding: 20px 10px 20px 0px;
+}
 
 @keyframes bounce {
   from,
@@ -73,8 +111,17 @@ body {
     transform: translate3d(0, -4px, 0);
   }
 }
-
 p {
   color: white;
 }
+.change {
+    cursor: pointer;
+    border: 1px solid #555;
+    border-radius: 40%;
+    width: 70px;
+    text-align: center;
+    padding: 5px;
+    margin-left: 8px;
+}
+
 

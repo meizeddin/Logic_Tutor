@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lesson3: Logical Equivalence and Laws of Propositional Calculi</title>
+    <link rel="stylesheet" href="../../main/resources/bootstrap5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="StudyPage.html"><img src="../media/logic.png" width="64" height="64" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="StudyPage.html">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lessons
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="LessonOne.html">Lesson1: Introduction to Propositional Logic</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonTwo.html">Lesson2: Propositional Connectives and Truth Tables</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonThree.html">Lesson3: Logical Equivalence and Laws of Propositional Calculi</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFour.html">Lesson4: Propositional Proof and Deduction</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFive.html">Lesson5: Applications of Propositional Logic</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="btn btn-primary change" onclick="darkLight()">Dark</button>
+        </div>
+    </div>
+</nav>
+<div class="fluid-container lesson-content">
+    <h1 class="my-5 text-center">Lesson 3: Logical Equivalence and Laws of Propositional Calculi</h1>
+    <div class="fluid-container">
+        <h1>Logical Equivalence</h1>
+        <p>Logical equivalence is a concept in logic and mathematics that describes a relationship between two logical statements. Two statements are said to be logically equivalent if they have the same truth value in all possible scenarios or situations. In other words, if the truth value of one statement is true, then the truth value of the other statement is also true, and if the truth value of one statement is false, then the truth value of the other statement is also false.</p>
+        <h2>Example:</h2>
+        <p>The statements "P and Q" and "Q and P" are logically equivalent. This is because both statements are true only if both P and Q are true, and false otherwise. Similarly, the statements "not (P or Q)" and "not P and not Q" are also logically equivalent, as both statements are true only if both P and Q are false, and false otherwise.</p>
+        <h2>Importance:</h2>
+        <p>Logical equivalence is an important concept in logic and mathematics, as it allows us to simplify complex logical expressions and proofs by replacing one statement with another that is logically equivalent. By doing so, we can reduce the number of logical steps required to reach a conclusion, making our reasoning more efficient and effective.</p>
+        <h2>Practical Example:</h2>
+        <p>Two propositions are logically equivalent if they have identical truth tables, see below.<br>
+        <div style="text-align: center;">
+            Consider the truth tables of<br>
+            <b>¬ (P & Q)</b> and <b>(¬P | ¬Q)</b>
+        </div>
+        </p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-dark table-striped table-hover table-bordered text-white">
+                    <thead>
+                    <tr class= "tr text-center">
+                        <th scope="col">P</th>
+                        <th scope="col">Q</th>
+                        <th scope="col">¬ (P & Q)</th>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="col">
+                <table class="table table-dark table-striped table-hover table-bordered text-white">
+                    <thead>
+                    <tr class= "tr text-center">
+                        <th scope="col">P</th>
+                        <th scope="col">Q</th>
+                        <th scope="col">¬P</th>
+                        <th scope="col">¬Q</th>
+                        <th scope="col">(¬P | ¬Q)</th>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <p>Since the truth tables are the same, the propositions are logically equivalent, and we can write:<br>
+                <b>¬(P & Q) ≡ (¬P | ¬Q)</b>
+            </p>
+        </div>
+    </div>
+    <hr>
+    <div class="row justify-content-center">
+        <div class="col-md-8 lesson-card py-4 px-5 my-5 center">
+            <h1>Exercise 3:</h1>
+            <form id="Exercise3-form">
+                <div class="mb-3">
+                    <label class="form-label">Construct a truth table to establish the equivalence.</label>
+                    <div>
+                        <ul style="text-align: left;">
+                            <li>¬(P => Q) ≡ (P | ¬Q)</li>
+                        </ul>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="checkAnswer3()">Check Answers</button>
+            </form>
+            <div class="mt-3" id="feedback3"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <h2>Some Important Laws of Propositional Calculi</h2>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-primary mb-3 bg-dark">
+                    <div class="card-header">1. Idempotent Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P | P ≡ P</p>
+                        <p>P & P ≡ P</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-secondary mb-3 bg-dark">
+                    <div class="card-header">2. Commutative Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P | Q ≡ Q | P</p>
+                        <p>P & Q ≡ Q & P</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-success mb-3 bg-dark">
+                    <div class="card-header">3. Identity Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P | F ≡ P</p>
+                        <p>P & T ≡ P</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-danger mb-3 bg-dark">
+                    <div class="card-header">4. Associative Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P | (Q | R) ≡ (P | Q) | R</p>
+                        <p>P & (Q & R) ≡ (P & Q) & R</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-warning mb-3 bg-dark">
+                    <div class="card-header">5. Distributive Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P & (Q | R) ≡ (P & Q) | (P & R)</p>
+                        <p>P | (Q & R) ≡ (P | Q) & (P | R)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-info mb-3 bg-dark">
+                    <div class="card-header">6. Complement Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>P & ¬P ≡ F &nbsp &nbsp &nbsp &nbsp &nbsp ¬T ≡ F</p>
+                        <p>P | ¬P ≡ T &nbsp &nbsp &nbsp &nbsp &nbsp ¬F ≡ T</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-light mb-3 bg-dark">
+                    <div class="card-header">7. De Morgan’s Laws</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>¬(P & Q) ≡ ¬P | Q</p>
+                        <p>¬(P | Q) ≡ ¬P & ¬Q</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="card border-dark mb-3 bg-dark">
+                    <div class="card-header">8. Double Negation</div>
+                    <div class="card-body bg-secondary text-center">
+                        <p>¬(¬P) ≡ P</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 lesson-card py-4 px-5 my-5">
+            <h1>Exercise 3:</h1>
+            <form id="Exercise4-form">
+                <div class="mb-3">
+                    <label class="form-label">Construct a truth table to establish the equivalence (to prove the distributivity and associativity).</label>
+                    <div>
+                        <ul style="text-align: left;">
+                            <li>Distributivity</li>
+                                <ul style="text-align: left;">
+                                    <li>P & (Q | R) ≡ (P & Q) | (P & R)</li>
+                                </ul>
+                            <li>Associativity
+                                <ul style="text-align: left;">
+                                    <li>P & (Q & R) ≡ (P & Q) & R</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="checkAnswer3()">Check Answers</button>
+            </form>
+            <div class="mt-3" id="feedback4"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-8 lesson-card py-4 px-5 my-5">
+                <p>In the next lesson, we will cover logical equivalence in more detail.</p>
+                <a href="LessonThree.html" class="btn btn-primary mt-4">Next: Lesson3: Logical Equivalence</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../main/resources/bootstrap5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
