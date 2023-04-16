@@ -1,0 +1,133 @@
+body {
+  background-color: #222;
+  color: #eee;
+  font-size:1.2em;
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+}
+.light {
+  background-color: #fffaea;
+  color: #000;
+  font-size:1.2em;
+  display: table;
+  height: 100%;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+}
+.light p{
+  color: black;
+}
+
+.lesson-card {
+  background-color: #555;
+  color: #fff;
+}
+.lesson-card p{
+  color: white;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.navbar{
+    width: 100%;
+    background-color: #23417C;
+    padding: 1% 0;
+    font-size: 1.8em;
+}
+
+.navbar-brand{
+    min-height: 55px;
+    padding: 0 15px 5px;
+}
+
+.navbar-default .navbar-nav li a{
+    color: #D5D5D5;
+}
+.navbar-default .navbar-nav li a:hover, .navbar-default .navbar-nav li a.active {
+    color: #FFF;
+}
+
+.animate__animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animate__bounce {
+  animation-name: bounce;
+  animation-iteration-count: 5;
+}
+.fluid-container{
+  padding: 20px 20px 20px 20px;
+}
+
+.card{
+    border-width: 5px;
+}
+.card p{
+  color: white;
+}
+.card-header{
+  color: white;
+}
+
+h2{
+    padding: 20px 10px 20px 0px;
+}
+
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  80%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+p {
+  color: white;
+}
+.change {
+    cursor: pointer;
+    border: 1px solid #555;
+    border-radius: 40%;
+    width: 70px;
+    text-align: center;
+    padding: 5px;
+    margin-left: 8px;
+}
+li {
+    padding: 10px 0px 10px 0px;
+}
+.lessonImg {
+  border: 5px solid DodgerBlue;
+}
+
+

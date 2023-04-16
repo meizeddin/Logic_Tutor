@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lesson 1: Introduction to Propositional Logic</title>
+    <link rel="stylesheet" href="../../main/resources/bootstrap5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="StudyPage.html"><img src="../media/logic.png" width="64" height="64" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="StudyPage.html">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lessons
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="LessonOne.html">Lesson1: Introduction to Propositional Logic</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonTwo.html">Lesson2: Propositional Connectives and Truth Tables</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonThree.html">Lesson3: Logical Equivalence and Laws of Propositional Calculi</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFour.html">Lesson4: Propositional Modelling</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFive.html">Lesson5: Propositional Proof and Deduction</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="btn btn-primary change" onclick="darkLight()">Dark</button>
+        </div>
+    </div>
+</nav>
+<div class="fluid-container lesson-content">
+    <h1 class="my-5 text-center">Lesson 1: Introduction to Propositional Logic</h1>
+    <p>Logic plays an important role in all sciences and especially so in computing:</p>
+    <ul>
+        <li>The flow of control in a program depends on the result of logical expressions in branching conditions (IF, WHILE…)</li>
+        <li>Computer architecture is based on binary arithmetic (1’s and 0’s). These digits are implemented by deciding whether an electrical charge is high or low, or in logical terms true or false.</li>
+        <li>Logic provides a set of rules for reasoning about a system.</li>
+        <li>To prove some property we must first express it symbolically, and then give a step by step argument to move from our starting point to the conclusion.</li>
+        <li>Each step has to be justified: it must be logical.</li>
+        <li>It must be an application of a rule of deduction.</li>
+        <li>There are many sets of rules for reasoning:</li>
+        <ul>
+            <li>Different logics for different systems.</li>
+            <li>We shall be dealing with propositions and predicates.</li>
+            <li>This is the logic of sentences that can take one of two values: true or false</li>
+        </ul>
+    </ul>
+    <p>To reason about any system there needs to be an agreed set of rules. Logic is the study of deductive arguments.</p>
+    <h3>What is a proposition?</h3>
+    <ul>
+        <li>In natural English, a proposition is a declarative sentence in the form of a statement, which may be either true or false. We may not know which of these values it has, but we can tell it must have one of them.</li>
+        <li>If a proposition is true, then we say it has a truth value of "true"; if a proposition is false, its truth value is "false".</li>
+        <li>Examples of propositions:</li>
+        <ul>
+            <li>Grass is green</li>
+            <li>Two plus two is four</li>
+            <li>It is raining today</li>
+            <li>2 + 5 = 5</li>
+            <li>King Henry the Eighth had six wives</li>
+        </ul>
+    </ul>
+    <div class="col-md-8 lesson-card py-4 px-5 my-5">
+        <h1>Exercise 1:</h1>
+        <form id="Exercise1-form">
+            <div class="mb-3">
+                <label class="form-label">Which of the following are propositions?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="answer-1" name="answer-1" value="The house is empty">
+                    <label class="form-check-label" for="answer-1">
+                        The house is empty
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="answer-2" name="answer-2" value="Pick up the phone">
+                    <label class="form-check-label" for="answer-2">
+                        Pick up the phone
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="answer-3" name="answer-3" value="5 < 4">
+                    <label class="form-check-label" for="answer-3">
+                        5 < 4
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="answer-4" name="answer-4" value="x < 4">
+                    <label class="form-check-label" for="answer-4">
+                        x < 4
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="answer-5" name="answer-5" value="Maths is interesting">
+                    <label class="form-check-label" for="answer-5">
+                        Maths is interesting
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="checkAnswer1()">Submit</button>
+        </form>
+        <div class="mt-3" id="feedback"></div>
+    </div>
+    <div class="fluid-container">
+        <h1>Connectives</h1>
+        <p>Compound propositions can be built from simple propositions by using logical connectives.</p>
+        <p>Any proposition may be constructed out of simple propositions using the connectives we consider.</p>
+        <p>Note that the set of connectives we will use is not the only one possible, though it is popular one.</p>
+        <p>The connectives are:</p>
+        <div class="table">
+            <table class="table table-dark table-striped table-hover table-bordered text-white" data-hx-get="https://my-api.com/data">
+                <thead>
+                <tr class= "tr text-center">
+                    <th scope="col">Name</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Description</th>
+                </tr>
+                <tr class= "text-center">
+                    <td class="td">
+                        <span class="badge bg-danger">Negation</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-primary">¬/!</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-info text-dark">Not</span>
+                    </td>
+                </tr>
+                <tr class= "text-center">
+                    <td class="td">
+                        <span class="badge bg-success">Conjunction</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-primary">&</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-info text-dark">And</span>
+                    </td>
+                </tr>
+                <tr class= "text-center">
+                    <td class="td">
+                        <span class="badge bg-success">Disjunction</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-primary">|</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-info text-dark">Or</span>
+                    </td>
+                </tr>
+                <tr class= "text-center">
+                    <td class="td">
+                        <span class="badge bg-success">Implication</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-primary">=></span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-info text-dark">If...Then</span>
+                    </td>
+                </tr>
+                <tr class= "text-center">
+                    <td class="td">
+                        <span class="badge bg-success">Equivalence</span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-primary"><=></span>
+                    </td>
+                    <td class="td">
+                        <span class="badge bg-info text-dark">If and only if</span>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <div class="text-center">
+                <td class="td">
+                    <span class="badge bg-danger">Unary Operators</span>
+                    <span class="badge bg-success">Binary Operators</span>
+                </td>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 lesson-card py-4 px-5 my-5">
+        <h1>Example</h1>
+        <p>Let P be the proposition <b>the house is white</b>.</p>
+        <p>Let Q be the proposition <b>the garage is green</b>.</p>
+        <div style="text-align: center;">
+            <b>Then</b>
+        </div>
+        <p><br>¬P the house is <b>not</b> white<br>
+            P & Q the house is white <b>and</b> the garage is green<br>
+            P | Q the house is white <b>or</b> the garage is green<br>
+            P => Q <b>if</b> the house is white <b>then</b> the garage is green<br>
+            P <=> Q the house is white <b>if and only if</b> the garage is green
+        </p>
+    </div>
+
+    <div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8 lesson-card py-4 px-5 my-5">
+            <p>In the next lesson, we will cover propositional operators and connectives in more detail.</p>
+            <div class="row">
+                <div class="col">
+                    <a href="StudyPage.html" class="btn btn-primary mt-4">Back: Home</a>
+                </div>
+                <div class="col">
+                    <a href="LessonTwo.html" class="btn btn-primary mt-4">Next: Lesson 2</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="../../main/resources/bootstrap5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

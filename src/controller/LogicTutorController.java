@@ -8,15 +8,12 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.TruthTableHelperFun;
-import view.LogicTutorRootPane;
-import view.ResultPane;
-import view.SimplificationPane;
-import view.WelcomingPane;
-import view.LogicTutorPane;
-import view.LogicTutorMenuBar;
+import view.*;
 import model.LogicalFormula;
-import simplifier.SimplifyLogicalStrings;
-import model.AutoTruth;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,17 +25,17 @@ public class LogicTutorController {
 
 	//fields to be used throughout class
 	private final LogicTutorRootPane view;
-	private final LogicTutorPane ltp;
+	private final EvaluatorPane ep;
 	private final ResultPane rp;
 	private final LogicTutorMenuBar ltmb;
 	private final LogicalFormula model;
 	private final WelcomingPane wp;
-	private final SimplificationPane sp;
+	private final ManipulationPane mp;
 
 	/**
 	 * a constructor method to initiate the view and model
 	 * @param view: Accepts a view where the user interaction is happening
-	 * @param model: Accepts a model to either store the data inputed on the view or-
+	 * @param model: Accepts a model to either store the data inputted on the view or-
 	 * 				-displays the data exited in the model on the view
 	 */
 	public LogicTutorController(LogicTutorRootPane view, LogicalFormula model) {
@@ -47,11 +44,11 @@ public class LogicTutorController {
 		this.model = model;
 
 		//initialize view sub-container fields
-		ltp = view.getLogicTutorPane();
+		ep = view.getLogicTutorPane();
 		ltmb = view.getLogicTutorMenuBar();
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
-		sp = view.getSimplificationPane();
+		mp = view.getManipulationPane();
 
 
 		//attach event handlers to view using private helper method
@@ -62,33 +59,35 @@ public class LogicTutorController {
 	 * helper method - used to attach event handlers
 	 */
 	private void attachEventHandlers() {
-		//
+		//WelcomePane Handlers
 		wp.studyHandler(new moveToStudyPaneHandler());
-		wp.calculatorHandler(new moveToCalcPaneHandler());
+		wp.evaluatorHandler(new moveToEvaluatePaneHandler());
+		wp.manipulatorHandler(new moveToManipulatePaneHandler());
 		wp.testHandler(new moveToTestPaneHandler());
 
 		//attach an event handler to create student profile pane
-		ltp.calculateLogicHandler(new evalLogicTutorPaneHandler());
-		ltp.simplifyLogicHandler(new simplificationBtnHandler());
-		ltp.conjunctionLogicHandler(new conjunctionBtnHandler());
-		ltp.disjunctionLogicHandler(new disjunctionBtnHandler());
-		ltp.negationLogicHandler(new negationBtnHandler());
-		ltp.implicationLogicHandler(new implicationBtnHandler());
-		ltp.equivalenceLogicHandler(new equivalenceBtnHandler());
+		ep.evaluateLogicHandler(new evalLogicTutorPaneHandler());
+		ep.manipulateLogicHandler(new simplificationBtnHandler());
+		ep.conjunctionLogicHandler(new conjunctionBtnHandler());
+		ep.disjunctionLogicHandler(new disjunctionBtnHandler());
+		ep.negationLogicHandler(new negationBtnHandler());
+		ep.implicationLogicHandler(new implicationBtnHandler());
+		ep.equivalenceLogicHandler(new equivalenceBtnHandler());
 
-		//result
+		//resultPane Handlers
+		rp.btnSaveHandler(new saveResultBtnHandler());
 
-		//simplification
-		sp.btnSaveHandler(new saveSimplificationBtnHandler());
-		sp.btnCalcHandler(new calcSimplificationBtnHandler());
-		sp.addButtonLogicHandler(new addSimplificationPaneHandler());
-		sp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
-		sp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
-		sp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
-		sp.negationLogicHandler(new negationSimplificationBtnHandler());
-		sp.implicationLogicHandler(new implicationSimplificationBtnHandler());
-		sp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
-		sp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
+		//Manipulation pane handlers
+		mp.btnSaveHandler(new saveSimplificationBtnHandler());
+		mp.btnCalcHandler(new calcSimplificationBtnHandler());
+		mp.addButtonLogicHandler(new addSimplificationPaneHandler());
+		mp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
+		mp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
+		mp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
+		mp.negationLogicHandler(new negationSimplificationBtnHandler());
+		mp.implicationLogicHandler(new implicationSimplificationBtnHandler());
+		mp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
+		mp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
 
 		//attach an event handler to the menu bar that closes the application
 		ltmb.addExitHandler(e -> System.exit(0));
@@ -102,8 +101,8 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				ltp.removeSpaces(ltp.getFormula());
-				model.setFormula(ltp.getFormula());
+				ep.removeSpaces(ep.getFormula());
+				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -131,15 +130,11 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException Pex)
+				catch (ParserException | EvaluationException Pex)
 				{
 					Pex.printStackTrace();
 				}
-				catch (EvaluationException ex)
-				{
-					ex.printStackTrace();
-				}
-				view.changeTab(2);
+				view.changeTab(3);
 			}
 		}
 	}
@@ -148,8 +143,8 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				ltp.removeSpaces(ltp.getFormula());
-				model.setFormula(ltp.getFormula());
+				ep.removeSpaces(ep.getFormula());
+				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -159,10 +154,9 @@ public class LogicTutorController {
 				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 
-				sp.populateFunction(model.getFormula());
-				sp.populateResult(SimplifyLogicalStrings.simplify(model.getFormula()));
-				model.setFormula(SimplifyLogicalStrings.simplify(model.getFormula()));
-				view.changeTab(3);
+				mp.populateFunction(model.getFormula());
+				mp.populateResult(model.getFormula());
+				view.changeTab(4);
 			}
 		}
 	}
@@ -170,51 +164,59 @@ public class LogicTutorController {
 	private class conjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("&");
+			ep.setFormula("&");
 		}
 	}
 
 	private class disjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("|");
+			ep.setFormula("|");
 		}
 	}
 	private class negationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("~");
+			ep.setFormula("~");
 		}
 	}
 	private class implicationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("=>");
+			ep.setFormula("=>");
 		}
 	}
 	private class equivalenceBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			ltp.setFormula("<=>");
+			ep.setFormula("<=>");
 		}
 	}
 
 	private class moveToStudyPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			//view.changeTab(0);
-		}
-	}
-	private class moveToCalcPaneHandler implements EventHandler<ActionEvent> {
-		@Override
-		public void handle(ActionEvent event) {
 			view.changeTab(1);
 		}
 	}
+	private class moveToEvaluatePaneHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			view.changeTab(2);
+		}
+	}
+
+	private class moveToManipulatePaneHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			view.changeTab(4);
+		}
+	}
+
 	private class moveToTestPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			//view.changeTab(3);
+			view.changeTab(5);
 		}
 	}
 
@@ -222,8 +224,61 @@ public class LogicTutorController {
 
 		@Override
 		public void handle(ActionEvent event) {
-			// TODO Auto-generated method stub
+			// Get the contents of the TextArea
+			String text = mp.getTxtResult().getText();
+			if(!mp.getTxtResult().getText().isEmpty()) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				String timeStamp = dateFormat.format(new Date());
+				String fileName = "file_" + timeStamp + ".txt";
+				// Set the file path
+				String filePath = String.format(".//savedManipulations//%s", fileName);
 
+				// Create a File object
+				File file = new File(filePath);
+
+				// Write the contents of the TextArea to the file
+
+				try {
+					FileWriter fileWriter = new FileWriter(file);
+					fileWriter.write(text);
+					fileWriter.close();
+					successDialogBuilder("Save Complete");
+				} catch (IOException e) {
+					e.printStackTrace();
+					alertDialogBuilder("Save InComplete");
+				}
+			}else {
+				alertDialogBuilder("There is nothing to save");
+			}
+		}
+	}
+
+	private class saveResultBtnHandler implements EventHandler<ActionEvent>{
+		@Override
+		public void handle(ActionEvent event) {
+			// Get the contents of the TextArea
+			String text = rp.getTxtFunction().getText() +"\n"+ rp.getTxtTruthTable().getText() +"\n"+ rp.getTxtResult().getText();
+			if(!rp.getTxtResult().getText().isEmpty()) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				String timeStamp = dateFormat.format(new Date());
+				String fileName = "file_" + timeStamp + ".txt";
+				// Set the file path
+				String filePath = String.format(".//savedEvaluations//%s", fileName);
+				// Create a File object
+				File file = new File(filePath);
+				// Write the contents of the TextArea to the file
+				try {
+					FileWriter fileWriter = new FileWriter(file);
+					fileWriter.write(text);
+					fileWriter.close();
+					successDialogBuilder("Save Complete");
+				} catch (IOException e) {
+					e.printStackTrace();
+					alertDialogBuilder("Save InComplete");
+				}
+			}else{
+				alertDialogBuilder("There is nothing to save");
+			}
 		}
 	}
 
@@ -231,7 +286,7 @@ public class LogicTutorController {
 		@Override
 		public void handle(ActionEvent event) {
 			try {
-				model.setFormula(sp.getFormula());
+				model.setFormula(mp.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -259,57 +314,53 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException Pex)
+				catch (ParserException | EvaluationException Pex)
 				{
 					Pex.printStackTrace();
 				}
-				catch (EvaluationException ex)
-				{
-					ex.printStackTrace();
-				}
-				view.changeTab(2);
+				view.changeTab(3);
 			}
 		}
 	}
 	private class conjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("&");
+			mp.setFormula("&");
 		}
 	}
 
 	private class disjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("|");
+			mp.setFormula("|");
 		}
 	}
 	private class negationSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("~");
+			mp.setFormula("~");
 		}
 	}
 	private class implicationSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("=>");
+			mp.setFormula("=>");
 		}
 	}
 	private class equivalenceSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
-			sp.setFormula("<=>");
+			mp.setFormula("<=>");
 		}
 	}
 
 	private class addSimplificationPaneHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			sp.clearResult();
+			mp.clearResult();
 			//retrieves data from the view
 			try {
-				sp.removeSpaces(sp.getFormula());
-				model.setFormula(sp.getFormula());
+				mp.removeSpaces(mp.getFormula());
+				model.setFormula(mp.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -318,8 +369,8 @@ public class LogicTutorController {
 				//output error
 				alertDialogBuilder("You need to enter a formula");
 			}else {
-				sp.populateFunction(model.getFormula());
-				sp.populateResult(model.getFormula());
+				mp.populateFunction(model.getFormula());
+				mp.populateResult(model.getFormula());
 				model.setFormula(model.getFormula());
 			}
 		}
@@ -327,7 +378,7 @@ public class LogicTutorController {
 
 	private class updateComboSimplificationBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			model.setSelectedFormula(sp.getSelectedFormula());
+			model.setSelectedFormula(mp.getSelectedFormula());
 			if (!model.getSelectedFormula().isEmpty()) {
 				List<String> itemList = model.getRulesList();
 				String expression = model.getSelectedFormula();
@@ -335,7 +386,7 @@ public class LogicTutorController {
 				List<String> tokens = Tokenizer.tokenize(expression);
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
 				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
-				sp.updateComboBox(itemList, expr);
+				mp.updateComboBox(itemList, expr);
 			} else{
 				alertDialogBuilder("Highlight an expression");
 			}
@@ -346,7 +397,7 @@ public class LogicTutorController {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
-				model.setSelectedFormula(sp.getSelectedFormula());
+				model.setSelectedFormula(mp.getSelectedFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
@@ -362,7 +413,7 @@ public class LogicTutorController {
 				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 				Expression result = null;
 				model.setResult("");
-				switch (sp.getSelectedRule()) {
+				switch (mp.getSelectedRule()) {
 					case "Idempotence Rule" -> {
 						IdempotenceVisitor visitor = new IdempotenceVisitor();
 						result = expr.accept(visitor);
@@ -408,15 +459,13 @@ public class LogicTutorController {
 						result = expr.accept(visitor);
 						model.updateResult("Using Identity Law");
 					}
-					case "Select an option.." -> {
-						alertDialogBuilder("Select a rule");
-					}
+					case "Select an option.." -> alertDialogBuilder("Select a rule");
 				}
-				sp.setFunction(result.toString(), sp.getIndexRange().getStart(), sp.getIndexRange().getEnd());
-				model.updateResult(sp.getFunction());
-				sp.clearFormula();
-				sp.populateResult(model.getResult());
-				sp.setFormula(sp.getFunction());
+				mp.setFunction(Objects.requireNonNull(result).toString(), mp.getIndexRange().getStart(), mp.getIndexRange().getEnd());
+				model.updateResult(mp.getFunction());
+				mp.clearFormula();
+				mp.populateResult(model.getResult());
+				mp.setFormula(mp.getFunction());
 				model.setResult("");
 			}
 		}
@@ -428,6 +477,14 @@ public class LogicTutorController {
 	private void alertDialogBuilder(String str) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(str);
+		alert.showAndWait();
+	}
+
+	private void successDialogBuilder(String str) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Confirmation Dialog");
 		alert.setHeaderText(null);
 		alert.setContentText(str);
 		alert.showAndWait();

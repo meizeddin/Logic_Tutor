@@ -89,13 +89,9 @@ public class AutoTruth {
 			for (int j = 0; j < variables; j++) {
 				try
 				{
-					expr.accept(new SetVariable(arrC.get(j) + "", arrB.get(i+j)));
+					expr.accept(new SetVariable(String.valueOf(arrC.get(j)), arrB.get(i+j)));
 				}
-				catch (ParserException e)
-				{
-					System.out.println(e.getMessage());
-				}
-				catch (EvaluationException e)
+				catch (ParserException | EvaluationException e)
 				{
 					System.out.println(e.getMessage());
 				}
