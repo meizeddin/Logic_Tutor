@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lesson4: Propositional Modelling</title>
+    <link rel="stylesheet" href="../../main/resources/bootstrap5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="StudyPage.html"><img src="../media/logic.png" width="64" height="64" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="StudyPage.html">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lessons
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="LessonOne.html">Lesson1: Introduction to Propositional Logic</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonTwo.html">Lesson2: Propositional Connectives and Truth Tables</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonThree.html">Lesson3: Logical Equivalence and Laws of Propositional Calculi</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFour.html">Lesson4: Propositional Modelling</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="LessonFive.html">Lesson5: Propositional Proof and Deduction</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="btn btn-primary change" onclick="darkLight()">Dark</button>
+        </div>
+    </div>
+</nav>
+<div class="fluid-container lesson-content">
+    <h1 class="my-5 text-center">Lesson 4: Propositional Modelling</h1>
+    <div class="fluid-container">
+        <h1>Modelling a System</h1>
+        <p>System modelling in propositional logic is using logical statements to reason about a system. The system components can be represented as logical statements and then logical equivalence and truth tables can be used to fully analyse the system and optimise its performance. This approach can help in modelling complex systems and determine potential issues before they arise.</p>
+        <h2>Practical Example:</h2>
+        <p>If the capacity of the lift is exceeded then the doors remain open. The doors are closed when the lift is moving. The alarm is on whenever the doors are closed and the capacity is exceeded, or the lift is moving with the doors open.</p>
+        <h2>First label the propositions as below:</h2>
+        <ul style="text-align: left;">
+            <li style="color: MediumSeaGreen"><b>E</b> &nbsp &nbsp The capacity of the lift is exceeded</li>
+            <li style="color: Tomato"><b>C</b> &nbsp &nbsp The lift's doors are closed</li>
+            <li style="color: DodgerBlue"><b>M</b> &nbsp &nbsp The lift is moving</li>
+            <li style="color: SlateBlue"><b>A</b> &nbsp &nbsp The alarm is on</li>
+        </ul>
+        <h2>Now using logical connectives:</h2>
+        <div>
+            <ul style="text-align: left;">
+                <li><b>If</b> the capacity of the lift is exceeded <b>then</b> the doors remain <b>open</b></li>
+                <ul style="text-align: left;">
+                    <li style="color: Tomato">E => ¬C</li>
+                </ul>
+                <li>The doors are closed <b>when</b> the lift is moving.</li>
+                <ul style="text-align: left;">
+                    <li style="color: MediumSeaGreen">M => C</li>
+                </ul>
+                <li>The alarm is on <b>whenever</b> the doors are closed <b>and</b> the capacity is exceeded, <b>or</b> the lift is moving <b>with</b> the doors open.</li>
+                <ul style="text-align: left;">
+                    <li style="color: DodgerBlue">(C & E) | (M & ¬C) => A</li>
+                </ul>
+            </ul>
+        </div>
+        <h2>Compound Propositions:</h2>
+        <div>
+            <ul style="text-align: left;">
+                <li style="color: Tomato">E => ¬C &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;If the capacity of the lift is exceeded then the doors remain open.</li>
+                <li style="color: MediumSeaGreen">M => C &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; The doors are closed when the lift is moving.</li>
+                <li style="color: DodgerBlue">(C & E) | (M & ¬C) => A &nbsp; &nbsp; The alarm is on whenever the doors are closed and the capacity is exceeded, or the lift is moving with the doors open.</li>
+            </ul>
+        </div>
+        <h2>Feasibility</h2>
+        <ul style="text-align: left;">
+            <li>The requirements are not feasible if the propositions are contradictory (that is they are never all true at the same time).</li>
+            <li>If we have a contradiction, then every row of the truth table for
+                (E => ¬C) & (M => C) & <b style="color: DodgerBlue">[</b><b style="color: Tomato">(</b>C & E<b style="color: Tomato">)</b> V <b style="color: Tomato">(</b>M & ¬C<b style="color: Tomato">)</b> => A<b style="color: DodgerBlue">]</b> will result in <b style="color: Tomato">false</b>.
+            </li>
+            <li>To show that a system is feasible we must demonstrate that <b>at least one row</b> of the table <b>does not result in false</b>.</li>
+        </ul>
+        <h2>Truth Table To Prove Feasibility</h2>
+        <div style="overflow-x: auto; min-width: 1150px;">
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover table-bordered text-white">
+                    <thead>
+                    <tr class= "tr text-center">
+                        <th scope="col">E</th>
+                        <th scope="col">C</th>
+                        <th scope="col">¬C</th>
+                        <th scope="col">M</th>
+                        <th scope="col">A</th>
+                        <th scope="col">E => ¬C</th>
+                        <th scope="col">M => C</th>
+                        <th scope="col">C & E</th>
+                        <th scope="col">M & ¬C</th>
+                        <th scope="col">(E => ¬C) & (M => C) & ((C & E) | (M & ¬C) => A)</th>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    <tr class= "text-center">
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-danger">False</span>
+                        </td>
+                        <td class="td">
+                            <span class="badge bg-success">True</span>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <p>It seems very complex, but what you need to take out of it is that we have proven that at least one row results in true and therefore the system proves to work well.</p>
+        </div>
+        <hr>
+        <div>
+            <h2>Terminology and consistency</h2>
+            <ul style="text-align: left;">
+                <li>A proposition is said to be a <b style="color: MediumSeaGreen">tautology</b> if it always has the truth value <b style="color: MediumSeaGreen">“T”</b>.</li>
+                <li>A proposition is said to be a <b style="color: DodgerBlue">contingency</b> if it sometimes has truth value <b style="color: DodgerBlue">“T”</b> and sometimes <b style="color: DodgerBlue">“F”</b>.</li>
+                <li>A proposition is said to be an <b style="color: Tomato">inconsistency</b> (<b style="color: Tomato">contradiction</b>)it has the truth value <b style="color: Tomato">“F”</b>.</li>
+                <li>A <b style="color: SlateBlue">consistent</b> proposition is one which is a <b style="color: MediumSeaGreen">tautology</b> or a <b style="color: DodgerBlue">contingency</b>.</li>
+                <li>We can establish which of these classes a proposition falls into just by constructing its truth table.</li>
+            </ul>
+        </div>
+        <hr>
+        <div class="row justify-content-center">
+            <div class="col-md-8 lesson-card py-4 px-5 my-5">
+                <h1>Exercise 5:</h1>
+                <form id="Exercise5-form">
+                    <div class="mb-3">
+                        <label class="form-label">Is the following argument valid?</label>
+                        <div>
+                            <ul style="text-align: left;">
+                                <li>If my program is correct,<br>
+                                    it will pass the validation test.<br>
+                                    My program passes the validation test.<br>
+                                    Therefore, my program is correct.</li>
+
+                                <li>Let, <b style="color: Crimson">C be ‘My program is correct’</b>, and<br>
+                                    <b style="color: Aqua">V be ‘My program passes the validation test’.</b></li>
+
+                                <li>We can rewrite the above argument
+                                    <ul style="text-align: left;">
+                                        <li><b style="color: Black">[(C => V) & V] => C</b></li>
+                                        <li>This is the proposition that must be a tautology for the argument to be valid.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="checkAnswer5()">Check Answers</button>
+                </form>
+                <div class="mt-3" id="feedback5"></div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-8 lesson-card py-4 px-5 my-5">
+                <p>In the next lesson, we will cover modelling in propositional logic.</p>
+                <div class="row">
+                    <div class="col">
+                        <a href="LessonThree.html" class="btn btn-primary mt-4">Back: Lesson 3</a>
+                    </div>
+                    <div class="col">
+                        <a href="LessonFive.html" class="btn btn-primary mt-4">Next: Lesson 5</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../main/resources/bootstrap5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
