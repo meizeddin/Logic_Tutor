@@ -3,16 +3,19 @@ import calcParser.EvaluationException;
 import calcParser.ParserException;
 import expressionTree.*;
 import expressionTree.rules.*;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import model.DataBase;
 import model.TruthTableHelperFun;
 import view.*;
 import model.LogicalFormula;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +34,13 @@ public class LogicTutorController {
 	private final LogicalFormula model;
 	private final WelcomingPane wp;
 	private final ManipulationPane mp;
+	private final TestPane testp;
+	private final DataBase db;
 
 	/**
 	 * a constructor method to initiate the view and model
-	 * @param view: Accepts a view where the user interaction is happening
-	 * @param model: Accepts a model to either store the data inputted on the view or-
+	 * @param view Accepts a view where the user interaction is happening
+	 * @param model Accepts a model to either store the data inputted on the view or-
 	 * 				-displays the data exited in the model on the view
 	 */
 	public LogicTutorController(LogicTutorRootPane view, LogicalFormula model) {
@@ -49,10 +54,33 @@ public class LogicTutorController {
 		rp = view.getResultPane();
 		wp = view.getWelcomingPane();
 		mp = view.getManipulationPane();
+		testp = view.getTestPane();
 
 
 		//attach event handlers to view using private helper method
 		this.attachEventHandlers();
+
+		//starting the database and populating all required fields from the database
+		// create the tree view
+		db = new DataBase();
+
+		TreeItem<String> rootItem = new TreeItem<>("Lessons");
+
+		// retrieve the lessons from the database
+		ObservableList<String> lessons = db.retrieveLessonsFromDatabase();
+
+		for (String lesson : lessons) {
+			TreeItem<String> lessonItem = new TreeItem<>(lesson);
+
+			// retrieve the tests for this lesson from the database
+			ObservableList<String> tests = db.retrieveTestsFromDatabaseForLesson(lesson);
+
+			for (String test : tests) {
+				TreeItem<String> testItem = new TreeItem<>(test);
+				lessonItem.getChildren().add(testItem);
+			}
+			testp.populateTreeView(rootItem, lessonItem);
+		}
 	}
 
 	/**
@@ -88,6 +116,9 @@ public class LogicTutorController {
 		mp.implicationLogicHandler(new implicationSimplificationBtnHandler());
 		mp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
 		mp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
+
+		//Test pane handlers
+		testp.takeTestHandler(new takeTestHandler());
 
 		//attach an event handler to the menu bar that closes the application
 		ltmb.addExitHandler(e -> System.exit(0));
@@ -467,6 +498,32 @@ public class LogicTutorController {
 				mp.populateResult(model.getResult());
 				mp.setFormula(mp.getFunction());
 				model.setResult("");
+			}
+		}
+	}
+
+	private class takeTestHandler implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent event) {
+			if(testp.getTreeView().getSelectionModel().getSelectedItem() != null ) {
+				String selectedTest = testp.getTreeView().getSelectionModel().getSelectedItem().getValue();
+				if(selectedTest.contains("Test")) {
+					List<String> questions = db.retrieveQuestionsForTest(selectedTest);
+					List<List<String>> answers = new ArrayList<>();
+					List<String> correctAnswers= new ArrayList<>();
+					for(String question: questions){
+						List<String> questionAnswers = db.retrieveAnswersForQuestion(question);
+						correctAnswers.add(db.retrieveCorrectAnswersForQuestion(question).get(0));
+						answers.add(questionAnswers);
+					}
+					System.out.println(correctAnswers);
+
+					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers);
+				}else{
+					alertDialogBuilder("You selected a lesson. Please select a test");
+				}
+			}else{
+				alertDialogBuilder("You did not select a test");
 			}
 		}
 	}

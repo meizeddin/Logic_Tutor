@@ -24,6 +24,7 @@ public class LogicTutorRootPane extends BorderPane {
 	private final LogicTutorMenuBar ltmb;
 	private final TabPane tp;
 	private final ManipulationPane mp;
+	private final TestPane testp;
 
 	/**
 	 * a constructor method to initiate the different tabs and their specific panes
@@ -39,6 +40,7 @@ public class LogicTutorRootPane extends BorderPane {
 		ltp = new EvaluatorPane();
 		rp = new ResultPane();
 		mp = new ManipulationPane();
+		testp = new TestPane();
 
 		//create tabs with panes added
 		Tab t1 = new Tab("Welcome", wp);
@@ -46,6 +48,8 @@ public class LogicTutorRootPane extends BorderPane {
 		Tab t3 = new Tab("Evaluate", ltp);
 		Tab t4 = new Tab("Result", rp);
 		Tab t5 = new Tab("Manipulate", mp);
+		Tab t6 = new Tab("Test", testp);
+
 		t1.setStyle("-fx-font-size: 16px;"
 				);
 		t2.setStyle("-fx-font-size: 16px;"
@@ -55,6 +59,8 @@ public class LogicTutorRootPane extends BorderPane {
 		t4.setStyle("-fx-font-size: 16px;"
 				);
 		t5.setStyle("-fx-font-size: 16px;"
+		);
+		t6.setStyle("-fx-font-size: 16px;"
 		);
 
 		// Create a WebView and add it to the second tab
@@ -66,7 +72,7 @@ public class LogicTutorRootPane extends BorderPane {
 		});
 
 		//add tabs to tab pane
-		tp.getTabs().addAll(t1, t2, t3, t4, t5);
+		tp.getTabs().addAll(t1, t2, t3, t4, t5, t6);
 		
 		//create menu bar
 		ltmb = new LogicTutorMenuBar();
@@ -99,6 +105,11 @@ public class LogicTutorRootPane extends BorderPane {
 	public ManipulationPane getManipulationPane() {
 		return mp;
 	}
+	public TestPane getTestPane() {
+		return testp;
+	}
+
+
 
 	/**
 	 * method to allow the controller to change tabs

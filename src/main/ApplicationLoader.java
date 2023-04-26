@@ -65,8 +65,6 @@ public class ApplicationLoader extends Application {
 	}
 	// main method to launch the application
 	public static void main(String[] args) {
-		// Create an instance of the DataBase class to create the tables
-		DataBase db = new DataBase();
 		// lunches the application
 		launch(args);
 	}
