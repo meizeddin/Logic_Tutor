@@ -10,7 +10,6 @@ import view.LogicTutorRootPane;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import java.io.*;
-import model.DataBase;
 
 public class ApplicationLoader extends Application {
 
@@ -65,8 +64,6 @@ public class ApplicationLoader extends Application {
 	}
 	// main method to launch the application
 	public static void main(String[] args) {
-		// Create an instance of the DataBase class to create the tables
-		DataBase db = new DataBase();
 		// lunches the application
 		launch(args);
 	}
