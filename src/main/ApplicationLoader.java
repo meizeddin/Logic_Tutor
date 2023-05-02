@@ -10,7 +10,6 @@ import view.LogicTutorRootPane;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import java.io.*;
-import model.DataBase;
 
 public class ApplicationLoader extends Application {
 
