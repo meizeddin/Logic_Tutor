@@ -15,7 +15,9 @@ import javafx.scene.paint.Color;
 import model.ValidationClass;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 
 public class ManipulationPane extends ScrollPane {
 	private final Button btnSave, btnCalc, btnAdd, btnManipulate, btnUpdateCombo;
@@ -299,14 +301,14 @@ public class ManipulationPane extends ScrollPane {
 		//add controls and labels to container
 		this.setContent(vbox2);
 		// create a new background image
-		FileInputStream input;
+		InputStream input;
 		try {
-			input = new FileInputStream(".//res//black.png");
-		} catch (FileNotFoundException e) {
+			input = ClassLoader.getSystemResourceAsStream("media/black.png");
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-		Image image = new Image(input);
+		Image image = new Image(Objects.requireNonNull(input));
 
 		// create a new background image view
 		BackgroundImage backgroundImageView = new BackgroundImage(image,

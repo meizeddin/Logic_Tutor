@@ -10,6 +10,7 @@ import view.LogicTutorRootPane;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import java.io.*;
+import java.util.Objects;
 
 public class ApplicationLoader extends Application {
 
@@ -26,7 +27,7 @@ public class ApplicationLoader extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		// create an input stream
-		FileInputStream icon = new FileInputStream(".//res//logic.png");
+		InputStream icon = ClassLoader.getSystemResourceAsStream("media/logic.png");
 
 		// create an image
 		Image iconImage = new Image(icon);
@@ -43,10 +44,10 @@ public class ApplicationLoader extends Application {
 
 
 		// create an input stream
-		FileInputStream input = new FileInputStream(".//res//black.png");
+		InputStream input = ClassLoader.getSystemResourceAsStream("media/black.png");
 
 		// create an image
-		Image image = new Image(input);
+		Image image = new Image(Objects.requireNonNull(input));
 
 		// create a background image
 		BackgroundImage backgroundimage = new BackgroundImage(image, 
