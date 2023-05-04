@@ -31,11 +31,9 @@ public class DeMorganVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
-        if (right instanceof Not && left instanceof Not) {
-            Not notR = (Not) right;
-            Not notL = (Not) left;
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
+        if (right instanceof Not notR && left instanceof Not notL) {
             Or or = new Or(notL.getExpression(), notR.getExpression());
             return new Not(or);
         }else{
@@ -45,11 +43,9 @@ public class DeMorganVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
-        if (right instanceof Not && left instanceof Not) {
-            Not notR = (Not) right;
-            Not notL = (Not) left;
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
+        if (right instanceof Not notR && left instanceof Not notL) {
             And and = new And(notL.getExpression(), notR.getExpression());
             return new Not(and);
         }else{
@@ -59,15 +55,15 @@ public class DeMorganVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
@@ -76,13 +72,13 @@ public class DeMorganVisitor implements ExpressionVisitor {
         Expression expr = not.getExpression();
         if (expr instanceof And and) {
             // Apply De Morgan's law
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
             return new Or(new Not(left), new Not(right));
         } else if (expr instanceof Or or) {
             // Apply De Morgan's law
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
             return new And(new Not(left), new Not(right));
         } else {
             // Keep the expression unchanged
@@ -101,22 +97,19 @@ public class DeMorganVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof And){
-            And and = (And) expr;
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+        if(expr instanceof And and){
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
             if (right instanceof Not && left instanceof Not) {
                 result = true;
             }
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+        }else if(expr instanceof Or or){
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
             if (right instanceof Not && left instanceof Not) {
                 result = true;
             }
-        }else if(expr instanceof Not){
-            Not not = (Not) expr;
+        }else if(expr instanceof Not not){
             Expression insideExpr = not.getExpression();
             if (insideExpr instanceof And ) {
                 result = true;

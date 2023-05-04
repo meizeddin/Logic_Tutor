@@ -29,35 +29,35 @@ public class CommutativeVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
         return new And(right, left);
     }
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
         return new Or(right, left);
     }
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(right, left);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         return new Not(expr);
     }
 

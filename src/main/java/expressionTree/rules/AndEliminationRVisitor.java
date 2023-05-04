@@ -28,31 +28,28 @@ public class AndEliminationRVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
-
-        return left;
+        return and.getLeft();
     }
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
 
         return new Or(left, right);
     }
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
 
         return new Imply(left, right);
     }
@@ -74,10 +71,6 @@ public class AndEliminationRVisitor implements ExpressionVisitor {
     }
 
     public boolean canApply(Expression expr) {
-        boolean result = false;
-        if ((expr instanceof And)) {
-            result = true;
-        }
-        return result;
+        return expr instanceof And;
     }
 }

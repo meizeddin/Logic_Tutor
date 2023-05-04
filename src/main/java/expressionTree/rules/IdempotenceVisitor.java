@@ -83,15 +83,13 @@ public class IdempotenceVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof And){
-            And and = (And) expr;
+        if(expr instanceof And and){
             Expression left = and.getLeft().accept(this);
             Expression right = and.getRight().accept(this);
             if (left.equals(right)) {
                 result = true;
             }
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
+        }else if(expr instanceof Or or){
             Expression left = or.getLeft().accept(this);
             Expression right = or.getRight().accept(this);
             if (left.equals(right)) {

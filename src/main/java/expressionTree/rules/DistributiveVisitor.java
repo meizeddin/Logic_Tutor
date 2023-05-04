@@ -29,29 +29,27 @@ public class DistributiveVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
 
-        if (left instanceof Variable && right instanceof Or) {
+        if ((left instanceof Variable || left instanceof Not) && right instanceof Or) {
             Or or = (Or) right;
-            Expression orLeft = or.getLeft().accept(this);
-            Expression orRight = or.getRight().accept(this);
+            Expression orLeft = or.getLeft();
+            Expression orRight = or.getRight();
             return new Or(new And(left, orLeft), new And(left, orRight));
-        } else if (left instanceof Or && right instanceof Variable){
+        } else if (left instanceof Or && (right instanceof Variable || right instanceof Not)){
             Or or = (Or) left;
-            Expression orLeft = or.getLeft().accept(this);
-            Expression orRight = or.getRight().accept(this);
+            Expression orLeft = or.getLeft();
+            Expression orRight = or.getRight();
             return new Or(new And(orLeft, right), new And(orRight, right));
-        } else if (left instanceof Or && right instanceof Or){
-            Or orL = (Or) left;
-            Expression orLLeft = orL.getLeft().accept(this);
-            Expression orLRight = orL.getRight().accept(this);
-            Or orR = (Or) right;
-            Expression orRLeft = orR.getLeft().accept(this);
-            Expression orRRight = orR.getRight().accept(this);
-            if(orLLeft.equals(orRLeft) ){
+        } else if (left instanceof Or orL && right instanceof Or orR){
+            Expression orLLeft = orL.getLeft();
+            Expression orLRight = orL.getRight();
+            Expression orRLeft = orR.getLeft();
+            Expression orRRight = orR.getRight();
+            if(orLLeft.toString().equals(orRLeft.toString()) ){
                 return new Or(orLLeft, new And(orLRight, orRRight));
-            }else if (orLRight.equals(orRRight)){
+            }else if (orLRight.toString().equals(orRRight.toString())){
                 return new Or(new And(orLLeft, orRLeft), orLRight);
             }else{
                 return new And(orL, orR);
@@ -63,29 +61,27 @@ public class DistributiveVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
 
-        if (left instanceof Variable && right instanceof And) {
+        if ((left instanceof Variable || left instanceof Not) && right instanceof And) {
             And and = (And) right;
-            Expression andLeft = and.getLeft().accept(this);
-            Expression andRight = and.getRight().accept(this);
+            Expression andLeft = and.getLeft();
+            Expression andRight = and.getRight();
             return new And(new Or(left, andLeft), new Or(left, andRight));
-        } else if (left instanceof And && right instanceof Variable){
+        } else if (left instanceof And && (right instanceof Variable || right instanceof Not)){
             And and = (And) left;
-            Expression andLeft = and.getLeft().accept(this);
-            Expression andRight = and.getRight().accept(this);
+            Expression andLeft = and.getLeft();
+            Expression andRight = and.getRight();
             return new And(new Or(andLeft, right), new Or(andRight, right));
-        }else if (left instanceof And && right instanceof And){
-            And andL = (And) left;
-            Expression andLLeft = andL.getLeft().accept(this);
-            Expression andLRight = andL.getRight().accept(this);
-            And andR = (And) right;
-            Expression andRLeft = andR.getLeft().accept(this);
-            Expression andRRight = andR.getRight().accept(this);
-            if(andLLeft.equals(andRLeft) ){
+        }else if (left instanceof And andL && right instanceof And andR){
+            Expression andLLeft = andL.getLeft();
+            Expression andLRight = andL.getRight();
+            Expression andRLeft = andR.getLeft();
+            Expression andRRight = andR.getRight();
+            if(andLLeft.toString().equals(andRLeft.toString()) ){
                 return new And(andLLeft, new Or(andLRight, andRRight));
-            }else if (andLRight.equals(andRRight)){
+            }else if (andLRight.toString().equals(andRRight.toString())){
                 return new And(new Or(andLLeft, andRLeft), andLRight);
             }else{
                 return new And(andL, andR);
@@ -97,21 +93,21 @@ public class DistributiveVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         return new Not(expr);
     }
 
@@ -127,47 +123,41 @@ public class DistributiveVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof And){
-            And and = (And) expr;
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+        if(expr instanceof And and){
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
 
-            if (left instanceof Variable && right instanceof Or) {
+            if ((left instanceof Variable || left instanceof Not) && right instanceof Or) {
                 result = true;
-            } else if (left instanceof Or && right instanceof Variable){
+            } else if (left instanceof Or && (right instanceof Variable || right instanceof Not)){
                 result = true;
-            }else if (left instanceof Or && right instanceof Or) {
-                Or orL = (Or) left;
-                Expression orLLeft = orL.getLeft().accept(this);
-                Expression orLRight = orL.getRight().accept(this);
-                Or orR = (Or) right;
-                Expression orRLeft = orR.getLeft().accept(this);
-                Expression orRRight = orR.getRight().accept(this);
-                if (orLLeft.equals(orRLeft)) {
+            }else if (left instanceof Or orL && right instanceof Or orR) {
+                Expression orLLeft = orL.getLeft();
+                Expression orLRight = orL.getRight();
+                Expression orRLeft = orR.getLeft();
+                Expression orRRight = orR.getRight();
+                if (orLLeft.toString().equals(orRLeft.toString())) {
                     result = true;
-                } else if (orLRight.equals(orRRight)) {
+                } else if (orLRight.toString().equals(orRRight.toString())) {
                     result = true;
                 }
             }
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+        }else if(expr instanceof Or or){
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
 
-            if (left instanceof Variable && right instanceof And) {
+            if ((left instanceof Variable || left instanceof Not) && right instanceof And) {
                 result = true;
-            } else if (left instanceof And && right instanceof Variable){
+            } else if (left instanceof And && (right instanceof Variable || right instanceof Not)){
                 result = true;
-            } else if (left instanceof And && right instanceof And) {
-                And andL = (And) left;
-                Expression andLLeft = andL.getLeft().accept(this);
-                Expression andLRight = andL.getRight().accept(this);
-                And andR = (And) right;
-                Expression andRLeft = andR.getLeft().accept(this);
-                Expression andRRight = andR.getRight().accept(this);
-                if (andLLeft.equals(andRLeft)) {
+            } else if (left instanceof And andL && right instanceof And andR) {
+                Expression andLLeft = andL.getLeft();
+                Expression andLRight = andL.getRight();
+                Expression andRLeft = andR.getLeft();
+                Expression andRRight = andR.getRight();
+                if (andLLeft.toString().equals(andRLeft.toString())) {
                     result = true;
-                } else if (andLRight.equals(andRRight)) {
+                } else if (andLRight.toString().equals(andRRight.toString())) {
                     result = true;
                 }
             }
