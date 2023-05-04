@@ -39,8 +39,7 @@ public class SwitcherooVisitor implements ExpressionVisitor {
     public Expression visit(Or or) {
         Expression left = or.getLeft();
         Expression right = or.getRight();
-        if(left instanceof Not){
-            Not not = (Not) left;
+        if(left instanceof Not not){
             return new Imply(not.getExpression(), right);
         }else {
             return new Or(left, right);
@@ -77,15 +76,12 @@ public class SwitcherooVisitor implements ExpressionVisitor {
     }
 
     public boolean canApply(Expression expr) {
-        Boolean result = false;
+        boolean result = false;
         if(expr instanceof Imply){
             result = true;
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
+        }else if(expr instanceof Or or){
             Expression left = or.getLeft();
-            Expression right = or.getRight();
             if(left instanceof Not){
-                Not not = (Not) left;
                 result = true;
             }
         }

@@ -27,22 +27,20 @@ public class AbsorptionVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
 
         // A and (A or B) = A
         if (left instanceof Variable && right instanceof Or) {
             Or or = (Or) right;
-            Expression orLeft = or.getLeft().accept(this);
-            Expression orRight = or.getRight().accept(this);
+            Expression orLeft = or.getLeft();
             if (orLeft.equals(left)) {
                 return left;
             }
         }
         if (right instanceof Variable && left instanceof Or){
             Or or = (Or) left;
-            Expression orLeft = or.getLeft().accept(this);
-            Expression orRight = or.getRight().accept(this);
+            Expression orLeft = or.getLeft();
             if (orLeft.equals(right)) {
                 return right;
             }
@@ -52,14 +50,13 @@ public class AbsorptionVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
 
         // A OR (A AND B) = A
         if (left instanceof Variable && right instanceof And) {
             And and = (And) right;
-            Expression andLeft = and.getLeft().accept(this);
-            Expression andRight = and.getRight().accept(this);
+            Expression andLeft = and.getLeft();
             if (andLeft.equals(left)) {
                 return left;
             }
@@ -68,8 +65,7 @@ public class AbsorptionVisitor implements ExpressionVisitor {
         // (A AND B) OR A = A
         if (right instanceof Variable && left instanceof And) {
             And and = (And) left;
-            Expression andLeft = and.getLeft().accept(this);
-            Expression andRight = and.getRight().accept(this);
+            Expression andLeft = and.getLeft();
             if (andLeft.equals(right)) {
                 return right;
             }
@@ -81,21 +77,21 @@ public class AbsorptionVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         return new Not(expr);
     }
 
@@ -113,34 +109,31 @@ public class AbsorptionVisitor implements ExpressionVisitor {
         boolean result = false;
         if(expr instanceof And){
             And and = (And) expr;
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
             // A and (A or B) = A
             if (left instanceof Variable && right instanceof Or) {
                 Or or = (Or) right;
-                Expression orLeft = or.getLeft().accept(this);
-                Expression orRight = or.getRight().accept(this);
+                Expression orLeft = or.getLeft();
                 if (orLeft.equals(left)) {
                     result = true;
                 }
             }
             if (right instanceof Variable && left instanceof Or){
                 Or or = (Or) left;
-                Expression orLeft = or.getLeft().accept(this);
-                Expression orRight = or.getRight().accept(this);
+                Expression orLeft = or.getLeft();
                 if (orLeft.equals(right)) {
                     result = true;
                 }
             }
         }else if(expr instanceof Or){
             Or or = (Or) expr;
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
             // A OR (A AND B) = A
             if (left instanceof Variable && right instanceof And) {
                 And and = (And) right;
-                Expression andLeft = and.getLeft().accept(this);
-                Expression andRight = and.getRight().accept(this);
+                Expression andLeft = and.getLeft();
                 if (andLeft.equals(left)) {
                     result = true;
                 }
@@ -148,8 +141,7 @@ public class AbsorptionVisitor implements ExpressionVisitor {
             // (A AND B) OR A = A
             if (right instanceof Variable && left instanceof And) {
                 And and = (And) left;
-                Expression andLeft = and.getLeft().accept(this);
-                Expression andRight = and.getRight().accept(this);
+                Expression andLeft = and.getLeft();
                 if (andLeft.equals(right)) {
                     result = true;
                 }

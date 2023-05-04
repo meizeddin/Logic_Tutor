@@ -32,8 +32,8 @@ public class ComplementVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
         // If both the left and right operands are equal, return the single operand
         if (right instanceof Not) {
             Not not = (Not) right;
@@ -58,8 +58,8 @@ public class ComplementVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
         // If both the left and right operands are equal, return the single operand
         if (right instanceof Not) {
             Not not = (Not) right;
@@ -82,21 +82,21 @@ public class ComplementVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         if (expr instanceof True){
             return new False();
         }else if (expr instanceof False){
@@ -117,10 +117,9 @@ public class ComplementVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof And){
-            And and = (And) expr;
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+        if(expr instanceof And and){
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
             if (right instanceof Not) {
                 Not not = (Not) right;
                 if (not.getExpression().toString().equals(left.toString())) {
@@ -132,10 +131,9 @@ public class ComplementVisitor implements ExpressionVisitor {
                     result = true;
                 }
             }
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+        }else if(expr instanceof Or or){
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
             if (right instanceof Not) {
                 Not not = (Not) right;
                 if (not.getExpression().toString().equals(left.toString())) {
@@ -149,7 +147,7 @@ public class ComplementVisitor implements ExpressionVisitor {
             }
         }else if (expr instanceof Not){
             Not not = (Not) expr;
-            Expression expr1 = not.getExpression().accept(this);
+            Expression expr1 = not.getExpression();
             if (expr1 instanceof True){
                 result = true;
             }else if (expr1 instanceof False){

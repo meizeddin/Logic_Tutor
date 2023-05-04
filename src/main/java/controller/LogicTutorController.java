@@ -416,6 +416,8 @@ public class LogicTutorController {
 			if (model.getFormula().equals("")) {
 				//output error
 				alertDialogBuilder("You need to enter a formula");
+			}else if(mp.getFunction().equals("")){
+				alertDialogBuilder("There is no formula to introduce to");
 			}else {
 				mp.populateFunction(model.getFormula());
 				mp.populateResult("\nUsing Introduction \n" + model.getFormula());

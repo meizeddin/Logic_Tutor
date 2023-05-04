@@ -28,33 +28,30 @@ public class ImplyEliminationVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
 
         return new And(left,right);
     }
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
 
         return new Or(left, right);
     }
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
-
-        return right;
+        return imply.getRight();
     }
 
     @Override
@@ -74,10 +71,6 @@ public class ImplyEliminationVisitor implements ExpressionVisitor {
     }
 
     public boolean canApply(Expression expr) {
-        boolean result = false;
-        if (expr instanceof Imply) {
-            result = true;
-        }
-        return result;
+        return expr instanceof Imply;
     }
 }

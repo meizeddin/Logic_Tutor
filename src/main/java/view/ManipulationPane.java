@@ -408,7 +408,7 @@ public class ManipulationPane extends ScrollPane {
 			}
 			case "Double Negation Rule" -> {
 				DoubleNegationVisitor visitor = new DoubleNegationVisitor();
-				result = visitor.canApply(expr);
+				result = visitor.canApply();
 			}
 			case "Switcheroo Rule" -> {
 				SwitcherooVisitor visitor = new SwitcherooVisitor();

@@ -28,8 +28,8 @@ public class AssociativeVisitor implements ExpressionVisitor {
     }
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
 
         if (left instanceof And leftAnd) {
             return new And(leftAnd.getLeft(), new And(leftAnd.getRight(), right));
@@ -42,8 +42,8 @@ public class AssociativeVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
 
         if (left instanceof Or leftOr) {
             return new Or(leftOr.getLeft(), new Or(leftOr.getRight(), right));
@@ -56,8 +56,8 @@ public class AssociativeVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         if (left instanceof Equivalence leftEquiv) {
             return new Equivalence(leftEquiv.getLeft(), new Equivalence(leftEquiv.getRight(), right));
         } else if (right instanceof Equivalence rightEquiv){
@@ -69,14 +69,14 @@ public class AssociativeVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Imply(left, right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         return new Not(expr);
     }
 
@@ -92,30 +92,27 @@ public class AssociativeVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof And){
-            And and = (And) expr;
-            Expression left = and.getLeft().accept(this);
-            Expression right = and.getRight().accept(this);
+        if(expr instanceof And and){
+            Expression left = and.getLeft();
+            Expression right = and.getRight();
 
             if (left instanceof And) {
                 result = true;
             } else if (right instanceof And){
                 result = true;
             }
-        }else if(expr instanceof Or){
-            Or or = (Or) expr;
-            Expression left = or.getLeft().accept(this);
-            Expression right = or.getRight().accept(this);
+        }else if(expr instanceof Or or){
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
 
             if (left instanceof Or) {
                 result = true;
             } else if (right instanceof Or){
                 result = true;
             }
-        }else if(expr instanceof Equivalence){
-            Equivalence equivalence = (Equivalence) expr;
-            Expression left = equivalence.getLeft().accept(this);
-            Expression right = equivalence.getRight().accept(this);
+        }else if(expr instanceof Equivalence equivalence){
+            Expression left = equivalence.getLeft();
+            Expression right = equivalence.getRight();
             if (left instanceof Equivalence) {
                 result = true;
             } else if (right instanceof Equivalence){

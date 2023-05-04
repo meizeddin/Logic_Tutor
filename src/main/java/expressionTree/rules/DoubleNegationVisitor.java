@@ -60,11 +60,9 @@ public class DoubleNegationVisitor implements ExpressionVisitor {
     @Override
     public Expression visit(Not not) {
         Expression insideExpr = not.getExpression();
-        if (insideExpr instanceof Not) {
-            Not notE = (Not) insideExpr;
+        if (insideExpr instanceof Not notE) {
             // Apply De Morgan's law
-            Expression expr = notE.getExpression();
-                return expr;
+            return notE.getExpression();
         } else {
             // Keep the expression unchanged
             return not;
@@ -81,8 +79,7 @@ public class DoubleNegationVisitor implements ExpressionVisitor {
         return new Not(new Not(value));
     }
 
-    public boolean canApply(Expression expr) {
-        boolean result = true;
-        return result;
+    public boolean canApply() {
+        return true;
     }
 }
