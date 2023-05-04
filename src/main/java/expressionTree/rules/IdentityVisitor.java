@@ -35,9 +35,9 @@ public class IdentityVisitor implements ExpressionVisitor {
         Expression left = and.getLeft().accept(this);
         Expression right = and.getRight().accept(this);
         // If either the left or right node = t then return the variable
-        if (left.toString().equals(Value.getTrue().toString())) {
+        if (left instanceof True) {
             return right;
-        }else if(right.toString().equals(Value.getTrue().toString())){
+        }else if(right instanceof True){
             return left;
         }else {
             return new And(left, right);
@@ -49,9 +49,9 @@ public class IdentityVisitor implements ExpressionVisitor {
         Expression left = or.getLeft().accept(this);
         Expression right = or.getRight().accept(this);
         // If either the left or right node = t then return the variable
-        if (left.toString().equals(Value.getFalse().toString())) {
+        if (left instanceof False) {
             return right;
-        }else if(right.toString().equals(Value.getFalse().toString())){
+        }else if(right instanceof False){
             return left;
         }else {
             return new Or(left, right);
@@ -69,7 +69,7 @@ public class IdentityVisitor implements ExpressionVisitor {
     public Expression visit(Imply imply) {
         Expression left = imply.getLeft().accept(this);
         Expression right = imply.getRight().accept(this);
-        if (left.toString().equals(Value.getTrue().toString())) {
+        if (left instanceof True) {
             return right;
         }else {
             return new Imply(left, right);
@@ -98,25 +98,25 @@ public class IdentityVisitor implements ExpressionVisitor {
             And and = (And) expr;
             Expression left = and.getLeft().accept(this);
             Expression right = and.getRight().accept(this);
-            if (left.toString().equals(Value.getTrue().toString())) {
+            if (left instanceof True) {
                 result = true;
-            }else if(right.toString().equals(Value.getTrue().toString())){
+            }else if(right instanceof True){
                 result = true;
             }
         }else if(expr instanceof Or){
             Or or = (Or) expr;
             Expression left = or.getLeft().accept(this);
             Expression right = or.getRight().accept(this);
-            if (left.toString().equals(Value.getFalse().toString())) {
+            if (left instanceof False) {
                 result = true;
-            }else if(right.toString().equals(Value.getFalse().toString())){
+            }else if(right instanceof False){
                 result = true;
             }
         }else if(expr instanceof Imply){
             Imply imply = (Imply) expr;
             Expression left = imply.getLeft().accept(this);
             Expression right = imply.getRight().accept(this);
-            if (left.toString().equals(Value.getTrue().toString())) {
+            if (left instanceof True) {
                 result = true;
             }
         }

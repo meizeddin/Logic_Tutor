@@ -13,10 +13,7 @@ import model.LogicalFormula;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author meize
@@ -104,16 +101,17 @@ public class LogicTutorController {
 		rp.btnSaveHandler(new saveResultBtnHandler());
 
 		//Manipulation pane handlers
-		mp.btnSaveHandler(new saveSimplificationBtnHandler());
-		mp.btnCalcHandler(new calcSimplificationBtnHandler());
-		mp.addButtonLogicHandler(new addSimplificationPaneHandler());
-		mp.manipulateButtonLogicHandler(new manipulateSimplificationPaneHandler());
-		mp.conjunctionLogicHandler(new conjunctionSimplificationBtnHandler());
-		mp.disjunctionLogicHandler(new disjunctionSimplificationBtnHandler());
-		mp.negationLogicHandler(new negationSimplificationBtnHandler());
-		mp.implicationLogicHandler(new implicationSimplificationBtnHandler());
-		mp.equivalenceLogicHandler(new equivalenceSimplificationBtnHandler());
-		mp.updateBtnLogicHandler(new updateComboSimplificationBtnHandler());
+		mp.btnSaveHandler(new saveManipulationPaneBtnHandler());
+		mp.btnCalcHandler(new calcManipulationPaneBtnHandler());
+		mp.addButtonLogicHandler(new addManipulationPaneBtnHandler());
+		mp.introduceButtonLogicHandler(new introduceManipulationPaneBtnHandler());
+		mp.manipulateButtonLogicHandler(new manipulateManipulationPaneBtnHandler());
+		mp.conjunctionLogicHandler(new conjunctionManipulationPaneBtnHandler());
+		mp.disjunctionLogicHandler(new disjunctionManipulationPaneBtnHandler());
+		mp.negationLogicHandler(new negationManipulationPaneBtnHandler());
+		mp.implicationLogicHandler(new implicationManipulationPaneBtnHandler());
+		mp.equivalenceLogicHandler(new equivalenceManipulationPaneBtnHandler());
+		mp.updateBtnLogicHandler(new updateComboManipulationPaneBtnHandler());
 
 		//Test pane handlers
 		testp.takeTestHandler(new takeTestHandler());
@@ -249,7 +247,7 @@ public class LogicTutorController {
 		}
 	}
 
-	private class saveSimplificationBtnHandler implements EventHandler<ActionEvent>{
+	private class saveManipulationPaneBtnHandler implements EventHandler<ActionEvent>{
 
 		@Override
 		public void handle(ActionEvent event) {
@@ -311,7 +309,7 @@ public class LogicTutorController {
 		}
 	}
 
-	private class calcSimplificationBtnHandler implements EventHandler<ActionEvent>{
+	private class calcManipulationPaneBtnHandler implements EventHandler<ActionEvent>{
 		@Override
 		public void handle(ActionEvent event) {
 			try {
@@ -351,39 +349,39 @@ public class LogicTutorController {
 			}
 		}
 	}
-	private class conjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class conjunctionManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("&");
 		}
 	}
 
-	private class disjunctionSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class disjunctionManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("|");
 		}
 	}
-	private class negationSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class negationManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("~");
 		}
 	}
-	private class implicationSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class implicationManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("=>");
 		}
 	}
-	private class equivalenceSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class equivalenceManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("<=>");
 		}
 	}
 
-	private class addSimplificationPaneHandler implements EventHandler<ActionEvent> {
+	private class addManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			mp.clearResult();
 			//retrieves data from the view
@@ -405,8 +403,29 @@ public class LogicTutorController {
 		}
 	}
 
-	private class updateComboSimplificationBtnHandler implements EventHandler<ActionEvent> {
+	private class introduceManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			//retrieves data from the view
+			try {
+				mp.removeSpaces(mp.getFormula());
+				model.setFormula(mp.getFormula());
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			//check input not empty
+			if (model.getFormula().equals("")) {
+				//output error
+				alertDialogBuilder("You need to enter a formula");
+			}else {
+				mp.populateFunction(model.getFormula());
+				mp.populateResult("\nUsing Introduction \n" + model.getFormula());
+				model.setFormula(model.getFormula());
+			}
+		}
+	}
+
+	private class updateComboManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) throws EmptyStackException {
 			model.setSelectedFormula(mp.getSelectedFormula());
 			if (!model.getSelectedFormula().isEmpty()) {
 				List<String> itemList = model.getRulesList();
@@ -414,7 +433,15 @@ public class LogicTutorController {
 				Parser.list.clear();
 				List<String> tokens = Tokenizer.tokenize(expression);
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
-				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				Expression expr;
+				try {
+					expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				} catch (Exception ex){
+					if (ex instanceof EmptyStackException){
+						alertDialogBuilder("Select an appropriate expression");
+					}
+					throw ex;
+				}
 				mp.updateComboBox(itemList, expr);
 			} else{
 				alertDialogBuilder("Highlight an expression");
@@ -422,7 +449,7 @@ public class LogicTutorController {
 		}
 	}
 
-	private class manipulateSimplificationPaneHandler implements EventHandler<ActionEvent> {
+	private class manipulateManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
@@ -452,6 +479,11 @@ public class LogicTutorController {
 						DeMorganVisitor visitor = new DeMorganVisitor();
 						result = expr.accept(visitor);
 						model.updateResult("Using De Morgan's Law");
+					}
+					case "Complement Rule" -> {
+						ComplementVisitor visitor = new ComplementVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Complement Rule");
 					}
 					case "Absorption Rule" -> {
 						AbsorptionVisitor visitor = new AbsorptionVisitor();
@@ -487,6 +519,21 @@ public class LogicTutorController {
 						IdentityVisitor visitor = new IdentityVisitor();
 						result = expr.accept(visitor);
 						model.updateResult("Using Identity Law");
+					}
+					case "Elimination of & Right" -> {
+						AndEliminationRVisitor visitor = new AndEliminationRVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of & Right");
+					}
+					case "Elimination of & Left" -> {
+						AndEliminationLVisitor visitor = new AndEliminationLVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of & Left");
+					}
+					case "Elimination of =>" -> {
+						ImplyEliminationVisitor visitor = new ImplyEliminationVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of =>");
 					}
 					case "Select an option.." -> alertDialogBuilder("Select a rule");
 				}

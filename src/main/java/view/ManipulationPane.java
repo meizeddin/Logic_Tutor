@@ -13,14 +13,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import model.ValidationClass;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
 public class ManipulationPane extends ScrollPane {
-	private final Button btnSave, btnCalc, btnAdd, btnManipulate, btnUpdateCombo;
+	private final Button btnSave, btnCalc, btnAdd, btnIntroduce, btnManipulate, btnUpdateCombo;
 	private final Button btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation;
 	private final ValidationClass txtFormula;
 	private final TextArea txtFunction, txtResult;
@@ -121,8 +119,9 @@ public class ManipulationPane extends ScrollPane {
 			popupMessage.show(popupButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
 		});
 
-		//initialize the create profile button and binds it to the validation in the validation helper class
+		//initialize the buttons, set styles, and binds them to the validation in the validation helper class
 		btnAdd = new Button("Add");
+		btnIntroduce = new Button("Introduce");
 		btnManipulate = new Button("Manipulate");
 		btnAnd = new Button("&");
 		btnOr = new Button("|");
@@ -133,6 +132,10 @@ public class ManipulationPane extends ScrollPane {
 		btnAdd.setStyle(WelcomingPane.idle);
 		btnAdd.setOnMouseEntered(e -> btnAdd.setStyle(WelcomingPane.hover));
 		btnAdd.setOnMouseExited(e -> btnAdd.setStyle(WelcomingPane.idle));
+
+		btnIntroduce.setStyle(WelcomingPane.idle);
+		btnIntroduce.setOnMouseEntered(e -> btnIntroduce.setStyle(WelcomingPane.hover));
+		btnIntroduce.setOnMouseExited(e -> btnIntroduce.setStyle(WelcomingPane.idle));
 
 		btnManipulate.setStyle(WelcomingPane.idle);
 		btnManipulate.setOnMouseEntered(e -> btnManipulate.setStyle(WelcomingPane.hover));
@@ -159,6 +162,7 @@ public class ManipulationPane extends ScrollPane {
 		btnNegation.setOnMouseExited(e -> btnNegation.setStyle(WelcomingPane.idle));
 
 		btnAdd.setPadding(new Insets(10, 10, 10, 10));
+		btnIntroduce.setPadding(new Insets(10, 10, 10, 10));
 		btnManipulate.setPadding(new Insets(10, 10, 10, 10));
 		btnAnd.setPadding(new Insets(10, 10, 10, 10));
 		btnOr.setPadding(new Insets(10, 10, 10, 10));
@@ -167,6 +171,7 @@ public class ManipulationPane extends ScrollPane {
 		btnNegation.setPadding(new Insets(10, 10, 10, 10));
 
 		btnAdd.setMinSize(50, 50);
+		btnIntroduce.setMinSize(50, 50);
 		btnManipulate.setMinSize(50, 50);
 		btnAnd.setMinSize(35, 35);
 		btnOr.setMinSize(35, 35);
@@ -178,11 +183,14 @@ public class ManipulationPane extends ScrollPane {
 		btnAdd.disableProperty().bind(txtFormula.isValidProperty.not());
 		lblFormulaError.visibleProperty().bind(txtFormula.isValidProperty.not());
 
+		btnIntroduce.disableProperty().bind(txtFormula.isValidProperty.not());
+		lblFormulaError.visibleProperty().bind(txtFormula.isValidProperty.not());
+
 
 
 		//h Boxes
 		HBox hb = new HBox(btnAnd, btnOr, btnImplies, btnIfOnlyIf, btnNegation);
-		HBox hb1 = new HBox(btnAdd);
+		HBox hb1 = new HBox(btnAdd, btnIntroduce);
 		HBox hb2 = new HBox(lblFormula, popupButton);
 		hb.setAlignment(Pos.BASELINE_CENTER);
 		hb1.setAlignment(Pos.BASELINE_CENTER);
@@ -378,6 +386,10 @@ public class ManipulationPane extends ScrollPane {
 				DeMorganVisitor visitor = new DeMorganVisitor();
 				result = visitor.canApply(expr);
 			}
+			case "Complement Rule" -> {
+				ComplementVisitor visitor = new ComplementVisitor();
+				result = visitor.canApply(expr);
+			}
 			case "Absorption Rule" -> {
 				AbsorptionVisitor visitor = new AbsorptionVisitor();
 				result = visitor.canApply(expr);
@@ -406,6 +418,18 @@ public class ManipulationPane extends ScrollPane {
 				IdentityVisitor visitor = new IdentityVisitor();
 				result = visitor.canApply(expr);
 			}
+			case "Elimination of & Right" -> {
+				AndEliminationRVisitor visitor = new AndEliminationRVisitor();
+				result = visitor.canApply(expr);
+			}
+			case "Elimination of & Left" -> {
+				AndEliminationLVisitor visitor = new AndEliminationLVisitor();
+				result = visitor.canApply(expr);
+			}
+			case "Elimination of =>" -> {
+				ImplyEliminationVisitor visitor = new ImplyEliminationVisitor();
+				result = visitor.canApply(expr);
+			}
 		}
 		return result;
 	}
@@ -428,6 +452,9 @@ public class ManipulationPane extends ScrollPane {
 
 	public void addButtonLogicHandler(EventHandler<ActionEvent> handler) {
 		btnAdd.setOnAction(handler);
+	}
+	public void introduceButtonLogicHandler(EventHandler<ActionEvent> handler) {
+		btnIntroduce.setOnAction(handler);
 	}
 	public void manipulateButtonLogicHandler(EventHandler<ActionEvent> handler) {
 		btnManipulate.setOnAction(handler);
@@ -452,13 +479,13 @@ public class ManipulationPane extends ScrollPane {
 	}
 
 	/**
-	 * @param str: accepts a string of student personal details and populate the corresponding textField in the view
+	 * @param str accepts a string of student personal details and populate the corresponding textField in the view
 	 */
 	public void populateFunction(String str) {
 		txtFunction.setText(str);
 	}
 	/**
-	 * @param str: accepts a string of student selected modules and populate the corresponding textField in the view
+	 * @param str accepts a string of student-selected modules and populate the corresponding textField in the view
 	 */
 	public void populateResult(String str) {
 		txtResult.appendText(str);
@@ -482,7 +509,7 @@ public class ManipulationPane extends ScrollPane {
 
 	/**
 	 * method to attach the buttons event handlers
-	 * @param handler: accepts an external handler set by the controller
+	 * @param handler accepts an external handler set by the controller
 	 */
 	public void btnSaveHandler(EventHandler<ActionEvent> handler) {
 		btnSave.setOnAction(handler);

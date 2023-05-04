@@ -37,6 +37,11 @@ public class LogicalFormula implements Serializable{
 		rulesList.add("Idempotence Rule");
 		rulesList.add("Switcheroo Rule");
 		rulesList.add("Identity Rule");
+		rulesList.add("Complement Rule");
+		rulesList.add("Elimination of & Right");
+		rulesList.add("Elimination of & Left");
+		rulesList.add("Elimination of =>");
+
 	}
 	//methods
 	/**

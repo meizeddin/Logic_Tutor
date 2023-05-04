@@ -12,6 +12,8 @@ import java.util.Objects;
  * <p>
  * Double Negation law states that:
  * !(!A) = A
+ * and
+ * A = !(!A)
  * <p>
  * When visiting a 'Not' expression, this visitor applies Double Negation law if the
  * expression contained within the 'Not' node is another 'Not' expression.
@@ -22,7 +24,7 @@ import java.util.Objects;
 public class DoubleNegationVisitor implements ExpressionVisitor {
 
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("!(!(!A))");
+        List<String> tokens = Tokenizer.tokenize("A&A");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
         DoubleNegationVisitor visitor = new DoubleNegationVisitor();
@@ -31,40 +33,38 @@ public class DoubleNegationVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
-        return new And(left, right);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
+        return new Not(new Not(new And(left, right)));
     }
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
-        return new Or(left, right);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
+        return new Not(new Not(new Or(left, right)));
     }
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
-        return new Equivalence(left, right);
-    }
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
+        return new Not(new Not(new Equivalence(left, right)));    }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
-        return new Imply(left, right);
-    }
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
+        return new Not(new Not(new Imply(left, right)));    }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression();
-        if (expr instanceof Not) {
-            Not notE = (Not) expr;
+        Expression insideExpr = not.getExpression();
+        if (insideExpr instanceof Not) {
+            Not notE = (Not) insideExpr;
             // Apply De Morgan's law
-            Expression left = notE.getExpression().accept(this);
-            return left;
+            Expression expr = notE.getExpression();
+                return expr;
         } else {
             // Keep the expression unchanged
             return not;
@@ -73,22 +73,16 @@ public class DoubleNegationVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(Variable variable) {
-        return variable;
+
+        return new Not(new Not(variable));
     }
 
     public Expression visit(Value value){
-        return value;
+        return new Not(new Not(value));
     }
 
     public boolean canApply(Expression expr) {
-        boolean result = false;
-        if(expr instanceof Not){
-            Not not = (Not) expr;
-            Expression exprInside = not.getExpression();
-            if (exprInside instanceof Not) {
-                result =true;
-            }
-        }
+        boolean result = true;
         return result;
     }
 }
