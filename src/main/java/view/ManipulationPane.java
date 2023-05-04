@@ -41,6 +41,32 @@ public class ManipulationPane extends ScrollPane {
 				+ "-fx-font: 30px Harrington;"
 		);
 
+		// Create a round button with a tooltip
+		Button popupButton = new Button("Click me!");
+		popupButton.setStyle("-fx-background-color: #37435c; "
+				+ "-fx-text-fill: white; "
+				+ "-fx-background-radius: 30;");
+
+		popupButton.setOnMouseEntered(e -> popupButton.setEffect(new DropShadow(10, Color.WHITE)));
+		popupButton.setOnMouseExited(e -> popupButton.setEffect(null));
+
+		Tooltip tooltip = new Tooltip("Click me to display a message");
+		popupButton.setTooltip(tooltip);
+
+		// Create a popup message
+		Tooltip popupMessage = new Tooltip("""
+				Only alphabetic characters and the below operators are allowed
+							Make sure you close all the brackets
+				(T) and (F) are considered true and false rather than variables""");
+		popupMessage.setStyle("-fx-font-size: 18px;");
+		popupMessage.setAutoHide(true);
+
+		// Show the popup message when the button is clicked
+		popupButton.setOnAction(e -> {
+			Bounds bounds = popupButton.localToScreen(popupButton.getBoundsInLocal());
+			popupMessage.show(popupButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
+		});
+
 		//error labels
 		Label lblFormulaError = new Label("Variables can only be alphabetic, all brackets must be closed,\n"
 				+ "\t\tand only the below operators are allowed");
@@ -93,31 +119,7 @@ public class ManipulationPane extends ScrollPane {
 		txtFormula.setMaxSize(700, 100);
 		txtFormula.setPromptText("Enter a logical expression");
 
-		// Create a round button with a tooltip
-		Button popupButton = new Button("Click me!");
-		popupButton.setStyle("-fx-background-color: #37435c; "
-				+ "-fx-text-fill: white; "
-				+ "-fx-background-radius: 30;");
 
-		popupButton.setOnMouseEntered(e -> popupButton.setEffect(new DropShadow(10, Color.WHITE)));
-		popupButton.setOnMouseExited(e -> popupButton.setEffect(null));
-
-		Tooltip tooltip = new Tooltip("Click me to display a message");
-		popupButton.setTooltip(tooltip);
-
-		// Create a popup message
-		Tooltip popupMessage = new Tooltip("""
-				Only alphabetic characters and the below operators are allowed
-							Make sure you close all the brackets
-				(T) and (F) are considered true and false rather than variables""");
-		popupMessage.setStyle("-fx-font-size: 18px;");
-		popupMessage.setAutoHide(true);
-
-		// Show the popup message when the button is clicked
-		popupButton.setOnAction(e -> {
-			Bounds bounds = popupButton.localToScreen(popupButton.getBoundsInLocal());
-			popupMessage.show(popupButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
-		});
 
 		//initialize the buttons, set styles, and binds them to the validation in the validation helper class
 		btnAdd = new Button("Add");
@@ -233,6 +235,33 @@ public class ManipulationPane extends ScrollPane {
 		labelFunc.setStyle("-fx-text-fill: white;"
 				+ "-fx-font: 30px Georgia;"
 				);
+
+		// Create a round button with a tooltip
+		Button manipulateHelpButton = new Button("Click me!");
+		manipulateHelpButton.setStyle("-fx-background-color: #37435c; "
+				+ "-fx-text-fill: white; "
+				+ "-fx-background-radius: 30;");
+
+		manipulateHelpButton.setOnMouseEntered(e -> manipulateHelpButton.setEffect(new DropShadow(10, Color.WHITE)));
+		manipulateHelpButton.setOnMouseExited(e -> manipulateHelpButton.setEffect(null));
+
+		Tooltip manipulateTooltip = new Tooltip("Click me to display a message");
+		manipulateHelpButton.setTooltip(manipulateTooltip);
+
+		// Create a popup message
+		Tooltip manipulatePopupMessage = new Tooltip("""
+						Each time you want to manipulate, highlight an expression
+										and click on update button.
+				If you want to introduce an expression go back up and use the button introduce.""");
+		manipulatePopupMessage.setStyle("-fx-font-size: 18px;");
+		manipulatePopupMessage.setAutoHide(true);
+
+		// Show the popup message when the button is clicked
+		manipulateHelpButton.setOnAction(e -> {
+			Bounds bounds = manipulateHelpButton.localToScreen(manipulateHelpButton.getBoundsInLocal());
+			manipulatePopupMessage.show(manipulateHelpButton.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
+		});
+
 		//setup text area
 		txtFunction = new TextArea();
 		txtFunction.setEditable(false);
@@ -294,7 +323,12 @@ public class ManipulationPane extends ScrollPane {
 		vbox1.setSpacing(20);
 		
 		VBox vbox = new VBox();
-		vbox.getChildren().addAll(labelFunc, txtFunction, hboxManipulate);
+		HBox hbox = new HBox();
+		hbox.setAlignment(Pos.BASELINE_CENTER);
+		hbox.setPadding(new Insets(5, 5, 5, 5));
+		hbox.setSpacing(20);
+		hbox.getChildren().addAll(labelFunc, manipulateHelpButton);
+		vbox.getChildren().addAll(hbox, txtFunction, hboxManipulate);
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setSpacing(20);
 
@@ -303,7 +337,6 @@ public class ManipulationPane extends ScrollPane {
 		vbox2.setAlignment(Pos.CENTER);
 		vbox2.setSpacing(20);
 		
-
 
 
 		//add controls and labels to container
