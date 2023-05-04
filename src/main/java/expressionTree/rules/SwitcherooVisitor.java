@@ -21,7 +21,7 @@ import java.util.Objects;
 public class SwitcherooVisitor implements ExpressionVisitor {
 
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("(P=>Q)=>R");
+        List<String> tokens = Tokenizer.tokenize("(!((!(P)|Q))|R)");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
         SwitcherooVisitor visitor = new SwitcherooVisitor();
@@ -30,35 +30,40 @@ public class SwitcherooVisitor implements ExpressionVisitor {
 
     @Override
     public Expression visit(And and) {
-        Expression left = and.getLeft().accept(this);
-        Expression right = and.getRight().accept(this);
+        Expression left = and.getLeft();
+        Expression right = and.getRight();
         return new And(left, right);
     }
 
     @Override
     public Expression visit(Or or) {
-        Expression left = or.getLeft().accept(this);
-        Expression right = or.getRight().accept(this);
-        return new Or(left, right);
+        Expression left = or.getLeft();
+        Expression right = or.getRight();
+        if(left instanceof Not){
+            Not not = (Not) left;
+            return new Imply(not.getExpression(), right);
+        }else {
+            return new Or(left, right);
+        }
     }
 
     @Override
     public Expression visit(Equivalence equivalence) {
-        Expression left = equivalence.getLeft().accept(this);
-        Expression right = equivalence.getRight().accept(this);
+        Expression left = equivalence.getLeft();
+        Expression right = equivalence.getRight();
         return new Equivalence(left, right);
     }
 
     @Override
     public Expression visit(Imply imply) {
-        Expression left = imply.getLeft().accept(this);
-        Expression right = imply.getRight().accept(this);
+        Expression left = imply.getLeft();
+        Expression right = imply.getRight();
         return new Or(new Not(left), right);
     }
 
     @Override
     public Expression visit(Not not) {
-        Expression expr = not.getExpression().accept(this);
+        Expression expr = not.getExpression();
         return new Not(expr);
     }
 
@@ -72,6 +77,18 @@ public class SwitcherooVisitor implements ExpressionVisitor {
     }
 
     public boolean canApply(Expression expr) {
-        return expr instanceof Imply;
+        Boolean result = false;
+        if(expr instanceof Imply){
+            result = true;
+        }else if(expr instanceof Or){
+            Or or = (Or) expr;
+            Expression left = or.getLeft();
+            Expression right = or.getRight();
+            if(left instanceof Not){
+                Not not = (Not) left;
+                result = true;
+            }
+        }
+        return result;
     }
 }

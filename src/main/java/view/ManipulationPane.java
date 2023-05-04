@@ -13,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import model.ValidationClass;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
@@ -378,6 +376,10 @@ public class ManipulationPane extends ScrollPane {
 				DeMorganVisitor visitor = new DeMorganVisitor();
 				result = visitor.canApply(expr);
 			}
+			case "Complement Rule" -> {
+				ComplementVisitor visitor = new ComplementVisitor();
+				result = visitor.canApply(expr);
+			}
 			case "Absorption Rule" -> {
 				AbsorptionVisitor visitor = new AbsorptionVisitor();
 				result = visitor.canApply(expr);
@@ -404,6 +406,18 @@ public class ManipulationPane extends ScrollPane {
 			}
 			case "Identity Rule" -> {
 				IdentityVisitor visitor = new IdentityVisitor();
+				result = visitor.canApply(expr);
+			}
+			case "Elimination of & Right" -> {
+				AndEliminationRVisitor visitor = new AndEliminationRVisitor();
+				result = visitor.canApply(expr);
+			}
+			case "Elimination of & Left" -> {
+				AndEliminationLVisitor visitor = new AndEliminationLVisitor();
+				result = visitor.canApply(expr);
+			}
+			case "Elimination of =>" -> {
+				ImplyEliminationVisitor visitor = new ImplyEliminationVisitor();
 				result = visitor.canApply(expr);
 			}
 		}

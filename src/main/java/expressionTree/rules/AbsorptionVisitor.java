@@ -1,7 +1,6 @@
 package expressionTree.rules;
 
 import expressionTree.*;
-
 import java.util.List;
 import java.util.Objects;
 

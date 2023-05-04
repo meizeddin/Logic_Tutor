@@ -33,14 +33,28 @@ public class DeMorganVisitor implements ExpressionVisitor {
     public Expression visit(And and) {
         Expression left = and.getLeft().accept(this);
         Expression right = and.getRight().accept(this);
-        return new And(left, right);
+        if (right instanceof Not && left instanceof Not) {
+            Not notR = (Not) right;
+            Not notL = (Not) left;
+            Or or = new Or(notL.getExpression(), notR.getExpression());
+            return new Not(or);
+        }else{
+            return new And(left, right);
+        }
     }
 
     @Override
     public Expression visit(Or or) {
         Expression left = or.getLeft().accept(this);
         Expression right = or.getRight().accept(this);
-        return new Or(left, right);
+        if (right instanceof Not && left instanceof Not) {
+            Not notR = (Not) right;
+            Not notL = (Not) left;
+            And and = new And(notL.getExpression(), notR.getExpression());
+            return new Not(and);
+        }else{
+            return new Or(left, right);
+        }
     }
 
     @Override
@@ -87,7 +101,21 @@ public class DeMorganVisitor implements ExpressionVisitor {
 
     public boolean canApply(Expression expr) {
         boolean result = false;
-        if(expr instanceof Not){
+        if(expr instanceof And){
+            And and = (And) expr;
+            Expression left = and.getLeft().accept(this);
+            Expression right = and.getRight().accept(this);
+            if (right instanceof Not && left instanceof Not) {
+                result = true;
+            }
+        }else if(expr instanceof Or){
+            Or or = (Or) expr;
+            Expression left = or.getLeft().accept(this);
+            Expression right = or.getRight().accept(this);
+            if (right instanceof Not && left instanceof Not) {
+                result = true;
+            }
+        }else if(expr instanceof Not){
             Not not = (Not) expr;
             Expression insideExpr = not.getExpression();
             if (insideExpr instanceof And ) {

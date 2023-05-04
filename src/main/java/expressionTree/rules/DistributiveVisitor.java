@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class DistributiveVisitor implements ExpressionVisitor {
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("A|(B&C)");
+        List<String> tokens = Tokenizer.tokenize("((A|B)&(A|C))");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
         DistributiveVisitor visitor = new DistributiveVisitor();
@@ -42,6 +42,20 @@ public class DistributiveVisitor implements ExpressionVisitor {
             Expression orLeft = or.getLeft().accept(this);
             Expression orRight = or.getRight().accept(this);
             return new Or(new And(orLeft, right), new And(orRight, right));
+        } else if (left instanceof Or && right instanceof Or){
+            Or orL = (Or) left;
+            Expression orLLeft = orL.getLeft().accept(this);
+            Expression orLRight = orL.getRight().accept(this);
+            Or orR = (Or) right;
+            Expression orRLeft = orR.getLeft().accept(this);
+            Expression orRRight = orR.getRight().accept(this);
+            if(orLLeft.equals(orRLeft) ){
+                return new Or(orLLeft, new And(orLRight, orRRight));
+            }else if (orLRight.equals(orRRight)){
+                return new Or(new And(orLLeft, orRLeft), orLRight);
+            }else{
+                return new And(orL, orR);
+            }
         }else {
             return new And(left, right);
         }
@@ -62,6 +76,20 @@ public class DistributiveVisitor implements ExpressionVisitor {
             Expression andLeft = and.getLeft().accept(this);
             Expression andRight = and.getRight().accept(this);
             return new And(new Or(andLeft, right), new Or(andRight, right));
+        }else if (left instanceof And && right instanceof And){
+            And andL = (And) left;
+            Expression andLLeft = andL.getLeft().accept(this);
+            Expression andLRight = andL.getRight().accept(this);
+            And andR = (And) right;
+            Expression andRLeft = andR.getLeft().accept(this);
+            Expression andRRight = andR.getRight().accept(this);
+            if(andLLeft.equals(andRLeft) ){
+                return new And(andLLeft, new Or(andLRight, andRRight));
+            }else if (andLRight.equals(andRRight)){
+                return new And(new Or(andLLeft, andRLeft), andLRight);
+            }else{
+                return new And(andL, andR);
+            }
         }else {
             return new Or(left, right);
         }
@@ -108,6 +136,18 @@ public class DistributiveVisitor implements ExpressionVisitor {
                 result = true;
             } else if (left instanceof Or && right instanceof Variable){
                 result = true;
+            }else if (left instanceof Or && right instanceof Or) {
+                Or orL = (Or) left;
+                Expression orLLeft = orL.getLeft().accept(this);
+                Expression orLRight = orL.getRight().accept(this);
+                Or orR = (Or) right;
+                Expression orRLeft = orR.getLeft().accept(this);
+                Expression orRRight = orR.getRight().accept(this);
+                if (orLLeft.equals(orRLeft)) {
+                    result = true;
+                } else if (orLRight.equals(orRRight)) {
+                    result = true;
+                }
             }
         }else if(expr instanceof Or){
             Or or = (Or) expr;
@@ -118,6 +158,18 @@ public class DistributiveVisitor implements ExpressionVisitor {
                 result = true;
             } else if (left instanceof And && right instanceof Variable){
                 result = true;
+            } else if (left instanceof And && right instanceof And) {
+                And andL = (And) left;
+                Expression andLLeft = andL.getLeft().accept(this);
+                Expression andLRight = andL.getRight().accept(this);
+                And andR = (And) right;
+                Expression andRLeft = andR.getLeft().accept(this);
+                Expression andRRight = andR.getRight().accept(this);
+                if (andLLeft.equals(andRLeft)) {
+                    result = true;
+                } else if (andLRight.equals(andRRight)) {
+                    result = true;
+                }
             }
         }
         return result;

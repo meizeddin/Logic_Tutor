@@ -13,10 +13,7 @@ import model.LogicalFormula;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author meize
@@ -406,7 +403,7 @@ public class LogicTutorController {
 	}
 
 	private class updateComboSimplificationBtnHandler implements EventHandler<ActionEvent> {
-		public void handle(ActionEvent e) {
+		public void handle(ActionEvent e) throws EmptyStackException {
 			model.setSelectedFormula(mp.getSelectedFormula());
 			if (!model.getSelectedFormula().isEmpty()) {
 				List<String> itemList = model.getRulesList();
@@ -414,7 +411,15 @@ public class LogicTutorController {
 				Parser.list.clear();
 				List<String> tokens = Tokenizer.tokenize(expression);
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
-				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				Expression expr;
+				try {
+					expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+				} catch (Exception ex){
+					if (ex instanceof EmptyStackException){
+						alertDialogBuilder("Select an appropriate expression");
+					}
+					throw ex;
+				}
 				mp.updateComboBox(itemList, expr);
 			} else{
 				alertDialogBuilder("Highlight an expression");
@@ -453,6 +458,11 @@ public class LogicTutorController {
 						result = expr.accept(visitor);
 						model.updateResult("Using De Morgan's Law");
 					}
+					case "Complement Rule" -> {
+						ComplementVisitor visitor = new ComplementVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Complement Rule");
+					}
 					case "Absorption Rule" -> {
 						AbsorptionVisitor visitor = new AbsorptionVisitor();
 						result = expr.accept(visitor);
@@ -487,6 +497,21 @@ public class LogicTutorController {
 						IdentityVisitor visitor = new IdentityVisitor();
 						result = expr.accept(visitor);
 						model.updateResult("Using Identity Law");
+					}
+					case "Elimination of & Right" -> {
+						AndEliminationRVisitor visitor = new AndEliminationRVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of & Right");
+					}
+					case "Elimination of & Left" -> {
+						AndEliminationLVisitor visitor = new AndEliminationLVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of & Left");
+					}
+					case "Elimination of =>" -> {
+						ImplyEliminationVisitor visitor = new ImplyEliminationVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Elimination of =>");
 					}
 					case "Select an option.." -> alertDialogBuilder("Select a rule");
 				}
