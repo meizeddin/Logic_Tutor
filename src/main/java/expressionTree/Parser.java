@@ -55,12 +55,16 @@ public class Parser {
 	public static void main(String[] args) {
 		// Create a Store object
 		Store store = new Store();
-		Expression s = Evaluator(Objects.requireNonNull(ShuntingYardAlgorithm.infixToPostfix(Tokenizer.tokenize("A => B & A"))));
-		store.addVariable(list.get(0), Value.getTrue());
+		Expression s = Evaluator(Objects.requireNonNull(ShuntingYardAlgorithm.infixToPostfix(Tokenizer.tokenize("T&F"))));
+		if (!list.isEmpty()) {
+			store.addVariable(list.get(0), Value.getTrue());
+		}
 
 		// Evaluate the expression and print the result
 			System.out.println(s.evaluate(store));
+		if (!list.isEmpty()) {
 			System.out.println(store.getValue(list.get(0)).evaluate(store));
+		}
 			System.out.println(list);
 
 	}
