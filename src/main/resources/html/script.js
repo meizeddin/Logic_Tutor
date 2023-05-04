@@ -48,18 +48,18 @@ function checkAnswer1(){
     function darkLight(){
         const body = document.body;
         const changeBtn = document.querySelector('.change');
-          if (body.classList.contains('light')) {
-            body.classList.remove('light');
-            changeBtn.innerText = 'Dark';
-            sessionStorage.setItem('theme', 'dark');
-          } else {
-            body.classList.add('light');
+          if (body.classList.contains('dark')) {
+            body.classList.remove('dark');
             changeBtn.innerText = 'Light';
             sessionStorage.setItem('theme', 'light');
+          } else {
+            body.classList.add('dark');
+            changeBtn.innerText = 'Dark';
+            sessionStorage.setItem('theme', 'dark');
           };
     }
     // Check for saved theme in localStorage and set it on page load
-    if (sessionStorage.getItem('theme') === 'light') {
+    if (sessionStorage.getItem('theme') === 'dark') {
       darkLight();
     }
 function checkAnswer2(){
