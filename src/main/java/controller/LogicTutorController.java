@@ -568,7 +568,7 @@ public class LogicTutorController {
 						correctAnswers.add(db.retrieveCorrectAnswersForQuestion(question).get(0));
 						answers.add(questionAnswers);
 					}
-					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers, 4);
+					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers, 2400);
 				}else{
 					alertDialogBuilder("You selected a lesson. Please select a test");
 				}
