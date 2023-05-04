@@ -502,6 +502,11 @@ public class LogicTutorController {
 						result = expr.accept(visitor);
 						model.updateResult("Using Commutative Law");
 					}
+					case "Contrapositive Rule" -> {
+						ContrapositiveVisitor visitor = new ContrapositiveVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using Contrapositive Law");
+					}
 					case "Distributive Rule" -> {
 						DistributiveVisitor visitor = new DistributiveVisitor();
 						result = expr.accept(visitor);
@@ -563,9 +568,7 @@ public class LogicTutorController {
 						correctAnswers.add(db.retrieveCorrectAnswersForQuestion(question).get(0));
 						answers.add(questionAnswers);
 					}
-					System.out.println(correctAnswers);
-
-					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers);
+					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers, 4);
 				}else{
 					alertDialogBuilder("You selected a lesson. Please select a test");
 				}

@@ -5,25 +5,25 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A visitor class that implements Switcheroo law on an expression tree.
+ * A visitor class that implements Contrapositive law on an expression tree.
  * This class implements the 'ExpressionVisitor' interface, allowing it to
  * traverse an expression tree and manipulate the expressions contained within.
  * <p>
- * Switcheroo law states that:
- * p imply q == (not p) or q
+ * Contrapositive law states that:
+ * p imply q == (not p) imply (not q)
  * <p>
- * When visiting an 'Imply' expression, this visitor applies Switcheroo law.
+ * When visiting an 'Imply' expression, this visitor applies Contrapositive law.
  * For all other expression types, the expression is returned unchanged.
  * <p>
  * This visitor does not modify expressions of type 'Equivalence', 'Not', 'And', 'Or', or 'Variable'.
  */
-public class SwitcherooVisitor implements ExpressionVisitor {
+public class ContrapositiveVisitor implements ExpressionVisitor {
 
     public static void main(String[] args) {
-        List<String> tokens = Tokenizer.tokenize("(!((!(P)|Q))|R)");
+        List<String> tokens = Tokenizer.tokenize("A=>B");
         List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
         Expression exp = Parser.Evaluator(Objects.requireNonNull(shunting));
-        SwitcherooVisitor visitor = new SwitcherooVisitor();
+        ContrapositiveVisitor visitor = new ContrapositiveVisitor();
         System.out.println(exp.accept(visitor));
     }
 
@@ -38,11 +38,7 @@ public class SwitcherooVisitor implements ExpressionVisitor {
     public Expression visit(Or or) {
         Expression left = or.getLeft();
         Expression right = or.getRight();
-        if(left instanceof Not not){
-            return new Imply(not.getExpression(), right);
-        }else {
-            return new Or(left, right);
-        }
+        return new Or(left, right);
     }
 
     @Override
@@ -56,7 +52,15 @@ public class SwitcherooVisitor implements ExpressionVisitor {
     public Expression visit(Imply imply) {
         Expression left = imply.getLeft();
         Expression right = imply.getRight();
-        return new Or(new Not(left), right);
+        if(left instanceof Not notL && right instanceof Not notR) {
+            Expression leftNotEx = notL.getExpression();
+            Expression rightNotEx = notR.getExpression();
+            return new Imply(leftNotEx, rightNotEx);
+        }else if(!(left instanceof Not) && !(right instanceof Not)){
+            return new Imply(new Not(left), new Not(right));
+        }else {
+            return new Imply(left, right);
+        }
     }
 
     @Override

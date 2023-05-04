@@ -435,6 +435,10 @@ public class ManipulationPane extends ScrollPane {
 				CommutativeVisitor visitor = new CommutativeVisitor();
 				result = visitor.canApply(expr);
 			}
+			case "Contrapositive Rule" -> {
+				ContrapositiveVisitor visitor = new ContrapositiveVisitor();
+				result = visitor.canApply(expr);
+			}
 			case "Distributive Rule" -> {
 				DistributiveVisitor visitor = new DistributiveVisitor();
 				result = visitor.canApply(expr);

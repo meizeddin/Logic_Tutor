@@ -90,12 +90,14 @@ public class TruthTableHelperFun {
             arrBB.add(expr.evaluate(store));
             store.clear();
         }
-        if ((arrBB.get(0)) && (arrBB.stream().distinct().count() <=1)) {
-            type = "Type: Tautology";
-        }else if ((!arrBB.get(0)) && (arrBB.stream().distinct().count() <=1)) {
-            type = "Type: Contradiction";
-        } else {
-            type = "Type: Contingency";
+        if(!arrBB.isEmpty()) {
+            if ((arrBB.get(0)) && (arrBB.stream().distinct().count() <= 1)) {
+                type = "Type: Tautology";
+            } else if ((!arrBB.get(0)) && (arrBB.stream().distinct().count() <= 1)) {
+                type = "Type: Contradiction";
+            } else {
+                type = "Type: Contingency";
+            }
         }
         result += "#"+"\t"+expression.toUpperCase()+"\t  "+type+"\n";
         result += "-------------------\n";
