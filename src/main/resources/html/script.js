@@ -51,15 +51,15 @@ function checkAnswer1(){
           if (body.classList.contains('light')) {
             body.classList.remove('light');
             changeBtn.innerText = 'Dark';
-            localStorage.setItem('theme', 'dark');
+            sessionStorage.setItem('theme', 'dark');
           } else {
             body.classList.add('light');
             changeBtn.innerText = 'Light';
-            localStorage.setItem('theme', 'light');
+            sessionStorage.setItem('theme', 'light');
           };
     }
     // Check for saved theme in localStorage and set it on page load
-    if (localStorage.getItem('theme') === 'light') {
+    if (sessionStorage.getItem('theme') === 'light') {
       darkLight();
     }
 function checkAnswer2(){
