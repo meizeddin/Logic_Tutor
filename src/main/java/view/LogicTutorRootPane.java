@@ -66,7 +66,7 @@ public class LogicTutorRootPane extends BorderPane {
 		// Create a WebView and add it to the second tab
 		Platform.runLater(() -> {
 			WebView webView = new WebView();
-			webView.getEngine().load(Objects.requireNonNull(getClass().getResource("../main/java/view/html/StudyPage.html")).toExternalForm());
+			webView.getEngine().load(Objects.requireNonNull(getClass().getResource("/html/StudyPage.html")).toExternalForm());
 			webView.getEngine().setJavaScriptEnabled(true);
 			t2.setContent(webView);
 		});

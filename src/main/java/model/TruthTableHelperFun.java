@@ -1,8 +1,5 @@
 package model;
 
-
-import expressionTree.EvaluationException;
-import expressionTree.ParserException;
 import expressionTree.*;
 
 import java.util.ArrayList;
@@ -84,7 +81,7 @@ public class TruthTableHelperFun {
                 {
                     store.addVariable(list.get(j), arrB.get(i+j));
                 }
-                catch (ParserException | EvaluationException e)
+                catch (EvaluationException e)
                 {
                     System.out.println(e.getMessage());
                 }

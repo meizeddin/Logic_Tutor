@@ -159,7 +159,7 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException | EvaluationException Pex)
+				catch (EvaluationException Pex)
 				{
 					Pex.printStackTrace();
 				}
@@ -343,7 +343,7 @@ public class LogicTutorController {
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
-				catch (ParserException | EvaluationException Pex)
+				catch (EvaluationException Pex)
 				{
 					Pex.printStackTrace();
 				}

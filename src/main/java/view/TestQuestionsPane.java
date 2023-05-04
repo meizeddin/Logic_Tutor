@@ -9,7 +9,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 
 
 public class TestQuestionsPane extends GridPane {
@@ -107,15 +109,15 @@ public class TestQuestionsPane extends GridPane {
         scrollPane.setFitToWidth(true); // Expand the ScrollPane to fill the width of its parent
 
         // create an input stream
-        FileInputStream input;
+        InputStream input;
         try {
-            input = new FileInputStream(".//res//black.png");
-        } catch (FileNotFoundException e) {
+            input = ClassLoader.getSystemResourceAsStream("media/black.png");
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         // create an image
-        Image image = new Image(input);
+        Image image = new Image(Objects.requireNonNull(input));
 
         // create a background image
         BackgroundImage backgroundimage = new BackgroundImage(image,
