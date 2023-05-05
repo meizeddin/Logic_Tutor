@@ -71,7 +71,7 @@ public class ManipulationPane extends ScrollPane {
 		Label lblFormulaError = new Label("Variables can only be alphabetic, all brackets must be closed,\n"
 				+ "\t\tand only the below operators are allowed");
 
-		lblFormulaError.setStyle("-fx-font: 25px Harrington;"
+		lblFormulaError.setStyle("-fx-font-size: 25px;"
 				+ "-fx-padding: 8px;"
 				+ "-fx-background-color: #ff9999;"
 				+ "-fx-text-fill: #800000;"

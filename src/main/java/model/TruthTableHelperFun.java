@@ -6,7 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The TruthTableHelperFun class provides helper functions to create and evaluate
+ * truth tables based on logical expressions.
+ */
 public class TruthTableHelperFun {
+    /**
+     * The main method of the TruthTableHelperFun class which executes the program.
+     * It creates an expression, converts it to postfix notation, and generates
+     * a truth table for the expression.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         // create expression
         String expression = "(A|A)";
@@ -15,14 +26,21 @@ public class TruthTableHelperFun {
         Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 
 
-        //System.out.print(truthTable("abd",3));
+        // generate truth table
         System.out.println(booleanTable(Parser.list));
         System.out.println(truthTable(Parser.list));
         System.out.println(resultTable(Parser.list, booleanTable(Parser.list), expr, expression));
 
     }
 
-    //produces a truth table
+    /**
+     * The truthTable method produces a truth table as a string based on a given list
+     * of variables. It generates all possible combinations of values for the variables,
+     * and evaluates the expression for each combination to determine the truth value.
+     *
+     * @param list the list of variables for which to generate the truth table
+     * @return a string representing the truth table
+     */
     public static String truthTable(ArrayList<Variable> list) {
         int n = list.size();
         StringBuilder str = new StringBuilder();
@@ -50,6 +68,13 @@ public class TruthTableHelperFun {
         return str.toString();
     }
 
+    /**
+     * The booleanTable method generates a list of all possible combinations of
+     * boolean values for a given list of variables.
+     *
+     * @param list the list of variables for which to generate the boolean table
+     * @return a list of boolean values representing all possible combinations
+     */
     public static List<Value> booleanTable(ArrayList<Variable> list) {
         int n = list.size();
         List<Value> arr = new ArrayList<>();
@@ -67,6 +92,14 @@ public class TruthTableHelperFun {
     }
 
 
+    /**
+     * Generates a truth result table for a given expression and list of variables
+     * @param list list of variables used in the expression
+     * @param arrB list of boolean values representing the input combinations
+     * @param expr the expression to evaluate
+     * @param expression the original expression as a string
+     * @return a string containing the reult table and type of the expression (tautology, contradiction or contingency)
+     */
     public static String resultTable(ArrayList<Variable> list, List<Value> arrB, Expression expr, String expression) {
         int variables = list.size();
         StringBuilder table = new StringBuilder();
@@ -105,6 +138,12 @@ public class TruthTableHelperFun {
         return result;
     }
 
+    /**
+     * Adds left padding to a string
+     * @param inputStr the input string
+     * @param length the desired length of the output string
+     * @return a string with the specified length, padded with leading zeros if necessary
+     */
     public static String leftPadding(String inputStr, int length) {
         if (inputStr.length()>= length) {
             return inputStr;

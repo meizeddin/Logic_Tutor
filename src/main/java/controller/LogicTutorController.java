@@ -17,7 +17,7 @@ import java.util.*;
 
 /**
  * @author meize
- * This is a simple Controller that Accepts input and converts it to commands for the model or the view.
+ * This is a Controller that Accepts input and converts it to commands for the model or the view.
  */
 public class LogicTutorController {
 
@@ -59,6 +59,7 @@ public class LogicTutorController {
 		// create the tree view
 		db = new DataBase();
 
+		//create a rootItem for the tree
 		TreeItem<String> rootItem = new TreeItem<>("Lessons");
 
 		// retrieve the lessons from the database
@@ -123,64 +124,87 @@ public class LogicTutorController {
 		ltmb.addAboutHandler(e -> ltmb.aboutInfo());
 
 	}
-	//event handler private class, which can be used for creating a profile
+	//event handlers private class, used for handling actions on the view.
 	private class evalLogicTutorPaneHandler implements EventHandler<ActionEvent> {
+		/**
+		 * Handles the action event when the evaluate button is clicked.
+		 * Retrieves data from the view and sets it in the model for calculation.
+		 * If the formula is empty, an error is displayed, otherwise, the formula is evaluated.
+		 * The resulting truth table and evaluation result are set in the model and displayed in the result pane.
+		 *
+		 * @param e The action event triggered by clicking the evaluate button.
+		 */
 		public void handle(ActionEvent e) {
-			//retrieves data from the view
+			// Retrieves data from the view
 			try {
 				ep.removeSpaces(ep.getFormula());
 				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
-			//check input not empty
+			// Check that input is not empty
 			if (model.getFormula().equals("")) {
-				//output error
+				// Output error
 				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
 				try
 				{
+					// Clear the parser's list and tokenize the expression
 					Parser.list.clear();
+
 					String expression = model.getFormula();
 					List<String> tokens = Tokenizer.tokenize(expression);
 					List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+					// Evaluate the expression and generate the truth table and result table
 					Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 					List<Value> boolTbl = TruthTableHelperFun.booleanTable(Parser.list);
 					String truthTbl = TruthTableHelperFun.truthTable(Parser.list);
 					String resultTbl = TruthTableHelperFun.resultTable(Parser.list, boolTbl, expr, expression);
 
-
+					// Set the truth table and result table in the model and display them in the result pane
 					model.setTruthTable(truthTbl);
 					model.setResult(resultTbl);
-
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
 				}
 				catch (EvaluationException Pex)
 				{
+					// Handle evaluation exception by printing the stack trace
 					Pex.printStackTrace();
 				}
+				// Switch to the result pane
 				view.changeTab(3);
 			}
 		}
 	}
 
+	/**
+	 * Private class to handle simplification events in the tutor pane.
+	 */
 	private class simplificationBtnHandler implements EventHandler<ActionEvent> {
+		/**
+		 * Handles the action event when the simplification button is clicked.
+		 * Retrieves data from the view and sets it in the model for simplification.
+		 * If the formula is empty, an error is displayed, otherwise, the formula is simplified.
+		 * The resulting simplified formula is displayed in the simplification pane.
+		 *
+		 * @param e The action event triggered by clicking the simplification button.
+		 */
 		public void handle(ActionEvent e) {
-			//retrieves data from the view
+			// Retrieves data from the view
 			try {
 				ep.removeSpaces(ep.getFormula());
 				model.setFormula(ep.getFormula());
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
 			}
-			//check input not empty
+			//Check input not empty
 			if (model.getFormula().equals("")) {
-				//output error
+				//Output error
 				alertDialogBuilder("To calculate, you need to enter a formula");
 			}else {
-
+				// Populate the formula and result in the simplification pane
 				mp.populateFunction(model.getFormula());
 				mp.populateResult(model.getFormula());
 				view.changeTab(4);
@@ -188,6 +212,10 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Private class to handle the conjunction button in the expression pane.
+	 * Sets the conjunction symbol in the expression pane.
+	 */
 	private class conjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -195,24 +223,40 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Private class to handle the disjunction button in the expression pane.
+	 * Sets the disjunction symbol in the expression pane.
+	 */
 	private class disjunctionBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			ep.setFormula("|");
 		}
 	}
+	/**
+	 * Private class to handle the negation button in the expression pane.
+	 * Sets the negation symbol in the expression pane.
+	 */
 	private class negationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			ep.setFormula("~");
 		}
 	}
+	/**
+	 * Private class to handle the implication button in the expression pane.
+	 * Sets the implication symbol in the expression pane.
+	 */
 	private class implicationBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			ep.setFormula("=>");
 		}
 	}
+	/**
+	 * Private class to handle the equivalence button in the expression pane.
+	 * Sets the equivalence symbol in the expression pane.
+	 */
 	private class equivalenceBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -220,26 +264,40 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Private class to handle moving to the study pane button.
+	 * Changes the active tab to the study pane.
+	 */
 	private class moveToStudyPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			view.changeTab(1);
 		}
 	}
+	/**
+	 * Private class to handle moving to the evaluate pane button.
+	 * Changes the active tab to the evaluate pane.
+	 */
 	private class moveToEvaluatePaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			view.changeTab(2);
 		}
 	}
-
+	/**
+	 * Private class to handle moving to the manipulate pane button.
+	 * Changes the active tab to the manipulate pane.
+	 */
 	private class moveToManipulatePaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			view.changeTab(4);
 		}
 	}
-
+	/**
+	 * Private class to handle moving to the test pane button.
+	 * Changes the active tab to the test pane.
+	 */
 	private class moveToTestPaneHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -247,8 +305,15 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Handles the save button on the Manipulation pane, writes the contents of the TextArea to a file.
+	 */
 	private class saveManipulationPaneBtnHandler implements EventHandler<ActionEvent>{
 
+		/**
+		 * Handles the action of clicking on the save button.
+		 * @param event The event that triggered the action.
+		 */
 		@Override
 		public void handle(ActionEvent event) {
 			// Get the contents of the TextArea
@@ -279,8 +344,14 @@ public class LogicTutorController {
 			}
 		}
 	}
-
+	/**
+	 * Handles the save button on the Evaluation pane, writes the contents of the TextArea to a file.
+	 */
 	private class saveResultBtnHandler implements EventHandler<ActionEvent>{
+		/**
+		 * Handles the action of clicking on the save button.
+		 * @param event The event that triggered the action.
+		 */
 		@Override
 		public void handle(ActionEvent event) {
 			// Get the contents of the TextArea
@@ -309,7 +380,15 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Handles the button event for calculating a formula in the Manipulation Pane.
+	 */
 	private class calcManipulationPaneBtnHandler implements EventHandler<ActionEvent>{
+		/**
+		 * Calculates a formula and updates the Result and Truth Table tabs accordingly.
+		 * If the formula is empty, displays an alert dialog indicating an error.
+		 * @param event The button event triggered by the user.
+		 */
 		@Override
 		public void handle(ActionEvent event) {
 			try {
@@ -324,19 +403,27 @@ public class LogicTutorController {
 			}else {
 				try
 				{
+					// Clear the parser list
 					Parser.list.clear();
 					String expression = model.getFormula();
+
+					// Tokenize the formula and convert to postfix notation
 					List<String> tokens = Tokenizer.tokenize(expression);
 					List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+
+					// Evaluate the expression
 					Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
+
+					// Generate the truth table and result table
 					List<Value> boolTbl = TruthTableHelperFun.booleanTable(Parser.list);
 					String truthTbl = TruthTableHelperFun.truthTable(Parser.list);
 					String resultTbl = TruthTableHelperFun.resultTable(Parser.list, boolTbl, expr, expression);
 
-
+					// Update the model with the new truth table and result table
 					model.setTruthTable(truthTbl);
 					model.setResult(resultTbl);
 
+					// Update the Result and Truth Table tabs
 					rp.populateFunction(model.getFormula());
 					rp.populateResult(model.getResult());
 					rp.populateTruthTable(model.getTruthTable());
@@ -345,10 +432,14 @@ public class LogicTutorController {
 				{
 					Pex.printStackTrace();
 				}
+				// Switch to the Result tab
 				view.changeTab(3);
 			}
 		}
 	}
+	/**
+	 * Handles the event when the conjunction button is clicked in the manipulation pane.
+	 */
 	private class conjunctionManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -356,24 +447,36 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Handles the event when the disjunction button is clicked in the manipulation pane.
+	 */
 	private class disjunctionManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("|");
 		}
 	}
+	/**
+	 * Handles the event when the negation button is clicked in the manipulation pane.
+	 */
 	private class negationManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("~");
 		}
 	}
+	/**
+	 * Handles the event when the implication button is clicked in the manipulation pane.
+	 */
 	private class implicationManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
 			mp.setFormula("=>");
 		}
 	}
+	/**
+	 * Handles the event when the equivalence button is clicked in the manipulation pane.
+	 */
 	private class equivalenceManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent event) {
@@ -381,6 +484,9 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * Handles the event when the add button is clicked in the manipulation pane.
+	 */
 	private class addManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			mp.clearResult();
@@ -403,55 +509,106 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * EventHandler class that handles the introduceManipulationPaneBtn button click.
+	 */
 	private class introduceManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
+		/**
+		 * Handles the action event triggered by the introduceManipulationPaneBtn button click.
+		 * Retrieves data from the view and sets the formula in the model.
+		 * Populates the result using the formula introduced using the Introduction.
+		 *
+		 * @param e The action event triggered by the button click.
+		 */
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
+				// removes spaces from the formula
 				mp.removeSpaces(mp.getFormula());
+				// sets the formula in the model
 				model.setFormula(mp.getFormula());
 			} catch (NullPointerException ex) {
+				// prints the stack trace if there's a NullPointerException
 				ex.printStackTrace();
 			}
 			//check input not empty
 			if (model.getFormula().equals("")) {
-				//output error
+				// outputs an error if the input is empty
 				alertDialogBuilder("You need to enter a formula");
 			}else if(mp.getFunction().equals("")){
+				// outputs an error if there's no formula to introduce to
 				alertDialogBuilder("There is no formula to introduce to");
 			}else {
+				// populates the function with the introduced formula
 				mp.populateFunction(model.getFormula());
+				// populates the result using the introduced formula
 				mp.populateResult("\nUsing Introduction \n" + model.getFormula());
+				// sets the formula in the model
 				model.setFormula(model.getFormula());
 			}
 		}
 	}
 
+	/**
+	 * EventHandler class that handles the updateComboManipulationPaneBtn button click.
+	 */
 	private class updateComboManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
+		/**
+		 * Handles the action event triggered by the updateComboManipulationPaneBtn button click.
+		 * Sets the selected formula in the model and updates the combo box with the appropriate expressions.
+		 *
+		 * @param e The action event triggered by the button click.
+		 *
+		 * @throws EmptyStackException if there's an empty stack while evaluating the expression.
+		 */
 		public void handle(ActionEvent e) throws EmptyStackException {
+			// sets the selected formula in the model
 			model.setSelectedFormula(mp.getSelectedFormula());
 			if (!model.getSelectedFormula().isEmpty()) {
+				// gets the list of rules
 				List<String> itemList = model.getRulesList();
+				// gets the selected formula
 				String expression = model.getSelectedFormula();
+				// clears the list in the Parser class
 				Parser.list.clear();
+				// tokenizes the selected formula
 				List<String> tokens = Tokenizer.tokenize(expression);
+				// converts infix to postfix notation
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
 				Expression expr;
 				try {
+					// evaluates the expression using the Parser class
 					expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 				} catch (Exception ex){
 					if (ex instanceof EmptyStackException){
+						// outputs an error if the expression is not appropriate
 						alertDialogBuilder("Select an appropriate expression");
 					}
+					// throws the exception
 					throw ex;
 				}
+				// updates the combo box with the appropriate expressions
 				mp.updateComboBox(itemList, expr);
 			} else{
+				// outputs an error if no expression is highlighted
 				alertDialogBuilder("Highlight an expression");
 			}
 		}
 	}
 
+	/**
+	 * This class handles the event when the update button is clicked in the ManipulationPane.
+	 * It retrieves the selected formula from the ManipulationPane, parses it into a List of tokens,
+	 * then converts it into a postfix notation using the Shunting Yard algorithm.
+	 * The postfix notation is then passed into a Parser object which evaluates the expression.
+	 * Finally, the ComboBox in the ManipulationPane is updated with the available rules for the evaluated expression.
+	 */
 	private class manipulateManipulationPaneBtnHandler implements EventHandler<ActionEvent> {
+		/** It retrieves the selected formula from the ManipulationPane, parses it into a List of tokens,
+		 * then converts it into a postfix notation using the Shunting Yard algorithm.
+		 * The postfix notation is then passed into a Parser object which builds the expression.
+		 * Finally, the ComboBox in the ManipulationPane is updated with the available rules for the evaluated expression.
+		 */
 		public void handle(ActionEvent e) {
 			//retrieves data from the view
 			try {
@@ -464,13 +621,18 @@ public class LogicTutorController {
 				//output error
 				alertDialogBuilder("Add a formula or highlight an expression");
 			}else {
+				// clear the list of parsed expressions in the Parser class
 				Parser.list.clear();
 				String expression = model.getSelectedFormula();
+				// tokenize the selected formula
 				List<String> tokens = Tokenizer.tokenize(expression);
+				// convert the tokens into postfix notation
 				List<String> shunting = ShuntingYardAlgorithm.infixToPostfix(tokens);
+				//evaluates the expression
 				Expression expr = Parser.Evaluator(Objects.requireNonNull(shunting));
 				Expression result = null;
 				model.setResult("");
+				//checking available rules
 				switch (mp.getSelectedRule()) {
 					case "Idempotence Rule" -> {
 						IdempotenceVisitor visitor = new IdempotenceVisitor();
@@ -554,7 +716,15 @@ public class LogicTutorController {
 		}
 	}
 
+	/**
+	 * 	Handles the event when the user clicks the "Take Test" button in the TestPane view.
+	 */
 	private class takeTestHandler implements EventHandler<ActionEvent> {
+		/**
+		 * Retrieves the selected test from the TestPane view and creates a new TestQuestionsPane
+		 * view to display the questions and answers for the selected test.
+		 * @param event The ActionEvent triggered by clicking the "Take Test" button.
+		 * */
 		@Override
 		public void handle(ActionEvent event) {
 			if(testp.getTreeView().getSelectionModel().getSelectedItem() != null ) {
@@ -568,6 +738,7 @@ public class LogicTutorController {
 						correctAnswers.add(db.retrieveCorrectAnswersForQuestion(question).get(0));
 						answers.add(questionAnswers);
 					}
+					// create a new TestQuestionsPane to display the questions and answers
 					TestQuestionsPane tqp = new TestQuestionsPane(selectedTest, questions, answers, correctAnswers, 2400);
 				}else{
 					alertDialogBuilder("You selected a lesson. Please select a test");
@@ -579,7 +750,8 @@ public class LogicTutorController {
 	}
 
 	/**
-	 * helper method - alerts for validation
+	 * Shows an error dialog with the given message.
+	 * @param str the message to display in the dialog.
 	 */
 	private void alertDialogBuilder(String str) {
 		Alert alert = new Alert(AlertType.ERROR);
@@ -588,7 +760,10 @@ public class LogicTutorController {
 		alert.setContentText(str);
 		alert.showAndWait();
 	}
-
+	/**
+	 * Shows a success dialog with the given message.
+	 * @param str the message to display in the dialog.
+	 */
 	private void successDialogBuilder(String str) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Confirmation Dialog");
