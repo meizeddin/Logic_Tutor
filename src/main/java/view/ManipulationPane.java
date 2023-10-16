@@ -467,6 +467,10 @@ public class ManipulationPane extends ScrollPane {
 				ImplyEliminationVisitor visitor = new ImplyEliminationVisitor();
 				result = visitor.canApply(expr);
 			}
+			case "BiConditional Rule" -> {
+				BiConditionalVisitor visitor = new BiConditionalVisitor();
+				result = visitor.canApply(expr);
+			}
 		}
 		return result;
 	}

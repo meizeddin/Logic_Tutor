@@ -707,6 +707,11 @@ public class LogicTutorController {
 						result = expr.accept(visitor);
 						model.updateResult("Using Elimination of =>");
 					}
+					case "BiConditional Rule" -> {
+						BiConditionalVisitor visitor = new BiConditionalVisitor();
+						result = expr.accept(visitor);
+						model.updateResult("Using BiConditional Rule");
+					}
 					case "Select an option.." -> alertDialogBuilder("Select a rule");
 				}
 				mp.setFunction(Objects.requireNonNull(result).toString(), mp.getIndexRange().getStart(), mp.getIndexRange().getEnd());
