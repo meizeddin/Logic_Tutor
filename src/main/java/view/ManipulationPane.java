@@ -544,6 +544,11 @@ public class ManipulationPane extends ScrollPane {
 		return txtResult;
 	}
 
+	//See explaination in the controller
+	public ComboBox getCombo() {
+		return comboBox;
+	}
+
 	/**
 	 * method to attach the buttons event handlers
 	 * @param handler accepts an external handler set by the controller
@@ -554,4 +559,5 @@ public class ManipulationPane extends ScrollPane {
 	public void btnCalcHandler(EventHandler<ActionEvent> handler) {
 		btnCalc.setOnAction(handler);
 	}
+
 }
