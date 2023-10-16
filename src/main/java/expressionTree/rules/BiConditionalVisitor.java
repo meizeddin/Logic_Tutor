@@ -5,6 +5,22 @@ import expressionTree.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A visitor class that implements BiConditional law on an expression tree.
+ * This class implements the 'ExpressionVisitor' interface, allowing it to
+ * traverse an expression tree and manipulate the expressions contained within.
+ * <p>
+ * BiConditional law states that:
+ * p equivalence q == (p Imply q) and (q Imply p)
+ * (p <=> q) == (p => q) & (q => p)
+ * <p>
+ * When visiting an 'Equivalence' expression, this visitor applies the BiConditional law.
+ * When visiting an 'And' expression, this visitor reverses the BiConditional law.
+ * For all other expression types, the expression is returned unchanged.
+ * <p>
+ * This visitor does not modify expressions of type 'Imply', 'Not', 'Or', or 'Variable'.
+ */
+
 public class BiConditionalVisitor implements ExpressionVisitor {
 
     public static void main(String[] args) {
